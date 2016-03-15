@@ -1,0 +1,17 @@
+{
+    "description": "Bus and Metrolink stop and time data for all services within the Greater Manchester boundary. Known technically as \"ATCO-CIF\". ", 
+    "license": "OGL-UK-3.0", 
+    "title": "Bus stops and schedules", 
+    "filepath": "/media/hulk/packagezip/bus-stops-and-schedules.zip", 
+    "id": "e100465a-9255-4ee0-b486-a02a17ba75fb", 
+    "resources": [
+        {
+            "description": "ATCO-CIF data", 
+            "format": "zip", 
+            "url": "http://odata.tfgm.com/opendata/downloads/GMPTE_CIF.zip", 
+            "included_in_zip": true, 
+            "path": "data/GMPTE_CIF.zip"
+        }
+    ], 
+    "name": "bus-stops-and-schedules"
+}

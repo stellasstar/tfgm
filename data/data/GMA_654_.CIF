@@ -1,0 +1,151 @@
+ATCO-CIF 500TFGM                            GM_AIM          20160202194805  
+ZLGMA_654_S11I
+ZD2016010220991231Mondays to Fridays                                                    
+ZSGMA_654_ 654Walkden - Tyldesley - Leigh                       
+ZAN1800WF40811 High Street/Tesco                               P1W0T1
+ZAN1800WF41001 Bridgewater Road/Longley Road                   P1W0T0
+ZAN1800WF41011 Bridgewater Road/Walkden Clinic                 P1W0T0
+ZAN1800WF41021 Bridgewater Road/Newhart Grove                  P1W0T0
+ZAN1800WF39921 Bridgewater Road/Park Road                      P1W0T0
+ZAN1800WF39891 Newearth Road/Carlton Road                      P1W0T0
+ZAN1800WF39871 Newearth Road/Queensway                         P1W0T0
+ZAN1800WK09171 Bridgewater Road/The Boundary Stone             P1W0T0
+ZAN1800WK06101 Bridgewater Road/East Moor                      P1W0T0
+ZAN1800WK09101 Mosley Common Road/Common Side Road             P1W0T0
+ZAN1800WK31731 Mosley Common Road/Thornton Road                P1W0T0
+ZAN1800WK31751 Thornton Road/Richmond Road                     P1W0T0
+ZAN1800WK31761 Lindale Road/Lindale Close                      P1W0T0
+ZAN1800WK31771 Lindale Road/Kendal Road                        P1W0T0
+ZAN1800WK31781 Kendal Road/Grange Road                         P1W0T0
+ZAN1800WK31791 Garrett Hall Road/Kendal Road                   P1W0T1
+ZAN1800WK08901 Garrett Hall Road/Thornton Road                 P1W0T0
+ZAN1800WK31711 Mosley Common Road/Parr Brow                    P1W0T0
+ZAN1800WK31691 Sale Lane/Wellington Drive                      P1W0T0
+ZAN1800WK31661 Sale Lane/Mort Lane                             P1W0T0
+ZAN1800WK31631 Sale Lane/Red Lion                              P1W0T0
+ZAN1800WK31621 Sale Lane/Hough Lane                            P1W0T0
+ZAN1800WK31591 Manchester Road/The Gatehouse                   P1W0T0
+ZAN1800WK31581 Manchester Road/Ratcliffe Street                P1W0T0
+ZAN1800WK31561 Manchester Road/Peel Hall Avenue                P1W0T0
+ZAN1800WK31531 Market Street/Tyldesley Town Hall               P1W0T0
+ZAN1800WK31301 Elliott Street/Tyldesley Square                 P1W0T0
+ZAN1800WK03211 Elliott Street/Lemon Street                     P1W0T0
+ZAN1800WK31271 Shuttle Street/Lime Street                      P1W0T0
+ZAN1800WK31281 Shuttle St/Tyldesley Police Station             P1W0T1
+ZAN1800WK31541 Manchester Road/Peel Hall Avenue                P1W0T0
+ZAN1800WK31571 Manchester Road/Ratcliffe Street                P1W0T0
+ZAN1800WK31601 Manchester Road/The Gatehouse                   P1W0T0
+ZAN1800WK31421 Hough Lane/Bodmin Road                          P1W0T0
+ZAN1800WK31401 Henfold Road/Garrett Lane                       P1W0T0
+ZAN1800WK09211 Stour Road/Dee Road                             P1W0T0
+ZAN1800WK09221 Stour Road/Canal Duke                           P1W0T1
+ZAN1800WK31521 Princes Avenue/The Ley                          P1W0T0
+ZAN1800WK31321 Princes Avenue/Windsor Avenue                   P1W0T0
+ZAN1800WK31341 Princes Avenue/Manchester Road                  P1W0T0
+ZAN1800WK32001 Manchester Road/Astley Straits                  P1W0T0
+ZAN1800WK32011 Higher Green Lane/Cross Hillock                 P1W0T0
+ZAN1800WK32041 Higher Green Lane/Manor Road                    P1W0T0
+ZAN1800WK32051 Higher Green Lane/Ellesmere Street              P1W0T0
+ZAN1800WK32071 Higher Green Lane/Mining Museum                 P1W0T0
+ZAN1800WK32091 Peel Lane/Higher Green Lane                     P1W0T0
+ZAN1800WK32101 First Avenue/Higher Green                       P1W0T1
+ZAN1800WK32081 Higher Green Lane/Mining Museum                 P1W0T0
+ZAN1800WK32061 Higher Green Lane/Ellesmere Street              P1W0T0
+ZAN1800WK32031 Higher Green Lane/Manor Road                    P1W0T0
+ZAN1800WK32021 Higher Green Lane/Cross Hillock                 P1W0T0
+ZAN1800WK05671 Manchester Road/Astley Straits                  P1W0T0
+ZAN1800WK32121 Manchester Road/Miners Arms                     P1W0T1
+ZAN1800WK32131 Manchester Road/St Ambrose                      P1W0T0
+ZAN1800WK32141 Manchester Road/St Mary's High School           P1W0T0
+ZAN1800WK32161 Manchester Road/Hadbutt Lane                    P1W0T0
+ZAN1800WK08991 Manchester Road/Marsland Green Lane             P1W0T0
+ZAN1800WK32171 Manchester Road/Leigh Cemetery                  P1W0T0
+ZAN1800WK37161 Manchester Road/Stafford Street                 P1W0T0
+ZAN1800WK37181 Manchester Road/Bedford High School             P1W0T0
+ZAN1800WK37341 Holden Road/Green Lane                          P1W0T0
+ZAN1800WK37351 Holden Road/Wensleydale Road                    P1W0T0
+ZAN1800WK37371 Holden Road/Peregrine Drive                     P1W0T0
+ZAN1800WK02671 Holden Road/Guest Street                        P1W0T0
+ZAN1800WK36321 Holden Road/Platt Fold Road                     P1W0T1
+ZAN1800WK10391 Platt Fold Road/Holden Road                     P1W0T0
+ZAN1800WK10211 Platt Fold Road/Greenways                       P1W0T0
+ZAN1800WK36291 The Avenue/Leigh Infirmary                      P1W0T0
+ZAN1800WK09761 The Avenue/Hanover Street                       P1W0T0
+ZAN1800WK07761 The Avenue/Holden Road                          P1W0T0
+ZAN1800WK35491 The Avenue/Leigh Road                           P1W0T0
+ZAN1800LHBS001 Leigh Bus Station                               P1W0T1
+QSNGTB 000001201601022099123111111000X 654999999BUS     99999999I
+ZJGMA_654_S11001074      000     0000000000000000T         
+ZNFA   Low floor bus - access for pushchairs and wheelchairs                   
+QO1800WF40811 0728   T1F0
+QI1800WF41001 07280728B   T0F0
+QI1800WF41011 07290729B   T0F0
+QI1800WF41021 07290729B   T0F0
+QI1800WF39921 07290729B   T0F0
+QI1800WF39891 07310731B   T0F0
+QI1800WF39871 07310731B   T0F0
+QI1800WK09171 07320732B   T0F0
+QI1800WK06101 07330733B   T0F0
+QI1800WK09101 07340734B   T0F0
+QI1800WK31731 07350735B   T0F0
+QI1800WK31751 07350735B   T0F0
+QI1800WK31761 07360736B   T0F0
+QI1800WK31771 07360736B   T0F0
+QI1800WK31781 07360736B   T0F0
+QI1800WK31791 07370737B   T1F0
+QI1800WK08901 07370737B   T0F0
+QI1800WK31711 07380738B   T0F0
+QI1800WK31691 07390739B   T0F0
+QI1800WK31661 07400740B   T0F0
+QI1800WK31631 07410741B   T0F0
+QI1800WK31621 07420742B   T0F0
+QI1800WK31591 07430743B   T0F0
+QI1800WK31581 07440744B   T0F0
+QI1800WK31561 07450745B   T0F0
+QI1800WK31531 07460746B   T0F0
+QI1800WK31301 07470747B   T0F0
+QI1800WK03211 07480748B   T0F0
+QI1800WK31271 07480748B   T0F0
+QI1800WK31281 07500750B   T1F0
+QI1800WK31541 07500750B   T0F0
+QI1800WK31571 07510751B   T0F0
+QI1800WK31601 07520752B   T0F0
+QI1800WK31421 07530753B   T0F0
+QI1800WK31401 07530753B   T0F0
+QI1800WK09211 07540754B   T0F0
+QI1800WK09221 07560756B   T1F0
+QI1800WK31521 07570757B   T0F0
+QI1800WK31321 07570757B   T0F0
+QI1800WK31341 07580758B   T0F0
+QI1800WK32001 07580758B   T0F0
+QI1800WK32011 07590759B   T0F0
+QI1800WK32041 07590759B   T0F0
+QI1800WK32051 08000800B   T0F0
+QI1800WK32071 08000800B   T0F0
+QI1800WK32091 08000800B   T0F0
+QI1800WK32101 08010801B   T1F0
+QI1800WK32081 08010801B   T0F0
+QI1800WK32061 08020802B   T0F0
+QI1800WK32031 08020802B   T0F0
+QI1800WK32021 08030803B   T0F0
+QI1800WK05671 08030803B   T0F0
+QI1800WK32121 08050805B   T1F0
+QI1800WK32131 08050805B   T0F0
+QI1800WK32141 08060806B   T0F0
+QI1800WK32161 08070807B   T0F0
+QI1800WK08991 08080808B   T0F0
+QI1800WK32171 08090809B   T0F0
+QI1800WK37161 08090809B   T0F0
+QI1800WK37181 08100810B   T0F0
+QI1800WK37341 08110811B   T0F0
+QI1800WK37351 08110811B   T0F0
+QI1800WK37371 08120812B   T0F0
+QI1800WK02671 08130813B   T0F0
+QI1800WK36321 08140814B   T1F0
+QI1800WK10391 08140814B   T0F0
+QI1800WK10211 08140814B   T0F0
+QI1800WK36291 08150815B   T0F0
+QI1800WK09761 08160816B   T0F0
+QI1800WK07761 08160816B   T0F0
+QI1800WK35491 08170817B   T0F0
+QT1800LHBS001 0819   T1F0
