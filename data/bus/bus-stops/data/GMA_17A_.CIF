@@ -1,0 +1,293 @@
+ATCO-CIF 500TFGM                            GM_AIM          20160202194805  
+ZLGMA_17A_S11I
+ZD2016012420991231Mondays to Fridays                                                    
+ZSGMA_17A_ 17ARochdale - Stake Hill - Manchester                
+ZAN1800REBS0K1 Rochdale Interchange                            P1W0T1
+ZAN1800REBS001 Rochdale Interchange                            P1W0T1
+ZAN1800NE17081 Drake Street/Milnrow Road                       P1W0T0
+ZAN1800NE17111 Drake Street/Milkstone Road                     P1W0T0
+ZAN1800NE17121 Drake Street/Castlemere Street                  P1W0T0
+ZAN1800NE17141 Drake Street/Manchester Road                    P1W0T0
+ZAN1800NE25801 Manchester Road/Tweedale Street                 P1W0T0
+ZAN1800NE25811 Manchester Road/Highfield Hospital              P1W0T0
+ZAN1800NE25781 Manchester Road/Tesco                           P1W0T1
+ZAN1800NE18461 Manchester Road/St Aidan's Church               P1W0T0
+ZAN1800NE03411 Manchester Road/Royal Toby Hotel                P1W0T0
+ZAN1800NE03391 Manchester Road/Nixon Street                    P1W0T0
+ZAN1800NE03371 Manchester Road/Farewell Inn                    P1W0T0
+ZAN1800NE03351 Manchester Road/Milne Street                    P1W0T0
+ZAN1800NE03331 Manchester Rd/Vicarage Rd Nth                   P1W0T0
+ZAN1800NE03311 Manchester Road/Mount Street                    P1W0T0
+ZAN1800NE03291 Manchester Road/M62                             P1W0T0
+ZAN1800NE03281 Manchester Road/Thornham New Road               P1W0T0
+ZAN1800NE03241 Manchester Road/Chesham Avenue                  P1W0T1
+ZAN1800NE03221 Rochdale Road/Garden Centre                     P1W0T0
+ZAN1800NE03191 Rochdale Road/Thornham Lane                     P1W0T0
+ZAN1800NE04671 Whitbrook Way/Stake Hill Ind. Estate            P1W0T1
+ZAN1800NE04681 Finlan Road/Stake Hill Ind. Estate              P1W0T0
+ZAN1800NE04691 Finlan Road/Stake Hill Ind. Estate              P1W0T0
+ZAN1800NEH1361 Finlan Rd/Touchet Hall Rd                       P1W0T0
+ZAN1800NE04701 Finlan Road/Stake Hill Ind. Estate              P1W0T0
+ZAN1800NE04711 Touchet Hall Road/Stake Hill Ind. Est           P1W0T0
+ZAN1800NE04721 Touchet Hall Road/Stake Hill Ind. Est           P1W0T0
+ZAN1800NEH1381 Touchet Hall Rd/Whitbrook Way                   P1W0T0
+ZAN1800NEH1251 Whitbrook Way/Rochdale Road                     P1W0T0
+ZAN1800NE03161 Rochdale Road/Golf Club                         P1W0T0
+ZAN1800NE03141 Rochdale Road/Hopwood Hall College              P1W0T0
+ZAN1800NE03111 Rochdale Rd/Cardinal Langley School             P1W0T0
+ZAN1800NE03091 Rochdale Road/Stanycliffe Lane                  P1W0T0
+ZAN1800NE03071 Rochdale Road/Waverley Road                     P1W0T0
+ZAN1800NE03061 Rochdale Road/Black Bull Inn                    P1W0T0
+ZAN1800NE26401 Rochdale Road/Hollin Lane                       P1W0T0
+ZAN1800NE26421 Long Street/New Lane                            P1W0T0
+ZAN1800NE26431 Long Street/Cemetery Street                     P1W0T0
+ZAN1800NE09721 Long Street/Eastway                             P1W0T0
+ZAN1800MNBS0A1 Middleton Bus Station                           P1W0T1
+ZAN1800MNBS0N1 Middleton Bus Station                           P1W0T1
+ZAN1800MNBS001 Middleton Bus Station                           P1W0T1
+ZAN1800NE35881 Manchester New Road/Mill Fold Road              P1W0T0
+ZAN1800NE43431 Manchester New Road/Mount Road                  P1W0T0
+ZAN1800NE43411 Manchester New Road/Kingsway                    P1W0T0
+ZAN1800NE15271 Manchester New Road/Woodlands Way               P1W0T0
+ZAN1800NE43341 Manchester New Road/Mainway                     P1W0T0
+ZAN1800NE43311 Manchester New Road/Mossway                     P1W0T0
+ZAN1800NB43911 Rochdale Road/Victoria Ave                      P1W0T1
+ZAN1800NB43931 Rochdale Road/Hilldale Avenue                   P1W0T0
+ZAN1800NB43951 Rochdale Road/Dam Head Medical Centre           P1W0T0
+ZAN1800NB43961 Rochdale Road/Lion Brow                         P1W0T0
+ZAN1800NB44001 Rochdale Road/Charlestown Road                  P1W0T0
+ZAN1800NB44021 Rochdale Road/Old Road                          P1W0T0
+ZAN1800NB44041 Rochdale Road/Parkmount Road                    P1W0T0
+ZAN1800NB44081 Rochdale Road/Moston Lane                       P1W0T0
+ZAN1800NB44101 Rochdale Road/Oak Bank                          P1W0T0
+ZAN1800NB44111 Rochdale Road/Harpurhey Road                    P1W0T0
+ZAN1800NB44131 Rochdale Road/Harpurhey Post Office             P1W0T0
+ZAN1800NB44151 Rochdale Road/Queens Park                       P1W0T0
+ZAN1800NB44201 Rochdale Road/Queens Road                       P1W0T1
+ZAN1800NB44221 Rochdale Road/Eggington Street                  P1W0T0
+ZAN1800NB09501 Rochdale Road/Whitley Road                      P1W0T0
+ZAN1800NB08521 Rochdale Road/Osborne Street                    P1W0T0
+ZAN1800NB08541 Rochdale Road/Livesey Street                    P1W0T0
+ZAN1800NB08561 Rochdale Road/Moorhead Street                   P1W0T0
+ZAN1800NB04321 Rochdale Road/Thompson Street                   P1W0T0
+ZAN1800SHIC0C1 Shudehill Interchange                           P1W0T1
+ZAN1800SHIC001 Shudehill Interchange                           P1W0T1
+QSNGMN 000001201601242099123111111000X 17A999999BUS     99999999I
+ZJGMA_17A_S11001068      000     0000000000000000C         
+QO1800REBS001 0525K  T1F0
+QI1800NE17081 05250525B   T0F0
+QI1800NE17111 05260526B   T0F0
+QI1800NE17121 05270527B   T0F0
+QI1800NE17141 05280528B   T0F0
+QI1800NE25801 05290529B   T0F0
+QI1800NE25811 05300530B   T0F0
+QI1800NE25781 05320532B   T1F0
+QI1800NE18461 05320532B   T0F0
+QI1800NE03411 05330533B   T0F0
+QI1800NE03391 05340534B   T0F0
+QI1800NE03371 05350535B   T0F0
+QI1800NE03351 05360536B   T0F0
+QI1800NE03331 05370537B   T0F0
+QI1800NE03311 05380538B   T0F0
+QI1800NE03291 05380538B   T0F0
+QI1800NE03281 05390539B   T0F0
+QI1800NE03241 05400540B   T1F0
+QI1800NE03221 05420542B   T0F0
+QI1800NE03191 05440544B   T0F0
+QI1800NE04671 05460546B   T1F0
+QI1800NE04681 05460546B   T0F0
+QI1800NE04691 05470547B   T0F0
+QI1800NEH1361 05470547B   T0F0
+QI1800NE04701 05480548B   T0F0
+QI1800NE04711 05480548B   T0F0
+QI1800NE04721 05490549B   T0F0
+QI1800NEH1381 05490549B   T0F0
+QI1800NEH1251 05500550B   T0F0
+QI1800NE03161 05510551B   T0F0
+QI1800NE03141 05510551B   T0F0
+QI1800NE03111 05520552B   T0F0
+QI1800NE03091 05520552B   T0F0
+QI1800NE03071 05530553B   T0F0
+QI1800NE03061 05530553B   T0F0
+QI1800NE26401 05540554B   T0F0
+QI1800NE26421 05550555B   T0F0
+QI1800NE26431 05550555B   T0F0
+QI1800NE09721 05550555B   T0F0
+QI1800MNBS001 05570557BN  T1F0
+QI1800NE35881 05570557B   T0F0
+QI1800NE43431 05580558B   T0F0
+QI1800NE43411 05580558B   T0F0
+QI1800NE15271 05590559B   T0F0
+QI1800NE43341 05590559B   T0F0
+QI1800NE43311 06000600B   T0F0
+QI1800NB43911 06010601B   T1F0
+QI1800NB43931 06010601B   T0F0
+QI1800NB43951 06020602B   T0F0
+QI1800NB43961 06020602B   T0F0
+QI1800NB44001 06030603B   T0F0
+QI1800NB44021 06030603B   T0F0
+QI1800NB44041 06040604B   T0F0
+QI1800NB44081 06040604B   T0F0
+QI1800NB44101 06050605B   T0F0
+QI1800NB44111 06050605B   T0F0
+QI1800NB44131 06050605B   T0F0
+QI1800NB44151 06060606B   T0F0
+QI1800NB44201 06070607B   T1F0
+QI1800NB44221 06070607B   T0F0
+QI1800NB09501 06090609B   T0F0
+QI1800NB08521 06100610B   T0F0
+QI1800NB08541 06110611B   T0F0
+QI1800NB08561 06110611B   T0F0
+QI1800NB04321 06120612B   T0F0
+QT1800SHIC001 0614   T1F0
+ZLGMA_17A_S51O
+ZD2016012420991231Mondays to Fridays                                                    
+ZSGMA_17A_ 17AManchester - Stake Hill - Rochdale                
+ZAN1800SHIC0C1 Shudehill Interchange                           P1W0T1
+ZAN1800SHIC001 Shudehill Interchange                           P1W0T1
+ZAN1800NB04281 Shudehill/Mayes Street                          P1W0T0
+ZAN1800NB04271 Rochdale Road/Angel Street                      P1W0T0
+ZAN1800NB08581 Rochdale Road/Gould Street                      P1W0T0
+ZAN1800NB08551 Rochdale Road/Peary Street                      P1W0T0
+ZAN1800NB08531 Rochdale Road/Livesey Street                    P1W0T0
+ZAN1800NB08511 Rochdale Road/Osborne Street                    P1W0T0
+ZAN1800NB09491 Rochdale Road/Collyhurst Street                 P1W0T0
+ZAN1800NB44211 Rochdale Road/Paget Street                      P1W0T0
+ZAN1800NB44181 Rochdale Road/Queens Road                       P1W0T1
+ZAN1800NB44141 Rochdale Road/Lathbury Road                     P1W0T0
+ZAN1800NB44121 Rochdale Road/Harpurhey Road                    P1W0T0
+ZAN1800NB09961 Rochdale Road/Pleasant Street                   P1W0T0
+ZAN1800NB44091 Rochdale Road/Christ Church                     P1W0T0
+ZAN1800NB44051 Rochdale Road/Moston Lane                       P1W0T0
+ZAN1800NB44031 Rochdale Rd/Cumberland Rd                       P1W0T0
+ZAN1800NB44011 Rochdale Road/Old Road                          P1W0T0
+ZAN1800NB43991 Rochdale Road/Charlestown Road                  P1W0T0
+ZAN1800NB43971 Rochdale Road/Lion Brow                         P1W0T0
+ZAN1800NB43941 Rochdale Road/Dam Head Medical Centre           P1W0T0
+ZAN1800NB43921 Rochdale Road/Hilldale Avenue                   P1W0T0
+ZAN1800NB43301 Rochdale Road/Victoria Ave                      P1W0T1
+ZAN1800NE04761 Manchester New Road/Mossway                     P1W0T0
+ZAN1800NE43331 Manchester New Road/Moss Lane                   P1W0T0
+ZAN1800NE43401 Manchester New Road/Woodlands Way               P1W0T0
+ZAN1800NE43421 Manchester New Road/Kingsway                    P1W0T0
+ZAN1800NE43441 Manchester New Road/Mount Road                  P1W0T0
+ZAN1800NE35871 Manchester New Road/Mill Fold Road              P1W0T0
+ZAN1800MNBS0A1 Middleton Bus Station                           P1W0T1
+ZAN1800MNBS0N1 Middleton Bus Station                           P1W0T1
+ZAN1800MNBS001 Middleton Bus Station                           P1W0T1
+ZAN1800NE09771 Assheton Way/Long Street                        P1W0T0
+ZAN1800NE26441 Long Street/Cemetery Street                     P1W0T0
+ZAN1800NE26411 Long Street/New Lane                            P1W0T0
+ZAN1800NE31711 Rochdale Road/Cleworth Road                     P1W0T0
+ZAN1800NE26451 Rochdale Road/Hollin Lane                       P1W0T0
+ZAN1800NE03051 Rochdale Road/Nowell Road                       P1W0T0
+ZAN1800NE03081 Rochdale Road/Waverley Road                     P1W0T0
+ZAN1800NE03101 Rochdale Road/Stanycliffe Lane                  P1W0T0
+ZAN1800NE03121 Rochdale Rd/Cardinal Langley School             P1W0T0
+ZAN1800NE03131 Rochdale Road/Hopwood Hall College              P1W0T0
+ZAN1800NE03151 Rochdale Road/Golf Club                         P1W0T0
+ZAN1800NE04671 Whitbrook Way/Stake Hill Ind. Estate            P1W0T0
+ZAN1800NEH1261 Finlan Road/Whitbrook Way                       P1W0T0
+ZAN1800NE04681 Finlan Road/Stake Hill Ind. Estate              P1W0T0
+ZAN1800NE04691 Finlan Road/Stake Hill Ind. Estate              P1W0T0
+ZAN1800NEH1361 Finlan Rd/Touchet Hall Rd                       P1W0T0
+ZAN1800NE04701 Finlan Road/Stake Hill Ind. Estate              P1W0T0
+ZAN1800NE04711 Touchet Hall Road/Stake Hill Ind. Est           P1W0T1
+ZAN1800NE04721 Touchet Hall Road/Stake Hill Ind. Est           P1W0T0
+ZAN1800NEH1381 Touchet Hall Rd/Whitbrook Way                   P1W0T0
+ZAN1800NEH1251 Whitbrook Way/Rochdale Road                     P1W0T0
+ZAN1800NE03181 Rochdale Road                                   P1W0T0
+ZAN1800NE03201 Rochdale Road/Thornham Lane                     P1W0T0
+ZAN1800NE03211 Rochdale Road/Garden Centre                     P1W0T0
+ZAN1800NE03231 Manchester Road/Chesham Avenue                  P1W0T1
+ZAN1800NE03251 Manchester Road/Thornham New Road               P1W0T0
+ZAN1800NE03301 Manchester Road/M62                             P1W0T0
+ZAN1800NE03321 Manchester Road/Vicarage Rd Nth                 P1W0T0
+ZAN1800NE03341 Manchester Rd/Castleton Post Office             P1W0T0
+ZAN1800NE03361 Manchester Road/Milne Street                    P1W0T0
+ZAN1800NE03381 Manchester Road/Farewell Inn                    P1W0T0
+ZAN1800NE03401 Manchester Road/Abbott Street                   P1W0T0
+ZAN1800NE03421 Manchester Road/Royal Toby Hotel                P1W0T0
+ZAN1800NE02421 Manchester Road/St Aidan's Church               P1W0T0
+ZAN1800NE18471 Manchester Road/Tesco                           P1W0T1
+ZAN1800NE18481 Manchester Road/Roch Valley Way                 P1W0T0
+ZAN1800NE25791 Manchester Road/Highfield Hospital              P1W0T0
+ZAN1800NE17151 Manchester Road/Tweedale Street                 P1W0T0
+ZAN1800NE17131 Drake Street/Castlemere Street                  P1W0T0
+ZAN1800NE17101 Drake Street/Milkstone Road                     P1W0T0
+ZAN1800NE17091 Drake Street/Milnrow Road                       P1W0T0
+ZAN1800REBS0K1 Rochdale Interchange                            P1W0T1
+ZAN1800REBS001 Rochdale Interchange                            P1W0T1
+QSNGMN 000001201601242099123111111000X 17A999999BUS     99999999O
+ZJGMA_17A_S51001071      000     0000000000000000C         
+QO1800SHIC001 0510C  T1F0
+QI1800NB04281 05100510B   T0F0
+QI1800NB04271 05100510B   T0F0
+QI1800NB08581 05110511B   T0F0
+QI1800NB08551 05120512B   T0F0
+QI1800NB08531 05120512B   T0F0
+QI1800NB08511 05130513B   T0F0
+QI1800NB09491 05130513B   T0F0
+QI1800NB44211 05140514B   T0F0
+QI1800NB44181 05160516B   T1F0
+QI1800NB44141 05160516B   T0F0
+QI1800NB44121 05160516B   T0F0
+QI1800NB09961 05170517B   T0F0
+QI1800NB44091 05170517B   T0F0
+QI1800NB44051 05180518B   T0F0
+QI1800NB44031 05190519B   T0F0
+QI1800NB44011 05190519B   T0F0
+QI1800NB43991 05200520B   T0F0
+QI1800NB43971 05210521B   T0F0
+QI1800NB43941 05210521B   T0F0
+QI1800NB43921 05220522B   T0F0
+QI1800NB43301 05230523B   T1F0
+QI1800NE04761 05240524B   T0F0
+QI1800NE43331 05240524B   T0F0
+QI1800NE43401 05260526B   T0F0
+QI1800NE43421 05260526B   T0F0
+QI1800NE43441 05270527B   T0F0
+QI1800NE35871 05280528B   T0F0
+QI1800MNBS001 05290529BA  T1F0
+QI1800NE09771 05290529B   T0F0
+QI1800NE26441 05290529B   T0F0
+QI1800NE26411 05300530B   T0F0
+QI1800NE31711 05300530B   T0F0
+QI1800NE26451 05300530B   T0F0
+QI1800NE03051 05300530B   T0F0
+QI1800NE03081 05310531B   T0F0
+QI1800NE03101 05310531B   T0F0
+QI1800NE03121 05310531B   T0F0
+QI1800NE03131 05320532B   T0F0
+QI1800NE03151 05320532B   T0F0
+QI1800NE04671 05330533B   T0F0
+QI1800NEH1261 05330533B   T0F0
+QI1800NE04681 05330533B   T0F0
+QI1800NE04691 05340534B   T0F0
+QI1800NEH1361 05340534B   T0F0
+QI1800NE04701 05340534B   T0F0
+QI1800NE04711 05350535B   T1F0
+QI1800NE04721 05360536B   T0F0
+QI1800NEH1381 05360536B   T0F0
+QI1800NEH1251 05370537B   T0F0
+QI1800NE03181 05380538B   T0F0
+QI1800NE03201 05380538B   T0F0
+QI1800NE03211 05390539B   T0F0
+QI1800NE03231 05410541B   T1F0
+QI1800NE03251 05410541B   T0F0
+QI1800NE03301 05420542B   T0F0
+QI1800NE03321 05420542B   T0F0
+QI1800NE03341 05430543B   T0F0
+QI1800NE03361 05440544B   T0F0
+QI1800NE03381 05440544B   T0F0
+QI1800NE03401 05450545B   T0F0
+QI1800NE03421 05450545B   T0F0
+QI1800NE02421 05460546B   T0F0
+QI1800NE18471 05470547B   T1F0
+QI1800NE18481 05470547B   T0F0
+QI1800NE25791 05480548B   T0F0
+QI1800NE17151 05490549B   T0F0
+QI1800NE17131 05500550B   T0F0
+QI1800NE17101 05500550B   T0F0
+QI1800NE17091 05510551B   T0F0
+QT1800REBS001 0552   T1F0

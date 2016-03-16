@@ -1,0 +1,196 @@
+ATCO-CIF 500TFGM                            GM_AIM          20160202194805  
+ZLGMB_344_S11I
+ZD2016010220991231Mondays to Fridays                                                    
+ZSGMB_344_ 344Oldham - Lees - Mossley - Stalybridge - Hyde      
+ZAN1800OMBS0G1 Oldham Central Bus Station                      P1W0T1
+ZAN1800OMBS001 Oldham Central Bus Station                      P1W0T1
+ZAN1800ED02121 Lord Street/Sports Centre                       P1W0T0
+ZAN1800ED15041 Yorkshire Street/Fairbottom Street              P1W0T0
+ZAN1800ED15071 Yorkshire Street/Scholes Street                 P1W0T0
+ZAN1800ED15891 Bottom O'th' Moor/Black Swan                    P1W0T0
+ZAN1800ED31001 Greenacres Road/Hill Street                     P1W0T0
+ZAN1800ED19011 Greenacres Road/Dunkerley Street                P1W0T0
+ZAN1800ED03081 Greenacres Road/Windermere Walk                 P1W0T0
+ZAN1800ED19041 Greenacres Rd/Greenacres Cemetery               P1W0T0
+ZAN1800ED19061 Greenacres Road/Sycamore Avenue                 P1W0T0
+ZAN1800ED11011 Greenacres Road/Cotton Tree Close               P1W0T0
+ZAN1800ED11121 Greenacres Road/Bulls Head                      P1W0T0
+ZAN1800ED30641 Stamford Road/Dunham Street                     P1W0T1
+ZAN1800ED30661 Stamford Road/Redwood Lane                      P1W0T0
+ZAN1800ED30701 Stamford Road/St John's                         P1W0T0
+ZAN1800ED30721 St John Street/The Grapes                       P1W0T0
+ZAN1800ED30741 St John Street/Greaves Street                   P1W0T0
+ZAN1800ED00391 High Street/The Swan                            P1W0T0
+ZAN1800ED30811 Oldham Road/County End                          P1W0T0
+ZAN1800ED06461 Oldham Road/Springhead Post Office              P1W0T0
+ZAN1800ED30791 Oldham Road/Walkers Lane                        P1W0T0
+ZAN1800ED30781 Oldham Road/Cooper Street                       P1W0T0
+ZAN1800ED01571 Oldham Road/Brooklands Parade                   P1W0T1
+ZAN1800ED45411 Coverhill Road/Oldham Road                      P1W0T0
+ZAN1800ED45431 Under Lane/Thornley Lane                        P1W0T0
+ZAN1800ED45441 Under Lane/Quick Edge Lane                      P1W0T0
+ZAN1800EH45461 Lees Road/Butt Lane                             P1W0T0
+ZAN1800EH45471 Lees Road/Fir Tree Farm                         P1W0T0
+ZAN1800EH45501 Lees Road                                       P1W0T0
+ZAN1800EH07111 Lees Road                                       P1W0T1
+ZAN1800EH08221 Stamford Road/Egerton Street                    P1W0T0
+ZAN1800EH08261 Stamford Road                                   P1W0T0
+ZAN1800EH06811 Stamford Road/Dental Surgery                    P1W0T1
+ZAN1800EH15001 Manchester Road/Brittania Inn                   P1W0T0
+ZAN1800EH07441 Manchester Road/Portman Street                  P1W0T0
+ZAN1800EH07411 Manchester Road/Mill Lane                       P1W0T0
+ZAN1800EH07401 Manchester Road/Woodend Mill                    P1W0T0
+ZAN1800EH07371 Manchester Road/Roughtown Road                  P1W0T0
+ZAN1800EH07361 Manchester Road/Roaches                         P1W0T0
+ZAN1800EH07321 Manchester Road/The Moorings                    P1W0T0
+ZAN1800ED07311 Manchester Road/Shadows Lane                    P1W0T1
+ZAN1800EH07291 Moorlands Drive/Huddersfield Rd                 P1W0T0
+ZAN1800EH07301 Moorlands Dr/Hey Farm Terminus                  P1W0T0
+ZAN1800EH45161 Huddersfield Road/Winterford Road               P1W0T0
+ZAN1800EH45221 Winterford Road/Moorside Road                   P1W0T1
+ZAN1800EH45241 Winterford Road/Mansfield Road                  P1W0T0
+ZAN1800EH45261 Winterford Road/The Uplands                     P1W0T0
+ZAN1800EH45281 Station Road/Moorlands Crescent                 P1W0T0
+ZAN1800EH17561 Staley Road/The Spindles                        P1W0T0
+ZAN1800EH45341 Staley Road/Tabley Street                       P1W0T0
+ZAN1800EH45361 Staley Road/Cemetery Road                       P1W0T0
+ZAN1800EH08201 Huddersfield Road/Staley Road                   P1W0T0
+ZAN1800EH08181 Huddersfield Rd/Staley Cottages                 P1W0T0
+ZAN1800EH08281 Buckton Vale Road/Post Office                   P1W0T0
+ZAN1800EH08291 Buckton Vale Road/South View                    P1W0T0
+ZAN1800EH01431 South View/Castle Lane                          P1W0T0
+ZAN1800EH17431 South View/Buckton Vale Road                    P1W0T1
+ZAN1800EH11201 Buckton Vale Road/Moorgate Road                 P1W0T0
+ZAN1800EH08161 Huddersfield Road/Buckton Castle                P1W0T0
+ZAN1800EH10001 Huddersfield Road/First Avenue                  P1W0T0
+ZAN1800EH09981 Huddersfield Road/St Raphael's Church           P1W0T0
+ZAN1800EH09961 Huddersfield Road/Shakespeare Avenue            P1W0T0
+ZAN1800EH09941 Huddersfield Road/Millbrook                     P1W0T1
+ZAN1800EH09921 Huddersfield Road/Parkfields                    P1W0T0
+ZAN1800EH09901 Huddersfield Road/Brushes Road                  P1W0T0
+ZAN1800EH43031 Brushes Road/Crantock Drive                     P1W0T0
+ZAN1800EH09871 Huddersfield Road/The Copley Centre             P1W0T0
+ZAN1800EH09841 Huddersfield Road/Demesne Drive                 P1W0T0
+ZAN1800EH09821 Huddersfield Road/Demesne Drive                 P1W0T0
+ZAN1800EH05731 Huddersfield Road/Mottram Road                  P1W0T0
+ZAN1800EH09441 Acres Lane/The Organ                            P1W0T0
+ZAN1800EH09421 Acres Lane/Park Street                          P1W0T0
+ZAN1800EH00611 Armentieres Square                              P1W0T0
+ZAN1800EH09491 Trinity Street/Market Street                    P1W0T0
+ZAN1800EH20541 Stalybridge Bus Station                         P1W0T1
+ZAN1800EH09451 Caroline Street/Shepley Street                  P1W0T0
+ZAN1800EH09381 High Street/Quarry Street                       P1W0T0
+ZAN1800EH09371 High Street/Stanley Square                      P1W0T0
+ZAN1800EH39471 High Street/Set Street                          P1W0T0
+ZAN1800EH09351 High Street/Pine Road                           P1W0T0
+ZAN1800EH39431 Oxford Road/St John Street                      P1W0T0
+ZAN1800EH39421 Oxford Road/Lodge Lane                          P1W0T0
+ZAN1800EH39401 Oxford Road/Albion Hotel                        P1W0T1
+ZAN1800EH03141 Birch Lane/Boyds Walk                           P1W0T0
+ZAN1800EH03161 Birch Lane/All Saints College                   P1W0T0
+ZAN1800EH03181 Birch Lane/Yew Tree Lane                        P1W0T0
+ZAN1800EH03221 Ashton Road/Gregory Street                      P1W0T0
+ZAN1800EH03241 Ashton Road/Cheshire Cheese                     P1W0T1
+ZAN1800EH38741 Bennet Street/Pine Street                       P1W0T0
+ZAN1800EH38731 Bennet St/Flowery Field Station                 P1W0T0
+ZAN1800EH38701 Old Road/White Hart Street                      P1W0T0
+ZAN1800EH38681 Old Road/Gair Street                            P1W0T0
+ZAN1800EH38571 Newton Street/Well Meadow                       P1W0T0
+ZAN1800HEBS0D1 Hyde Bus Station                                P1W0T1
+ZAN1800HEBS001 Hyde Bus Station                                P1W0T1
+QSNSTO 000001201601022099123111111000X 344999999BUS     99999999I
+ZJGMB_344_S11001102      000     0000000000000000T         
+QO1800OMBS001 0740G  T1F0
+QI1800ED02121 07410741B   T0F0
+QI1800ED15041 07420742B   T0F0
+QI1800ED15071 07420742B   T0F0
+QI1800ED15891 07440744B   T0F0
+QI1800ED31001 07460746B   T0F0
+QI1800ED19011 07470747B   T0F0
+QI1800ED03081 07480748B   T0F0
+QI1800ED19041 07490749B   T0F0
+QI1800ED19061 07500750B   T0F0
+QI1800ED11011 07500750B   T0F0
+QI1800ED11121 07510751B   T0F0
+QI1800ED30641 07530753B   T1F0
+QI1800ED30661 07530753B   T0F0
+QI1800ED30701 07540754B   T0F0
+QI1800ED30721 07550755B   T0F0
+QI1800ED30741 07560756B   T0F0
+QI1800ED00391 07570757B   T0F0
+QI1800ED30811 07570757B   T0F0
+QI1800ED06461 07580758B   T0F0
+QI1800ED30791 07590759B   T0F0
+QI1800ED30781 08000800B   T0F0
+QI1800ED01571 08010801B   T1F0
+QI1800ED45411 08020802B   T0F0
+QI1800ED45431 08030803B   T0F0
+QI1800ED45441 08040804B   T0F0
+QI1800EH45461 08050805B   T0F0
+QI1800EH45471 08050805B   T0F0
+QI1800EH45501 08060806B   T0F0
+QI1800EH07111 08070807B   T1F0
+QI1800EH08221 08090809B   T0F0
+QI1800EH08261 08110811B   T0F0
+QI1800EH06811 08120812B   T1F0
+QI1800EH15001 08120812B   T0F0
+QI1800EH07441 08120812B   T0F0
+QI1800EH07411 08130813B   T0F0
+QI1800EH07401 08130813B   T0F0
+QI1800EH07371 08140814B   T0F0
+QI1800EH07361 08150815B   T0F0
+QI1800EH07321 08160816B   T0F0
+QI1800ED07311 08170817B   T1F0
+QI1800EH07291 08170817B   T0F0
+QI1800EH07301 08180818B   T0F0
+QI1800EH45161 08190819B   T0F0
+QI1800EH45221 08200820B   T1F0
+QI1800EH45241 08200820B   T0F0
+QI1800EH45261 08200820B   T0F0
+QI1800EH45281 08200820B   T0F0
+QI1800EH17561 08210821B   T0F0
+QI1800EH45341 08210821B   T0F0
+QI1800EH45361 08210821B   T0F0
+QI1800EH08201 08220822B   T0F0
+QI1800EH08181 08220822B   T0F0
+QI1800EH08281 08220822B   T0F0
+QI1800EH08291 08230823B   T0F0
+QI1800EH01431 08230823B   T0F0
+QI1800EH17431 08240824B   T1F0
+QI1800EH11201 08250825B   T0F0
+QI1800EH08161 08270827B   T0F0
+QI1800EH10001 08280828B   T0F0
+QI1800EH09981 08290829B   T0F0
+QI1800EH09961 08310831B   T0F0
+QI1800EH09941 08330833B   T1F0
+QI1800EH09921 08330833B   T0F0
+QI1800EH09901 08340834B   T0F0
+QI1800EH43031 08370837B   T0F0
+QI1800EH09871 08380838B   T0F0
+QI1800EH09841 08390839B   T0F0
+QI1800EH09821 08400840B   T0F0
+QI1800EH05731 08400840B   T0F0
+QI1800EH09441 08410841B   T0F0
+QI1800EH09421 08420842B   T0F0
+QI1800EH00611 08420842B   T0F0
+QI1800EH09491 08430843B   T0F0
+QI1800EH20541 08440844B   T1F0
+QI1800EH09451 08440844B   T0F0
+QI1800EH09381 08450845B   T0F0
+QI1800EH09371 08460846B   T0F0
+QI1800EH39471 08460846B   T0F0
+QI1800EH09351 08480848B   T0F0
+QI1800EH39431 08480848B   T0F0
+QI1800EH39421 08490849B   T0F0
+QI1800EH39401 08500850B   T1F0
+QI1800EH03141 08500850B   T0F0
+QI1800EH03161 08510851B   T0F0
+QI1800EH03181 08520852B   T0F0
+QI1800EH03221 08540854B   T0F0
+QI1800EH03241 08550855B   T1F0
+QI1800EH38741 08550855B   T0F0
+QI1800EH38731 08560856B   T0F0
+QI1800EH38701 08570857B   T0F0
+QI1800EH38681 08570857B   T0F0
+QI1800EH38571 08580858B   T0F0
+QT1800HEBS001 0900   T1F0

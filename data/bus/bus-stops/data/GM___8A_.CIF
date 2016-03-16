@@ -1,0 +1,63 @@
+ATCO-CIF 500TFGM                            GM_AIM          20160202194805  
+ZLGM___8A_S11I
+ZD2016010220991231Mondays to Fridays                                                    
+ZSGM___8A_  8ABlackrod - Adlington - Chorley                    
+ZAN1800WA34051 New Street/Methodist Church                     P1W0T1
+ZAN1800WA34031 Church Street/Red Lion                          P1W0T0
+ZAN1800WA34001 Black Horse Street/Black Horse                  P1W0T1
+ZAN1800WA02701 Chorley Road/A6 Bypass                          P1W0T0
+ZAN1800WA12181 Chorley Road/Grimeford Lane                     P1W0T0
+ZAN1800WA10781 Chorley Road/Waterhouse Nook                    P1W0T0
+ZAN2500575     LOWER ADLINGTON, White Bear                     P1W0T0
+ZAN250010052   Railway Station                                 P1W0T1
+ZAN2500IMG2466 HEATH CHARNOCK, Bay Horse                       P1W0T1
+ZAN2500LAA00094LIMBRICK, Cricket Ground                        P1W0T1
+ZAN2500DCL3384 CHORLEY, Rail Station                           P1W0T0
+ZAN250020901   CHORLEY, Bus Station                            P1W0T1
+QSNGNV 000001201601022099123101001000X  8A999999BUS     99999999I
+ZJGM___8A_S11001012      000     0000000000000000C         
+ZNTu   Tuesday & Friday only                                                   
+QO1800WA34051 1100   T1F0
+QI1800WA34031 11011101B   T0F0
+QI1800WA34001 11031103B   T1F0
+QI1800WA02701 11041104B   T0F0
+QI1800WA12181 11051105B   T0F0
+QI1800WA10781 11071107B   T0F0
+QI2500575     11091109B   T0F0
+QI250010052   11101110B   T1F0
+QI2500IMG2466 11131113B   T1F0
+QI2500LAA0009411161116B   T1F0
+QI2500DCL3384 11261126B   T0F0
+QT250020901   1127   T1F0
+ZLGM___8A_S51O
+ZD2016010220991231Mondays to Fridays                                                    
+ZSGM___8A_  8AChorley - Adlington - Blackrod                    
+ZAN250020901   CHORLEY, Bus Station                            P1W0T1
+ZAN2500510     CHORLEY Rail Station                            P1W0T0
+ZAN2500DCL3421 CHORLEY George Street                           P1W0T0
+ZAN2500LAA00095LIMBRICK, Cricket Ground                        P1W0T1
+ZAN2500563     HEATH CHARNOCK, Bay Horse                       P1W0T1
+ZAN2500500     ADLINGTON (Lancs), Belmont Road                 P1W0T0
+ZAN2500IMG2470 Railway Station                                 P1W0T1
+ZAN1800WA10791 Chorley Road/Edgewood                           P1W0T0
+ZAN1800WA12451 Chorley Road/Grimeford Lane                     P1W0T0
+ZAN1800WA02631 Chorley Road/A6 Bypass                          P1W0T0
+ZAN1800WA34011 Black Horse Street/Black Horse                  P1W0T1
+ZAN1800WA34021 Church Street/Red Lion                          P1W0T0
+ZAN1800WA34041 New Street/Methodist Church                     P1W0T1
+QSNGNV 000001201601022099123101001000X  8A999999BUS     99999999O
+ZJGM___8A_S51001013      000     0000000000000000C         
+ZNTu   Tuesday & Friday only                                                   
+QO250020901   1445   T1F0
+QI2500510     14451445B   T0F0
+QI2500DCL3421 14461446B   T0F0
+QI2500LAA0009514521452B   T1F0
+QI2500563     14571457B   T1F0
+QI2500500     14591459B   T0F0
+QI2500IMG2470 15001500B   T1F0
+QI1800WA10791 15011501B   T0F0
+QI1800WA12451 15041504B   T0F0
+QI1800WA02631 15051505B   T0F0
+QI1800WA34011 15071507B   T1F0
+QI1800WA34021 15081508B   T0F0
+QT1800WA34041 1510   T1F0

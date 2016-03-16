@@ -1,0 +1,24 @@
+{
+    "description": "This dataset consists of map files which show bus routes covering the Greater Manchester area in a selection of GIS file formats.\r\n\r\nBy downloading this dataset you are indicating your acceptance of the terms of the licence.\r\n\r\nPlease acknowledge the source of this information using the following attribution statement:\r\n\r\nContains Transport for Greater Manchester data.  Contains OS data \u00a9 Crown copyright and database right 2016.", 
+    "license": "OGL-UK-3.0", 
+    "title": "Bus routes (1:25,000 scale map data)", 
+    "filepath": "/media/hulk/packagezip/bus-routes-1-25-000-scale-map-data.zip", 
+    "id": "136be10f-1667-474f-b52c-92bb24486739", 
+    "resources": [
+        {
+            "description": "Bus Route Supporting Information", 
+            "format": "pdf", 
+            "url": "http://odata.tfgm.com/opendata/downloads/BusRouteMaps/BusRouteMapsSupportingInfo.pdf", 
+            "included_in_zip": true, 
+            "path": "data/BusRouteMapsSupportingInfo.pdf"
+        }, 
+        {
+            "description": "Bus Route map data", 
+            "format": "zip", 
+            "url": "http://odata.tfgm.com/opendata/downloads/BusRouteMaps/BusRouteMapData.zip", 
+            "included_in_zip": true, 
+            "path": "data/BusRouteMapData.zip"
+        }
+    ], 
+    "name": "bus-routes-1-25-000-scale-map-data"
+}

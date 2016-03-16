@@ -1,0 +1,153 @@
+ATCO-CIF 500TFGM                            GM_AIM          20160202194805  
+ZLGM__194_S11I
+ZD2016010220991231Mondays to Fridays                                                    
+ZSGM__194_ 194Wythenshawe Hospital - East Didsbury              
+ZAN1800SB45781 Wythenshawe Hospital                            P1W0T1
+ZAN1800SB15131 Hospital Road/Southmoor Road                    P1W0T0
+ZAN1800SB18321 Marden Road/Black Boy                           P1W0T0
+ZAN1800SB08721 Bowland Road/Neilson Court                      P1W0T0
+ZAN1800SB09721 Hall Lane/Baguley Clinic                        P1W0T0
+ZAN1800SB46531 Hall Lane/Baguley Post Office                   P1W0T0
+ZAN1800SB46511 Hall Lane/Floatshall Road                       P1W0T0
+ZAN1800SB45991 Hall Lane/Nearcroft Road                        P1W0T0
+ZAN1800SB41801 Altrincham Road/Hall Lane                       P1W0T0
+ZAN1800SB43001 Altrincham Rd/Princess Parkway                  P1W0T1
+ZAN1800SB42021 Britannia Hotel                                 P1W0T0
+ZAN1800SB33491 Princess Road/Mersey Bank Avenue                P1W0T0
+ZAN1800SB33501 Princess Road/St Ambrose School                 P1W0T0
+ZAN1800SB33511 Princess Rd/Barlow Moor Rd                      P1W0T0
+ZAN1800SB11951 Nell Lane/Princess Road                         P1W0T0
+ZAN1800SB08931 Elizabeth Slinger Rd/Nell Lane                  P1W0T1
+ZAN1800SB33811 Barlow Moor Rd/Barlow Moor Ct                   P1W0T0
+ZAN1800SB33841 Barlow Moor Road/Clyde Road                     P1W0T0
+ZAN1800SB34291 Barlow Moor Road/Palatine Road                  P1W0T0
+ZAN1800SB34271 Barlow Moor Road/Hesketh Avenue                 P1W0T0
+ZAN1800SB34141 Wilmslow Road/Didsbury Village                  P1W0T1
+QSNMTR 000001201601022099123111111000X 194999999BUS     99999999I
+ZJGM__194_S11001021      000     0000000000000000T         
+QO1800SB45781 1710   T1F0
+QI1800SB15131 17111711B   T0F0
+QI1800SB18321 17121712B   T0F0
+QI1800SB08721 17131713B   T0F0
+QI1800SB09721 17131713B   T0F0
+QI1800SB46531 17141714B   T0F0
+QI1800SB46511 17151715B   T0F0
+QI1800SB45991 17161716B   T0F0
+QI1800SB41801 17161716B   T0F0
+QI1800SB43001 17181718B   T1F0
+QI1800SB42021 17201720B   T0F0
+QI1800SB33491 17241724B   T0F0
+QI1800SB33501 17251725B   T0F0
+QI1800SB33511 17261726B   T0F0
+QI1800SB11951 17271727B   T0F0
+QI1800SB08931 17281728B   T1F0
+QI1800SB33811 17281728B   T0F0
+QI1800SB33841 17291729B   T0F0
+QI1800SB34291 17301730B   T0F0
+QI1800SB34271 17311731B   T0F0
+QT1800SB34141 1732   T1F0
+ZLGM__194_S51O
+ZD2016010220991231Mondays to Fridays                                                    
+ZSGM__194_ 194Longsight - Didsbury - Wythenshawe Hospital       
+ZAN1800EB06301 Stockport Rd/Longsight Shopping Ctr             P1W0T1
+ZAN1800EB04471 Stockport Road/Slade Lane                       P1W0T0
+ZAN1800EB04501 Stockport Road/East Road                        P1W0T0
+ZAN1800EB06341 Slade Lane/Crowcroft Road                       P1W0T0
+ZAN1800EB00861 Slade Lane/St Agnes Church                      P1W0T0
+ZAN1800EB06351 Slade Lane/Park Avenue                          P1W0T0
+ZAN1800EB06361 Slade Lane/West Point                           P1W0T0
+ZAN1800EB13931 Kingsway/Moseley Road                           P1W0T0
+ZAN1800EB13901 Kingsway/Grangethorpe Drive                     P1W0T0
+ZAN1800EB04621 Mauldeth Road/Rail Station                      P1W0T0
+ZAN1800SB14061 Mauldeth Road/Ladybarn Village                  P1W0T1
+ZAN1800SB14131 Parrs Wood Road/Ladybarn Park                   P1W0T0
+ZAN1800SB14141 Parrs Wood Road/Haldon Road                     P1W0T0
+ZAN1800SB14161 Parrs Wood Road/Heyscroft Road                  P1W0T0
+ZAN1800SB14181 Parrs Wood Road/Parkville Road                  P1W0T0
+ZAN1800SB14201 Parrs Wood Road/Fog Lane                        P1W0T0
+ZAN1800SB14221 Parrs Wood Road/Willow Way                      P1W0T0
+ZAN1800SB14241 Parrs Wood Road/School lane                     P1W0T0
+ZAN1800SB14261 Parrs Wood Road/Ruabon Road                     P1W0T0
+ZAN1800SB34221 Parrswood Road/Wilmslow Road                    P1W0T0
+ZAN1800SB34251 Parrs Wood Road/Gawsworth Avenue                P1W0T0
+ZAN1800SBH1361 Broad Oak Ln (SEbd)                             P1W0T1
+ZAN1800SBH1341 Tanfield Rd (Nbd)                               P1W0T0
+ZAN1800SBH1351 Riverton Rd (Sbd)                               P1W0T0
+ZAN1800SBH1361 Broad Oak Ln (SEbd)                             P1W0T0
+ZAN1800SB34261 Parrs Wood Road/Millgate Lane                   P1W0T0
+ZAN1800SB34241 Parrs Wood Road/Gawsworth Avenue                P1W0T0
+ZAN1800SB34201 Wilmslow Rd/Didsbury Cricket Club               P1W0T0
+ZAN1800SB34181 Wilmslow Road/Fletcher Moss                     P1W0T0
+ZAN1800SB14911 Wilmslow Road/Broomhurst Hall                   P1W0T0
+ZAN1800SB34161 Wilmslow Road/Grange Lane                       P1W0T0
+ZAN1800SB14891 Wilmslow Road/Whitechapel Street                P1W0T1
+ZAN1800SB34281 Barlow Moor Road/Hesketh Avenue                 P1W0T0
+ZAN1800SB34301 Barlow Moor Road/Palatine Road                  P1W0T0
+ZAN1800SB33851 Barlow Moor Road/Clyde Road                     P1W0T0
+ZAN1800SB15431 Barlow Moor Rd/Elizabeth Slinger Rd             P1W0T0
+ZAN1800SB33801 Barlow Moor Road/Winster Avenue                 P1W0T0
+ZAN1800SB33781 Barlow Moor Rd/Southern Cemetery                P1W0T1
+ZAN1800SB33471 Princess Road/Mersey Crescent                   P1W0T0
+ZAN1800SB33481 Princess Road/Mersey Bank Avenue                P1W0T0
+ZAN1800SB42041 Princess Parkway/Yew Tree Lane                  P1W0T0
+ZAN1800SB42061 Britannia Hotel                                 P1W0T0
+ZAN1800SB42991 Altrincham Rd/Princess Parkway                  P1W0T1
+ZAN1800SB46001 Hall Lane/Nearcroft Road                        P1W0T0
+ZAN1800SB46521 Hall Lane/Floatshall Road                       P1W0T0
+ZAN1800SB46541 Hall Lane/Baguley Post Office                   P1W0T0
+ZAN1800SB17431 Bowland Road/Methodist Church                   P1W0T0
+ZAN1800SB17441 Bowland Road/Black Boy                          P1W0T0
+ZAN1800SB15141 Hospital Road/Southmoor Road                    P1W0T0
+ZAN1800SB45781 Wythenshawe Hospital                            P1W0T1
+QSNMTR 000001201601022099123111111000X 194999999BUS     99999999O
+ZJGM__194_S51001051      000     0000000000000000T         
+QO1800EB06301 0745   T1F0
+QI1800EB04471 07460746B   T0F0
+QI1800EB04501 07460746B   T0F0
+QI1800EB06341 07470747B   T0F0
+QI1800EB00861 07470747B   T0F0
+QI1800EB06351 07490749B   T0F0
+QI1800EB06361 07490749B   T0F0
+QI1800EB13931 07510751B   T0F0
+QI1800EB13901 07520752B   T0F0
+QI1800EB04621 07540754B   T0F0
+QI1800SB14061 07550755B   T1F0
+QI1800SB14131 07560756B   T0F0
+QI1800SB14141 07580758B   T0F0
+QI1800SB14161 07590759B   T0F0
+QI1800SB14181 08000800B   T0F0
+QI1800SB14201 08020802B   T0F0
+QI1800SB14221 08040804B   T0F0
+QI1800SB14241 08050805B   T0F0
+QI1800SB14261 08070807B   T0F0
+QI1800SB34221 08080808B   T0F0
+QI1800SB34251 08100810B   T0F0
+QI1800SBH1361 08130813B   T1F0
+QI1800SBH1341 08130813B   T0F0
+QI1800SBH1351 08130813B   T0F0
+QI1800SBH1361 08140814B   T0F0
+QI1800SB34261 08140814B   T0F0
+QI1800SB34241 08150815B   T0F0
+QI1800SB34201 08150815B   T0F0
+QI1800SB34181 08160816B   T0F0
+QI1800SB14911 08170817B   T0F0
+QI1800SB34161 08170817B   T0F0
+QI1800SB14891 08180818B   T1F0
+QI1800SB34281 08190819B   T0F0
+QI1800SB34301 08200820B   T0F0
+QI1800SB33851 08210821B   T0F0
+QI1800SB15431 08230823B   T0F0
+QI1800SB33801 08230823B   T0F0
+QI1800SB33781 08240824B   T1F0
+QI1800SB33471 08250825B   T0F0
+QI1800SB33481 08250825B   T0F0
+QI1800SB42041 08280828B   T0F0
+QI1800SB42061 08300830B   T0F0
+QI1800SB42991 08330833B   T1F0
+QI1800SB46001 08340834B   T0F0
+QI1800SB46521 08350835B   T0F0
+QI1800SB46541 08360836B   T0F0
+QI1800SB17431 08370837B   T0F0
+QI1800SB17441 08370837B   T0F0
+QI1800SB15141 08380838B   T0F0
+QT1800SB45781 0840   T1F0
