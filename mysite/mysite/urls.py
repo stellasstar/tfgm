@@ -13,9 +13,20 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import patterns, include, url
 from django.contrib import admin
+
+admin.autodiscover()
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^transport/', include('transport.urls')),
+        # Add the following line to link the root URL to the function myblog.views.index()
+    url(r'^$', 'mysite.views.index', name='index'),
+        # url(r'^myblog/', include('myblog.foo.urls')),
+     
+        # Uncomment the admin/doc line below to enable admin documentation:
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+     
+    
 ]
