@@ -1,0 +1,21 @@
+body {font-family: sans-serif}
+
+li a {
+    color: green;
+}
+
+
+#map {
+display: block;
+margin: 0 auto;
+width: 500px; 
+height: 300px;
+border:2px solid #000000;
+background-color:#EDF4E1;
+padding:2px;
+}
+
+    
+#waypoints {overflow: auto; width: 500px; height: 100px}
+.linkOFF {color: darkblue}
+.linkON {color: white; background-color: darkblue}
