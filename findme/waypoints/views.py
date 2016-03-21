@@ -6,6 +6,10 @@ from django.contrib.gis.geos import Point
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from django.core.context_processors import csrf
+from django.contrib.auth import logout
+from django.http import HttpResponseRedirect
+from django.shortcuts import render_to_response
+
 # Import system modules
 import itertools
 import tempfile
@@ -14,6 +18,15 @@ import os
 from waypoints.models import Waypoint
 import json
 
+def main_page(request):
+    return render_to_response('index.html')
+
+def logout_page(request):
+    """
+    Log users out and re-direct them to the main page.
+    """
+    logout(request)
+    return HttpResponseRedirect('/')
 
 
 def index(request):

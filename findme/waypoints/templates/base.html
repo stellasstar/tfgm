@@ -5,20 +5,13 @@
 </head>
 <body>
     <img src="{% static "images/world.png" %}" alt="Logo" />
-    {% block content %}{% endblock %}
-    {% if user.is_authenticated %}
-    <p>Welcome, {{ user.username }}  <a href="{% url 'waypoints:logout' %}">[logout]</a></p>
-{% else %}
-    <p>Welcome, Guest <a href="{% url 'waypoints:login' %}">[login]</a></p>
-{% endif %}
-{% if user.is_authenticated %}
-    <p>
-    Welcome, {{ user.username }}
-    <a href="{% url 'waypoints:password_change' %}">[Change Password]</a>
-    <a href="{% url 'waypoints:logout' %}">[logout]</a>
-    </p>
-{% else %}
-    <p>Welcome, Guest <a href="{% url 'waypoints:login' %}">[login]</a></p>
-{% endif %}
+    <div>
+      {{ user }}
+      {% if user.is_anonymous %}
+      <a href="{% url 'django.contrib.auth.views.login' %}">login</a>
+      {% else %}
+      <a href="{% url 'django.contrib.auth.views.logout' %}">logout</a>
+      {% endif %}
+    </div>
 </body>
 </html>

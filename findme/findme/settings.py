@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
@@ -26,6 +25,11 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+ADMINS = (
+    ('Stella Silverstein', 'stella.silverstein@isotoma.com'),
+)
+MANAGERS = ADMINS
+
 
 # Application definition
 
@@ -36,7 +40,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'waypoints'
+    'waypoints',
+    'gatekeeper',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -86,4 +91,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+TEMPLATE_LOADERS = (
+    #'django.template.loaders.filesystem.load_template_source',
+    'django.template.loaders.filesystem.Loader',
+    #'django.template.loaders.app_directories.load_template_source',
+    'django.template.loaders.app_directories.Loader',
+)
+
+LOGIN_REDIRECT_URL = '/'
+
+# URL of the login page.
+LOGIN_URL = 'http://localhost:8000/login/'
 
