@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load staticfiles%}
+{% block title %}Log in{% endblock %}
+{% block extrastyle %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}bootstrap/css/signin.css" />
+{% endblock %}
+{% block content %}
+<img id="loginlogo" src="{{ STATIC_URL }}images/world.png" %}" alt="Logo">
+    {% if form.errors %}
+        <p>Your username and password didn't match. Please try again.</p>
+    {% endif %}
+    <form method="post" action=".">{% csrf_token %}
+        <table border="0">
+            <tr><th><label for="id_username">Username:</label></th><td>{{ form.username }}</td></tr>
+            <tr><th><label for="id_password">Password:</label></th><td>{{ form.password }}</td></tr>
+        </table>
+        <input type="submit" value="Login" />
+        <input type="hidden" name="next" value="/home" />
+    </form>
+    <a href="/register">Register</a>
+{% endblock %}

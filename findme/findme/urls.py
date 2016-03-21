@@ -1,17 +1,17 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from waypoints.views import *
+from gatekeeper.views import *
 
 urlpatterns = [
             # index page
-            url(r'^$', 'gatekeeper.views.index'),           
-    
-            # Login / logout.
-            url(r'^logged_in/$', 'gatekeeper.views.logged_in'),
-          
-            # using default django auth views with custom templates
-            url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
-            url(r'^logout/$', 'django.contrib.auth.views.logout', {'template_name': 'logout.html'}),
+            url(r'^$', 'django.contrib.auth.views.login'),
+            url(r'^logout/$', logout_page),
+            url(r'^accounts/login/$', 'django.contrib.auth.views.login'), 
+            # If user is not login it will redirect to login page
+            url(r'^register/$', register),
+            url(r'^register/success/$', register_success),
+            url(r'^home/$', home),
             
             # Uncomment the next line to enable the admin:       
             url(r'^admin/', include(admin.site.urls)),
