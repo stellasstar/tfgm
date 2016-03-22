@@ -8,6 +8,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('findme', '0013_auto_20160322_1711'),
     ]
 
     operations = [

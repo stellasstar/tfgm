@@ -1,7 +1,12 @@
 import re
 from django import forms
-from django.contrib.auth.models import User
+from gatekeeper.models import User
 from django.utils.translation import ugettext_lazy as _
+
+
+# Uncomment the next two lines to enable the admin:
+from django.contrib import admin
+admin.autodiscover()
 
 class RegistrationForm(forms.Form):
 
@@ -25,3 +30,6 @@ class RegistrationForm(forms.Form):
                 raise forms.ValidationError(_("The two password fields did not match."))
         return self.cleaned_data
     
+class CustomUserChangeForm(admin.ModelAdmin):
+   
+   form = RegistrationForm

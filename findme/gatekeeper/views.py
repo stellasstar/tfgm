@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
+from django.contrib.auth import get_user_model
 
 @csrf_protect
 def register(request):
@@ -15,7 +16,9 @@ def register(request):
             user = User.objects.create_user(
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password1'],
-                email=form.cleaned_data['email']
+                email=form.cleaned_data['email'],
+                first_name = models.CharField(_('first name'), max_length=30, blank=True, null=True),
+                last_name = models.CharField(_('last name'), max_length=30, blank=True, null=True)  ,             
             )
             return HttpResponseRedirect('/register/success/')
     else:
