@@ -120,11 +120,11 @@ LOGIN_URL = 'http://localhost:8000/'
 # if user is not logged in then it will redirect the user to login page.
 django.contrib.auth.LOGIN_URL = '/'
 
-#AUTH_USER_MODEL = 'gatekeeper.UserProfile'
+#AUTH_USER_MODEL = 'gatekeeper.User'
 #AUTH_PROFILE_MODULE = 'gatekeeper.UserProfile' 
 
-AUTHENTICATION_BACKENDS = (
-    'django_facebook.auth_backends.FacebookBackend',
-    'django.contrib.auth.backends.ModelBackend',
-)
+#AUTHENTICATION_BACKENDS = (
+#    'django_facebook.auth_backends.FacebookBackend',
+#    'django.contrib.auth.backends.ModelBackend',
+#)
 

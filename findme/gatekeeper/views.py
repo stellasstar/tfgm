@@ -17,8 +17,6 @@ def register(request):
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password1'],
                 email=form.cleaned_data['email'],
-                first_name = models.CharField(_('first name'), max_length=30, blank=True, null=True),
-                last_name = models.CharField(_('last name'), max_length=30, blank=True, null=True)  ,             
             )
             return HttpResponseRedirect('/register/success/')
     else:
