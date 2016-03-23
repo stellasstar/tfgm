@@ -1,7 +1,16 @@
 {% extends "base.html" %}
+{% load staticfiles%}
 {% block title %}Welcome to FindMe{% endblock %}
 {% block head %}Welcome to FindMe{% endblock %}
+{% block extrastyle %}
+<link rel="stylesheet" type="text/css" href={% static 'bootstrap/css/style.css'%} />
+{% endblock %}
 {% block content %}
-    <p>Welcome {{ user.username }} !!!</p>
+
+    {% if user.is_authenticated %}
+    <h1>FindMe says... hello {{ user.username }}!</h1>
+    {% else %}
+    <h1>FindMe says... hello world!</h1>
+    {% endif %}
     <a href="/logout/">Logout</a>
 {% endblock %}

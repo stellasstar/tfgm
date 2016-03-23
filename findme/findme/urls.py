@@ -7,10 +7,10 @@ urlpatterns = [
             # index page
             url(r'^$', 'django.contrib.auth.views.login'),
             url(r'^logout/$', logout_page),
-            url(r'^accounts/login/$', 'django.contrib.auth.views.login'), 
+            url(r'^gatekeeper/login/$', 'django.contrib.auth.views.login'), 
             # If user is not login it will redirect to login page
             url(r'^register/$', register),
-            url(r'^register/success/$', register_success),
+            url(r'^success/$', register_success),
             url(r'^home/$', home),
             
             # Uncomment the next line to enable the admin:       

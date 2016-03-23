@@ -1,8 +1,7 @@
-from django.contrib import admin
+from django.contrib.gis import admin
 from django.contrib.auth.admin import UserAdmin
-from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import User
 
-#from gatekeeper.models import User
+from gatekeeper.models import UserProfile
 
-
-#admin.site.register(User)
+admin.site.register(UserProfile)

@@ -2,10 +2,9 @@
 {% load staticfiles%}
 {% block title %}Log in{% endblock %}
 {% block extrastyle %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}bootstrap/css/signin.css" />
+<link rel="stylesheet" type="text/css" href={% static 'bootstrap/css/style.css'%} />
 {% endblock %}
 {% block content %}
-<img id="loginlogo" src="{{ STATIC_URL }}images/world.png" %}" alt="Logo">
     {% if form.errors %}
         <p>Your username and password didn't match. Please try again.</p>
     {% endif %}
