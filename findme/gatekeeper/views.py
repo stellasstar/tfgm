@@ -20,49 +20,44 @@ def register(request):
     if request.method == 'POST':
         # Attempt to grab information from the raw form information.
         # Note that we make use of both UserForm and UserProfileForm.
-        user_form = UserRegistrationForm(request.POST)    
-        profile_form = UserProfileForm(request.POST)
+        user_form = UserRegistrationForm(data=request.POST)    
+        profile_form = UserProfileForm(data=request.POST)
 
         # If the two forms are valid...
-        if user_form.is_valid():
+        if user_form.is_valid() and profile_form.is_valid():
             
             # Save the user's form data to the database.
-            created_user = user_form.save(commit=False)
+            created_user = User.objects.create_user(
+                            username=user_form.cleaned_data['username'],
+                            first_name = user_form.cleaned_data['first_name'],
+                            last_name = user_form.cleaned_data['last_name'],
+                            password=user_form.cleaned_data['password1'],
+                            email=user_form.cleaned_data['email']
+                            )
+            created_user.save()
             
-            if profile_form.is_valid():
-           
-                # Now we hash the password with the set_password method.
-                # Once hashed, we can update the user object.
-                created_user.set_password(created_user.password)
-                created_user = user_form.save()
-
-                # Now sort out the UserProfile instance.
-                # Since we need to set the user attribute ourselves, we set commit=False.
-                # This delays saving the model until we're ready to avoid integrity problems.
-                profile = profile_form.save(commit=False)
-                profile.user = created_user
+            # Now sort out the UserProfile instance.
+            # Since we need to set the user attribute ourselves, we set commit=False.
+            # This delays saving the model until we're ready to avoid integrity problems.
+            profile = profile_form.save(commit=False)
+            profile.objects.create(user=created_user)
+        
+            # Did the user provide a profile picture?
+            # If so, we need to get it from the input form and put it in the UserProfile model.
+            if 'picture' in request.FILES:
+                profile.picture = request.FILES['picture']
             
-                # Did the user provide a profile picture?
-                # If so, we need to get it from the input form and put it in the UserProfile model.
-                if 'picture' in request.FILES:
-                    profile.picture = request.FILES['picture']
-                
-                #add in the profile extras from models.py
-                profile.url = user_form.cleaned_data('url')
-                profile.latitude = user_form.cleaned_data('latitude')
-                profile.longitude = user_form.cleaned_data('longitude')
+            #add in the profile extras from models.py
+            profile.url = profile_form.cleaned_data['homepage']
+            profile.latitude = profile_form.cleaned_data['latitude']
+            profile.longitude = profile_form.cleaned_data['longitude']
 
-                # Now we save the UserProfile model instance.
-                profile.save()
-    
-                # Update our variable to tell the template registration was successful.
-                registered = True
+            # Now we save the UserProfile model instance.
+            profile.save()
 
-            # Invalid form or forms - mistakes or something else?
-            # Print problems to the terminal.
-            # They'll also be shown to the user.
-            else:
-                print user_form.errors, profile_form.errors
+            # Update our variable to tell the template registration was successful.
+            registered = True
+
         # Invalid form or forms - mistakes or something else?
         # Print problems to the terminal.
         # They'll also be shown to the user.

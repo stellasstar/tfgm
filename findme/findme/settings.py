@@ -46,8 +46,6 @@ INSTALLED_APPS = (
     'gatekeeper',
     'findme',
     'waypoints',
-    'zap',
-    'awesome_avatar',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -100,12 +98,12 @@ STATIC_URL = '/static/'
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-AVATAR_ROOT = os.path.join(STATIC_URL, 'images/avatars')
+AVATAR_ROOT = os.path.join(BASE_DIR, 'images/avatars')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-AVATAR_URL = '/images/avatars/'
+AVATAR_URL = 'images/avatars/'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
