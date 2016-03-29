@@ -1,17 +1,15 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from waypoints.views import *
-from gatekeeper.views import *
+from django.contrib.auth import views
+from gatekeeper.views import HomePageView
+
+admin.autodiscover()
 
 urlpatterns = [
             # index page
-            url(r'^$', 'django.contrib.auth.views.login'),
-            url(r'^logout/$', logout_page),
-            url(r'^gatekeeper/login/$', 'django.contrib.auth.views.login'), 
-            # If user is not login it will redirect to login page
-            url(r'^register/$', register),
-            url(r'^success/$', register_success),
-            url(r'^home/$', home),
+            # index page
+            url(r'^$', HomePageView.as_view(), name='home'), 
+            url(r'^gatekeeper/', include('gatekeeper.urls')),
             
             # Uncomment the next line to enable the admin:       
             url(r'^admin/', include(admin.site.urls)),

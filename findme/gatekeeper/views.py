@@ -1,138 +1,132 @@
-from gatekeeper.forms import UserRegistrationForm, UserProfileForm
-from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect, HttpResponse
-from django.contrib.auth.decorators import login_required
-from django.template import RequestContext
-from django.shortcuts import render_to_response
-from django.views.decorators.csrf import csrf_protect
-from django.contrib.auth.models import User
-from models import UserProfile
+from django.shortcuts import get_object_or_404
+from django.views.generic.base import TemplateView
+from rest_framework import parsers, renderers, generics, status
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework import permissions
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
+from gatekeeper.serializers import *
+from gatekeeper.permissions import IsNotAuthenticated, IsProfileOwner
 
-def register(request):
-    # Like before, get the request's context.
-    context = RequestContext(request)
 
-    # A boolean value for telling the template whether the registration was successful.
-    # Set to False initially. Code changes value to True when registration succeeds.
-    registered = False
+#method decorator
+from django.utils.decorators import method_decorator
 
-    # If it's a HTTP POST, we're interested in processing form data.
-    if request.method == 'POST':
-        # Attempt to grab information from the raw form information.
-        # Note that we make use of both UserForm and UserProfileForm.
-        user_form = UserRegistrationForm(data=request.POST)    
-        profile_form = UserProfileForm(data=request.POST)
+#import user forms
+from gatekeeper.forms import UserRegistrationForm
 
-        # If the two forms are valid...
-        if user_form.is_valid() and profile_form.is_valid():
-            
-            # Save the user's form data to the database.
-            created_user = User.objects.create_user(
-                            username=user_form.cleaned_data['username'],
-                            first_name = user_form.cleaned_data['first_name'],
-                            last_name = user_form.cleaned_data['last_name'],
-                            password=user_form.cleaned_data['password1'],
-                            email=user_form.cleaned_data['email']
-                            )
-            created_user.save()
-            
-            # Now sort out the UserProfile instance.
-            # Since we need to set the user attribute ourselves, we set commit=False.
-            # This delays saving the model until we're ready to avoid integrity problems.
-            profile = profile_form.save(commit=False)
-            profile.objects.create(user=created_user)
-        
-            # Did the user provide a profile picture?
-            # If so, we need to get it from the input form and put it in the UserProfile model.
-            if 'picture' in request.FILES:
-                profile.picture = request.FILES['picture']
-            
-            #add in the profile extras from models.py
-            profile.url = profile_form.cleaned_data['homepage']
-            profile.latitude = profile_form.cleaned_data['latitude']
-            profile.longitude = profile_form.cleaned_data['longitude']
-
-            # Now we save the UserProfile model instance.
-            profile.save()
-
-            # Update our variable to tell the template registration was successful.
-            registered = True
-
-        # Invalid form or forms - mistakes or something else?
-        # Print problems to the terminal.
-        # They'll also be shown to the user.
-        else:
-            print user_form.errors, profile_form.errors                
-
-    # Not a HTTP POST, so we render our form using two ModelForm instances.
-    # These forms will be blank, ready for user input.
-    else:
-        user_form = UserRegistrationForm()
-        profile_form = UserProfileForm()
-
-    # Render the template depending on the context.
-    return render_to_response(
-            'registration/register.html',
-            {'user_form': user_form, 'profile_form': profile_form, 'registered': registered},
-            context)
-
-def user_login(request):
-    # Like before, obtain the context for the user's request.
-    context = RequestContext(request)
-
-    # If the request is a HTTP POST, try to pull out the relevant information.
-    if request.method == 'POST':
-        # Gather the username and password provided by the user.
-        # This information is obtained from the login form.
-        username = request.POST['username']
-        password = request.POST['password']
-
-        # Use Django's machinery to attempt to see if the username/password
-        # combination is valid - a User object is returned if it is.
-        user = authenticate(username=username, password=password)
-
-        # If we have a User object, the details are correct.
-        # If None (Python's way of representing the absence of a value), no user
-        # with matching credentials was found.
-        if user:
-            # Is the account active? It could have been disabled.
-            if user.is_active:
-                # If the account is valid and active, we can log the user in.
-                # We'll send the user back to the homepage.
-                login(request, user)
-                return HttpResponseRedirect('/success/')
-            else:
-                # An inactive account was used - no logging in!
-                return HttpResponse("Your FindMe account is disabled.")
-        else:
-            # Bad login details were provided. So we can't log the user in.
-            print "Invalid login details: {0}, {1}".format(username, password)
-            return HttpResponse("Invalid login details supplied.")
-
-    # The request is not a HTTP POST, so display the login form.
-    # This scenario would most likely be a HTTP GET.
-    else:
-        # No context variables to pass to the template system, hence the
-        # blank dictionary object...
-        return render_to_response('/', {}, context)
+#import custom user model
+try:
+    from django.contrib.auth import get_user_model
+except ImportError: # django < 1.5
+    from django.contrib.auth.models import User
+else:
+    User = get_user_model()
     
-def register_success(request):
-    return render_to_response(
-    'registration/success.html',
-    )
+class AccountLogin(generics.GenericAPIView):
+    """
+    Log in
+    
+    **Parameters**:
+    
+     * username
+     * password
+     * remember
+    """
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsNotAuthenticated, )
+    serializer_class = LoginSerializer
+    parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)
+    renderer_classes = (renderers.JSONRenderer,)    
+    
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key})
+    
+    def permission_denied(self, request):
+        raise exceptions.PermissionDenied(_("You are already authenticated"))
 
-def logout_page(request):
-    logout(request)
-    return HttpResponseRedirect('/')
- 
-@login_required
-def home(request):
-    return render_to_response(
-    'home.html',
-    { 'user': request.user }
-    )
 
-@login_required
-def view_profile(request):
-    user_profile = request.user.get_profile()
-    url = request.user.get_profile().url
+class AccountLogout(APIView):
+    """
+    Log out
+    """
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (permissions.IsAuthenticated, )
+    
+    def post(self, request, format=None):
+        """ clear session """
+        logout(request)
+        return Response({ 'detail': _(u'Logged out successfully') })
+
+class UserRegistrationView(generics.ListCreateAPIView):
+    
+    """
+    Return profile of current authenticated user or return 401.    
+    """ 
+    
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    model = User
+    serializer_class = UserRegistrationSerializer
+    
+    # custom
+    serializer_reader_class = UserProfileSerializer    
+    
+    def get(self, request, *args, **kwargs):
+        """ return profile of current user if authenticated otherwise 401 """
+        serializer = self.serializer_reader_class
+        
+        if request.user.is_authenticated():
+            return Response({ 'detail': serializer(request.user, context=self.get_serializer_context()).data })
+        else:
+            return Response({ 'detail': _('Authentication credentials were not provided') }, status=401)
+    
+    def post_save(self, obj, created):
+        """
+        Send email confirmation according to configuration
+        """
+        super(UserRegistrationView, self).post_save(obj)
+        
+        if created:
+            obj.add_email()
+
+
+class UserProfileView(generics.RetrieveUpdateAPIView):
+    """
+    An endpoint for users to view and update their profile information.
+    """
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsProfileOwner)
+    model = User
+    serializer_class = UserProfileSerializer
+    lookup_field = 'username'    
+
+
+class AccountDetail(generics.GenericAPIView):
+    """
+    Retrieve profile of current user or return 401 if not authenticated.
+    """
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (permissions.IsAuthenticated, )
+    serializer_class = UserProfileSerializer
+    
+    def get(self, request, format=None):
+        """ Retrieve profile of current user or return 401 if not authenticated. """
+        serializer = self.serializer_class(request.user, context=self.get_serializer_context())
+        return Response(serializer.data)
+
+account_detail = AccountDetail.as_view()
+
+class HomePageView(TemplateView):
+
+    template_name = "home.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(HomePageView, self).get_context_data(**kwargs)
+        return context

@@ -1,88 +1,24 @@
-setuptools==7.0
-Django==1.6.10
-Jinja2==2.7.2
-Pillow==2.7.0
-South==1.0
-argparse==1.2.1
-dj-database-url==0.3.0
-django-classy-tags==0.5.1
-django-cms==3.0.6
-django-import-export==0.2.6
-django-json-settings==0.1
-django-mptt==0.6.1
-django-reversion==1.8.2
-django-sekizai==0.7
-django-stackhelper==0.1
-djangocms-admin-style==0.2.2
-djangocms-column==1.4
-djangocms-file==0.0.2
-djangocms-flash==0.0.3
-djangocms-googlemap==0.1.0
-djangocms-inherit==0.0.2
-djangocms-installer==0.5.4
-djangocms-link==1.4.0
-djangocms-picture==0.0.4
-djangocms-style==1.4
-djangocms-teaser==0.0.2
-djangocms-text-ckeditor==2.3.0
-djangocms-video==0.0.2
-gunicorn==19.1.1
-html5lib==0.999
-psycopg2==2.5.3
-pytz==2014.4
-six==1.7.3
-wsgiref==0.1.2
+astropy==1.1.2
+Django==1.9.4
+django-awesome-avatar==1.1.3
+django-filter==0.13.0
+-e git://github.com/omab/django-social-auth.git@699571a3b6d84aa2c25ffce59daa4c7f3559a0e4#egg=django_social_auth
+django-zap==0.0.6
+djangorestframework==3.3.3
+flake8==2.5.4
+Markdown==2.6.6
+mccabe==0.4.0
+numpy==1.10.4
+oauthlib==1.0.3
+pep8==1.7.0
+Pillow==3.1.1
+psycopg2==2.6.1
+pyflakes==1.0.0
+PyJWT==1.4.0
+python-openid==2.2.5
+python-social-auth==0.2.14
+requests==2.9.1
+requests-oauthlib==0.6.1
+six==1.10.0
 
-## Django cmsplugin-filer requirements
-cmsplugin-filer==0.9.9
-django-appconf==0.6
-django-filer==0.9.7
-django-polymorphic==0.5.6
-easy-thumbnails==2.1
 
-# Django live settings
-# Note: we are using django-constance-updated
-# until django-constance is fixed to work with
-# django 1.6
-
-# django-constance[database]==0.6
-django-constance-updated[database]==0.6.1
-django-picklefield==0.3.1
-
-django-leaflet==0.14.1
-django-geojson[field]==2.6.0
-
-# Mailchimp integration
-mailchimp==2.0.8
-requests==2.3.0
-docopt==0.4.0 # Pinned for mailchimp==2.0.8
-
-# Registration and custom user model
-django-registration==1.0
-django-bootstrap3==4.11.0
-django-custom-user==0.4
-
-# Twitter
-twitter==1.14.3
-
-# Bit.ly
-bitly_api==0.3
-
-# Permissions and mixins
-django-braces==1.4.0
-
-# CSV export
-unicodecsv==0.9.4
-
-# Caching
-python-memcached==1.53
-
-# User agent detection
-django-user_agents==0.3.0
-# Search
-django-haystack==2.3.1
-aldryn-search==0.2.2
-elasticsearch==1.2.0
-
-# Cartographic transformations
-pyproj==1.9.3

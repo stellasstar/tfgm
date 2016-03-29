@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.admindocs',
+    'rest_framework',    
     'gatekeeper',
     'findme',
     'waypoints',
@@ -98,12 +99,12 @@ STATIC_URL = '/static/'
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-AVATAR_ROOT = os.path.join(BASE_DIR, 'images/avatars')
+AVATAR_ROOT = os.path.join(BASE_DIR, 'user_images/avatars')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-AVATAR_URL = 'images/avatars/'
+AVATAR_URL = 'user_images/avatars/'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -127,11 +128,24 @@ LOGIN_URL = 'http://localhost:8000/'
 # if user is not logged in then it will redirect the user to login page.
 django.contrib.auth.LOGIN_URL = '/'
 
-#AUTH_USER_MODEL = 'gatekeeper.UserProfile'
-AUTH_PROFILE_MODULE = 'gatekeeper.UserProfile' 
+AUTH_USER_MODEL = 'gatekeeper.UserProfile'
+#AUTH_PROFILE_MODULE = 'gatekeeper.UserProfile' 
 
 #AUTHENTICATION_BACKENDS = (
 #    'django_facebook.auth_backends.FacebookBackend',
 #    'django.contrib.auth.backends.ModelBackend',
 #)
+
+# Django REST Framework
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )
+}
 
