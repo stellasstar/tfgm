@@ -2,11 +2,7 @@ FindMe 1.0
 
 Dependencies:
 
-sudo vim /etc/apt/sources.list.d/postgresql.list
-
-add to the above file:
-
-deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main 9.5
+sudo sh -c 'sudo echo "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main 9.5" > /etc/apt/sources.list.d/postgresql.list'
 
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 
@@ -29,9 +25,19 @@ Activate
 
 Pip Install Django
 
-4)  Unfortunately the django management command zap_and_create_postgis_db does not work until a PostgreSQL database with postgis already exists. The role and password can be taken from settings.py
+4)  install other dependencies through pip
+pip install -r requirements.txt --upgrade -e .
+
+5)  Configuring PostgreSQL:
+
+Ensure that there is a line in /etc/postgresql/9.3/main/pg_hba.conf that allows local connections using md5:
+
+# "local" is for Unix domain socket connections only
+local   all         all                               md5
+
+6)  Unfortunately the django management command zap_and_create_postgis_db does not work until a PostgreSQL database with postgis already exists. The role and password can be taken from settings.py
 
 ./findme/scripts/builddb.sh
 
-5) ./findme/scripts/rebuild.sh
+7) ./findme/scripts/rebuild.sh
 
