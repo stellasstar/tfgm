@@ -11,16 +11,17 @@
         <a href="/">Return to the homepage.</a><br />
         {% else %}
         FindMe says: <strong>register here!</strong><br />
-        
-        <form id="user_form" method="post" action="." enctype="multipart/form-data">
-
-        {% csrf_token %}
-        <table border="0">
-            {{ user_form.as_table }}
-            {{ profile_form.as_table }}
-        </table>
+        <form id='user_form' method='post' action=''>{% csrf_token %}
+            <table>
+            {{user_form.as_table}}
         <input type="submit" name="submit" value="Register" />
-    </form>
+            </table>
+        </form>
+</body>
+</html> 
+
+
     {% endif %}
+    <br><br>
     <a href="/">Login</a>
 {% endblock %}

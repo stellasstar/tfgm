@@ -1,0 +1,18 @@
+<html>
+<head>
+    <script>
+    {% if messages %}
+        {% for message in messages %}
+            alert(message);
+        {% endfor %}
+    {% endif %}
+    </script>
+</head>
+<body>
+    <h1>Erorrs:</h1>
+    {{ form.errors.as_p }}
+    {{ form.non_field_errors.as_p }}
+    {{form.as_p}}
+    <a href="/">Home</a>
+</body>
+</html> 

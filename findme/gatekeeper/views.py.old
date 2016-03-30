@@ -1,0 +1,162 @@
+from django.shortcuts import get_object_or_404
+from django.views.generic.base import TemplateView
+from rest_framework import parsers, renderers, generics, status
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework import permissions
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
+from gatekeeper.serializers import *
+from gatekeeper.permissions import IsNotAuthenticated, IsProfileOwner
+from gatekeeper.forms import UserRegistrationForm, UserCreationFor
+from django.views.generic.edit import FormView
+from django.views.generic.base import RedirectView
+from django.http import HttpResponseRedirect, HttpResponse
+from django.core.urlresolvers import reverse
+
+#method decorator
+from django.utils.decorators import method_decorator
+
+#import user forms
+from gatekeeper.forms import UserRegistrationForm
+
+#import custom user model
+try:
+    from django.contrib.auth import get_user_model
+except ImportError: # django < 1.5
+    from django.contrib.auth.models import User
+else:
+    User = get_user_model()
+    
+class AccountLogin(generics.GenericAPIView):
+    """
+    Log in
+    
+    **Parameters**:
+    
+     * username
+     * password
+     * remember
+    """
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsNotAuthenticated, )
+    serializer_class = LoginSerializer
+    parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)
+    renderer_classes = (renderers.JSONRenderer,)    
+    
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key})
+    
+    def permission_denied(self, request):
+        raise exceptions.PermissionDenied(_("You are already authenticated"))
+
+
+class AccountLogout(APIView):
+    """
+    Log out
+    """
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (permissions.IsAuthenticated, )
+    
+    def post(self, request, format=None):
+        """ clear session """
+        logout(request)
+        return Response({ 'detail': _(u'Logged out successfully') })
+
+class UserRegistrationView(FormView):
+    
+    """
+    Registers a user in the database.    
+    """ 
+    
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    model = User
+    serializer_class = UserRegistrationSerializer
+    template_name = 'registration/register.html'
+    form_class = UserCreationForm
+    
+    # custom
+    serializer_reader_class = UserProfileSerializer    
+    
+    def form_valid(self, form):
+        UserRegistrationView.register_user(self.request, **form.cleaned_data)
+       
+        return super(UserRegistrationView, self).form_valid(self, form)
+
+    @classmethod
+    def register_user(cls, request, **kwargs):
+        '''
+        Given an email address and password, create a new
+        user account.
+        '''
+       
+        create_user = User.objects.create_user
+        username = kwargs['username']
+        first_name, last_name = kwargs['first_name'], kwargs['last_name']
+        email, password = kwargs['email'], kwargs['password']  
+        homepage = kwargs['homepage']
+        picture = kwargs['picture']
+        latitude = kwargs['latitude']
+        longitude = kwargs['longitude']
+        
+        try:
+            user = create_user(username, first_name, last_name,
+                               email, password, homepage,
+                               picture, latitude, longitude)        
+            return user
+        except IntegrityError:
+            return cls.register_user(request, **kwargs)
+        
+        
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_active:
+            # Redirect registered users
+            return HttpResponseRedirect(reverse('home'))
+        else:
+            return super(UserRegistrationView, self).dispatch(request, *args, **kwargs)
+
+class UserProfileView(generics.RetrieveUpdateAPIView):
+    """
+    An endpoint for users to view and update their profile information.
+    """
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsProfileOwner)
+    model = User
+    serializer_class = UserProfileSerializer
+    lookup_field = 'username'    
+
+
+class AccountDetail(generics.GenericAPIView):
+    """
+    Retrieve profile of current user or return 401 if not authenticated.
+    """
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    serializer_class = UserProfileSerializer
+    model = User
+
+    # custom
+    serializer_reader_class = UserProfileSerializer
+
+    def get(self, request, *args, **kwargs):
+        """ return profile of current user if authenticated otherwise 401 """
+        serializer = self.serializer_reader_class
+
+        if request.user.is_authenticated():
+            return Response({ 'detail': serializer(request.user, context=self.get_serializer_context()).data })
+        else:
+            return Response({ 'detail': _('Authentication credentials were not provided') }, status=401)
+
+
+class HomePageView(TemplateView):
+
+    template_name = "home.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(HomePageView, self).get_context_data(**kwargs)
+        return context
