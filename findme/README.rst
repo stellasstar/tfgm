@@ -2,6 +2,14 @@ FindMe 1.0
 
 Dependencies:
 
+sudo vim /etc/apt/sources.list.d/postgresql.list
+add to the above file:
+deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main 9.5
+
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+sudo apt-get update
+
 sudo apt-get install binutils libproj-dev postgresql-9.5 postgresql-9.5-postgis-2.2 postgresql-server-dev-9.5 python-psycopg2
 sudo apt-get install libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk
 
@@ -25,12 +33,7 @@ Pip Install Django
 
 6) Unfortunately the django management command zap_and_create_postgis_db does not work until a PostgreSQL database with postgis already exists. The role and password can be taken from settings.py
 
-ROLE=geouser
-PASSWORD=geodatabase
-sudo -u postgres psql -c "CREATE ROLE $ROLE PASSWORD '$PASSWORD' NOSUPERUSER CREATEDB NOCREATEROLE INHERIT LOGIN"
-sudo -u postgres psql -c "CREATE DATABASE $ROLE WITH OWNER = $ROLE TEMPLATE = template0 ENCODING = 'UTF8'"
-sudo -u postgres psql $ROLE -c "CREATE EXTENSION postgis"
-
+./findme/scripts/builddb.sh
 
 7) ./findme/scripts/rebuild.sh
 
