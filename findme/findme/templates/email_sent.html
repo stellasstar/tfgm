@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load staticfiles%}
+{% block title %}User Registration{% endblock %}
+{% block head %}User Registration{% endblock %}
+
+{% block content %}
+
+     {% if user.is_authenticated %}
+    <h1>Thank you for sending us an email {{ user.username }}!</h1>
+    {% else %}
+    <h1>Thank you for sending us an email</h1> 
+    {% endif %}
+ 
+{% endblock %}

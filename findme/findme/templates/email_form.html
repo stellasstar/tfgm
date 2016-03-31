@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load staticfiles%}
+{% block title %}Contact FindMe{% endblock %}
+{% block head %}Contact FindMe{% endblock %}
+{% block content %}
+    <br><br><br>
+    
+    {% load crispy_forms_tags %}
+    {% crispy form %}
+    
+{% endblock %}
+
+{% block extrajs %}
+<script src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript">
+$(function() {
+    $('#id_name').focus()
+});
+</script>
+{% endblock %}

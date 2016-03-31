@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.contrib.auth import views
-from gatekeeper.views import HomePageView
+from findme.views import HomePageView, ContactFormView
 
 admin.autodiscover()
 
@@ -9,6 +9,7 @@ urlpatterns = [
             # index page
             # index page
             url(r'^$', HomePageView.as_view(), name='home'), 
+            url(r'^contact/$', ContactFormView.as_view(), name='contact'),
             url(r'^gatekeeper/', include('gatekeeper.urls')),
             
             # Uncomment the next line to enable the admin:       

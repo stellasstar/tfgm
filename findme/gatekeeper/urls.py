@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from gatekeeper.views import UserRegistrationView
+from gatekeeper.views import UserRegistrationView, LoginView, LogOutView
 from django.contrib.auth import views
 
 #import custom user model
@@ -15,6 +15,8 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = [
+    
+    # Registration
     url(r'^register/$', UserRegistrationView.as_view(), name="register"),
     url(r'^register/done/$', views.password_reset_done, {
         'template_name': 'registration/initial_done.html',
@@ -27,4 +29,8 @@ urlpatterns = [
     url(r'^register/complete/$', views.password_reset_complete, {
         'template_name': 'registration/initial_complete.html',
     }, name='register-complete'),
+    
+    # Login/Logout
+    url(r'^login/$', LoginView.as_view(), name='login'),
+    url(r'^logout/$', LogOutView.as_view(), name='logout'),
 ]
