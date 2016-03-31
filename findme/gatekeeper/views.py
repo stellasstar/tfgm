@@ -1,11 +1,11 @@
 from django.views.generic.base import TemplateView
 from django.contrib.auth.forms import PasswordResetForm
 from django.shortcuts import render, redirect, render_to_response, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 
 from django.views.generic.edit import BaseCreateView, FormView
 from django.views.generic import CreateView, RedirectView
-from gatekeeper.forms import UserRegistrationForm, LoginForm
+from gatekeeper.forms import UserRegistrationForm, LoginForm, UserProfileForm
 from django.contrib import messages 
 
 from django.contrib.auth import authenticate, login, logout
@@ -87,3 +87,30 @@ class LogOutView(RedirectView):
     def get(self, request, *args, **kwargs):
 	logout(request)
 	return super(LogOutView, self).get(request, *args, **kwargs)
+    
+class UserProfileView(TemplateView):
+    """
+    Profile View Page
+    url: /profile/view
+    """
+    template_name = 'profiles/profile_view.html'
+
+    http_method_names = {'get'}
+
+    def get_context_data(self, **kwargs):
+	"""Load up the default data to show in the display form."""
+	username = self.kwargs.get('username')
+	if username:
+	    user = get_object_or_404(User, username=username)
+	elif self.request.user.is_authenticated():
+	    user = self.request.user
+	else:
+	    raise Http404  # Case where user gets to this view anonymously for non-existent user
+
+	return_to = self.request.GET.get('returnTo', '/')
+
+	form = UserProfileForm(instance=user)
+
+	form.initial['returnTo'] = return_to
+
+	return {'form': form}

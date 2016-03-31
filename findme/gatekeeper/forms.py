@@ -53,3 +53,20 @@ class UserRegistrationForm(forms.ModelForm):
         super(UserRegistrationForm, self).__init__(*args, **kwargs)        
 
      
+class UserProfileForm(forms.ModelForm):
+    """Form for editing the data that is part of the User model"""
+
+    class Meta():
+        model = User
+        fields = ['first_name', 
+                  'last_name',
+                  'username', 
+                  'email', 
+                  'homepage', 
+                  'picture', 
+                  'latitude', 
+                  'longitude',
+        ]
+        
+    def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)     

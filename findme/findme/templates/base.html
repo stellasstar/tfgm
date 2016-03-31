@@ -30,9 +30,9 @@ dir="rtl"{% endif %}>
         <ul class="nav navbar-nav navbar-right">
         
         {% if user.is_authenticated %}
-        <p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link">{{ user.username }}</a></p>
+        <p class="navbar-text navbar-right">Signed in as <a href="/gatekeeper/profiles/" class="navbar-link">{{ user.username }}</a></p>
         {% else %}
-        <p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link">Any Mouse</a></p>
+        <p class="navbar-text navbar-right">Signed in as <a href="/gatekeeper/profiles" class="navbar-link">Any Mouse</a></p>
         {% endif %}
         <li><a href=""></a></li>
         <li><a href=""></a></li>

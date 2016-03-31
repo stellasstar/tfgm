@@ -6,7 +6,7 @@
 {% block content %}
 
         {% if user.is_authenticated %}
-        <h1>You've already registered.  Hello {{user.username}}.</h1>
+        <h1>Hello {{user.first_name}}&nbsp; {{user.last_name}}. You've already registered. </h1>
          <br />
         {% else %}
         <h1>Register Here</h1><br /><br /><br /><br />

@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from gatekeeper.views import UserRegistrationView, LoginView, LogOutView
+from gatekeeper.views import UserRegistrationView, LoginView, LogOutView, UserProfileView
 from django.contrib.auth import views
 
 #import custom user model
@@ -33,4 +33,7 @@ urlpatterns = [
     # Login/Logout
     url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^logout/$', LogOutView.as_view(), name='logout'),
+    
+    # Profiles
+    url(r'^profiles/$', UserProfileView.as_view(), name='profile_view'),
 ]

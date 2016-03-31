@@ -6,10 +6,17 @@
 
 {% block headline %}<h1>Login to FindMe</h1>{% endblock %}
 {% block content %}
-    <br><br><br>
-    
-    {% csrf_token %}
-    {% load crispy_forms_tags %}
-    {% crispy form %}
+
+    {% if user.is_authenticated %}
+        <h1>Hello {{user.first_name}}&nbsp; {{user.last_name}}.  You've already logged in.  </h1>
+         <br />
+        {% else %}
+    <p></p>
+    <p></p>
+    <p></p>
+        {% csrf_token %}
+        {% load crispy_forms_tags %}
+        {% crispy form %}
+        {% endif %}
     
 {% endblock %}
