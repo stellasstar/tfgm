@@ -15,11 +15,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.forms import AuthenticationForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, ButtonHolder, Layout
-import floppyforms
 
 class LoginForm(AuthenticationForm):
     
-        username = floppyforms.CharField(required=True)
+        username = forms.CharField(required=True)
         password = forms.CharField(widget=forms.PasswordInput)      
     
         def __init__(self, *args, **kwargs):
@@ -47,5 +46,10 @@ class UserRegistrationForm(forms.ModelForm):
                   'latitude', 
                   'longitude',
         ]
+        
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('submit', 'Register', css_class='btn-primary'))
+        super(UserRegistrationForm, self).__init__(*args, **kwargs)        
 
      

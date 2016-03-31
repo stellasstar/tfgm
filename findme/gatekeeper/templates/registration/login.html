@@ -8,6 +8,7 @@
 {% block content %}
     <br><br><br>
     
+    {% csrf_token %}
     {% load crispy_forms_tags %}
     {% crispy form %}
     

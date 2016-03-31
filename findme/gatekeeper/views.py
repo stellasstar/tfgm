@@ -51,7 +51,6 @@ class UserRegistrationView(CreateView):
             # 'html_email_template_name': provide an HTML content template if you desire.
         }
         # This form sends the email on save()
-# NEED TO FIX THIS
         reset_form.save(**opts)
 
 	return redirect(self.success_url)

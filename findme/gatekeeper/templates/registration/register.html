@@ -5,21 +5,15 @@
 
 {% block content %}
 
-        {% if registered %}
-        <h1>Thank you for registering!</h1>
-        <a class="btn btn-success btn-lg" role="button" href="/">Return to the homepage.</a>
-        <br />
+        {% if user.is_authenticated %}
+        <h1>You've already registered.  Hello {{user.username}}.</h1>
+         <br />
         {% else %}
         <h1>Register Here</h1><br /><br /><br /><br />
+        {% csrf_token %}
+        {% load crispy_forms_tags %}
+        {% crispy form %}
         {% endif %}
-        
-        <form class="form-horizontal" method='post' action=''>{% csrf_token %}
-                <table>
-                    {{form.as_table}}
-                </table> </br>
-                <button type="submit" name="submit" class="btn btn-primary">
-                Register
-                </button>
-        </form>
+
 
 {% endblock %}
