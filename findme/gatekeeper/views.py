@@ -91,7 +91,7 @@ class LogOutView(RedirectView):
 class UserProfileView(TemplateView):
     """
     Profile View Page
-    url: /profile/view
+    url: profiles/profile_view.html
     """
     template_name = 'profiles/profile_view.html'
 

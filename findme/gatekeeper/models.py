@@ -19,16 +19,16 @@ class UserManager(BaseUserManager):
         if not username:
             raise ValueError('Users must have a username')        
         user = self.model(username=username, email = UserManager.normalize_email(email),
-                          is_staff=False, is_active=True, is_superuser=False,
+                          password=password, created=now,
+                          is_admin=False, is_active=True, is_superuser=False,
                           last_login=now, **extra_fields)
 
         user.set_password(password)
         user.save(using=self._db)
         return user
     
-    def create_user(self, email, password, **extra_fields):
-        return self._create_user(email, password, False, False,
-                                 **extra_fields)    
+    def create_user(self, username, email, password, **extra_fields):
+        return self._create_user(username, email, password, **extra_fields)    
 
     def create_superuser(self, username, email, password, **extra_fields):
         user = self.create_user(username, email, password, **extra_fields)
@@ -96,7 +96,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         return full_name.strip()
 
     def get_short_name(self):
-        return self.first_name
+        return self.first_name.strip()
 
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
