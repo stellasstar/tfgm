@@ -1,24 +1,26 @@
 from django.views.generic.base import TemplateView
 from django.contrib.auth.forms import PasswordResetForm
-from django.shortcuts import render, redirect, render_to_response, get_object_or_404
-from django.http import HttpResponse, Http404
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import Http404
 
-from django.views.generic.edit import BaseCreateView, FormView
-from django.views.generic import CreateView, RedirectView
-from gatekeeper.forms import UserRegistrationForm, LoginForm, UserProfileForm
-from django.contrib import messages 
+from django.views.generic.edit import FormView
+from django.views.generic import CreateView, RedirectView, UpdateView
+from django.views.generic.edit import ModelFormMixin
+from gatekeeper.forms import *
 
 from django.contrib.auth import authenticate, login, logout
 
-#import custom user model
+# import custom user model
 try:
     from django.contrib.auth import get_user_model
-except ImportError: # django < 1.5
+except ImportError:  # django < 1.5
     from django.contrib.auth.models import User
 else:
     User = get_user_model()
 
+
 class UserRegistrationView(CreateView):
+
     form_class = UserRegistrationForm
     model = User
     template_name = 'registration/register.html'
@@ -27,11 +29,11 @@ class UserRegistrationView(CreateView):
     def get(self, request):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        return render(self.request, self.template_name, {'form':form})
-    
+        return render(self.request, self.template_name, {'form': form})
+
     def form_invalid(self, form):
-        return render(self.request, self.template_name, {'form':form})
-        #return super(UserRegistrationView, self).form_invalid(form)
+        return render(self.request, self.template_name, {'form': form})
+        # return super(UserRegistrationView, self).form_invalid(form)
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -44,73 +46,97 @@ class UserRegistrationView(CreateView):
         reset_form.is_valid()  # Must trigger validation
         # Copied from django/contrib/auth/views.py : password_reset
         opts = {
-            'use_https': self.request.is_secure(),
-            'email_template_name': 'registration/activate.html',
-            'subject_template_name': 'registration/activation_email_subject.txt',
+            'use_https':
+                self.request.is_secure(),
+            'email_template_name':
+                'registration/activate.html',
+            'subject_template_name':
+                'registration/activation_email_subject.txt',
             'request': self.request,
-            # 'html_email_template_name': provide an HTML content template if you desire.
+            # 'html_email_template_name':
+            # provide an HTML content template if you desire.
         }
         # This form sends the email on save()
         reset_form.save(**opts)
 
-	return redirect(self.success_url)
+        return redirect(self.success_url)
+
 
 class LoginView(FormView):
-    
+
     form_class = LoginForm
     success_url = '/'
     template_name = 'registration/login.html'
     model = User
-    
+
     def get(self, request):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        return render(self.request, self.template_name, {'form':form})
-    
+        return render(self.request, self.template_name, {'form': form})
+
     def form_invalid(self, form):
-        return render(self.request, self.template_name, {'form':form})    
+        return render(self.request, self.template_name, {'form': form})
 
     def form_valid(self, form):
-	username = form.cleaned_data['username']
-	password = form.cleaned_data['password']
-	user = authenticate(username=username, password=password)
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        user = authenticate(username=username, password=password)
 
-	if user is not None and user.is_active:
-	    login(self.request, user)
-	    return super(LoginView, self).form_valid(form)
-	else:
-	    return self.form_invalid(form)
-	
+        if user is not None and user.is_active:
+            login(self.request, user)
+            return super(LoginView, self).form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+
 class LogOutView(RedirectView):
+
     url = '/'
 
     def get(self, request, *args, **kwargs):
-	logout(request)
-	return super(LogOutView, self).get(request, *args, **kwargs)
-    
+        logout(request)
+        return super(LogOutView, self).get(request, *args, **kwargs)
+
+
 class UserProfileView(TemplateView):
     """
     Profile View Page
     url: profiles/profile_view.html
     """
     template_name = 'profiles/profile_view.html'
-
-    http_method_names = {'get'}
+    http_method_names = {'get'}    
 
     def get_context_data(self, **kwargs):
-	"""Load up the default data to show in the display form."""
-	username = self.kwargs.get('username')
-	if username:
-	    user = get_object_or_404(User, username=username)
-	elif self.request.user.is_authenticated():
-	    user = self.request.user
-	else:
-	    raise Http404  # Case where user gets to this view anonymously for non-existent user
+        """
+        Load up the default data to
+        show in the display form.
+        """
+        username = self.kwargs.get('username')
 
-	return_to = self.request.GET.get('returnTo', '/')
+        if username:
+            user = get_object_or_404(User, username=username)
+        elif self.request.user.is_authenticated():
+            user = self.request.user
+        else:
+            raise Http404
+            # Case where user gets to this view
+            # anonymously for non-existent user
 
-	form = UserProfileForm(instance=user)
+        return_to = self.request.GET.get('returnTo', '/')
+        form = UserProfileForm(instance=user)
+        form.initial['returnTo'] = return_to
+        return {'form': form}
+    
+    def render_to_response(self):
+        if self.request.method == "POST":
+            message = "YES"
+        else:
+            message = "NO"
+        return render(message)    
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)    
 
-	form.initial['returnTo'] = return_to
 
-	return {'form': form}

@@ -1,16 +1,16 @@
-from django import forms
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
-#import custom user model
+# import custom user model
 try:
     from django.contrib.auth import get_user_model
-except ImportError: # django < 1.5
+except ImportError:  # django < 1.5
     from django.contrib.auth.models import User
 else:
     User = get_user_model()
+
 
 class UserAdmin(BaseUserAdmin):
     # The forms to add and change user instances
@@ -41,9 +41,7 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'password1', 'password2')}
-        ),
-    )
+            'fields': ('username', 'email', 'password1', 'password2')}), )
     ordering = ['-is_staff', '-date_joined']
     search_fields = ('email', 'username', 'first_name', 'last_name')
     ordering = ('username',)
