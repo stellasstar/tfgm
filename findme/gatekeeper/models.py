@@ -7,6 +7,7 @@ from django.core import validators
 from django.utils import timezone
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.contrib.auth.models import User
 
 
 class UserManager(BaseUserManager):

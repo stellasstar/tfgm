@@ -71,11 +71,33 @@ class UserProfileForm(forms.ModelForm):
                   ]  
 
     def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+
+
+class UserProfileUpdateForm(forms.ModelForm):
+    """Form for editing the data that is part of the User model"""
+
+    class Meta():
+        model = User
+        fields = ['first_name',
+                  'last_name',
+                  'email',
+                  'homepage',
+                  'picture',
+                  'latitude',
+                  'longitude',
+                  ]  
+
+    def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
         self.helper.add_input(Submit('submit',
                                      'Update',
-                                     css_class='btn-primary'))
-        
-        super(UserProfileForm, self).__init__(*args, **kwargs)
-        
-     
+                                     css_class='btn-primary'))   
+        super(UserProfileUpdateForm, self).__init__(*args, **kwargs)
+
+    def save(self, user=None):
+        user_profile = super(UserProfileUpdateForm, self).save(commit=False)
+        if user:
+            user_profile.user = user
+        user_profile.save()
+        return user_profile    

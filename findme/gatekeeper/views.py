@@ -3,10 +3,14 @@ from django.contrib.auth.forms import PasswordResetForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+
 from django.views.generic.edit import FormView
+from django.core.urlresolvers import reverse
 from django.views.generic import CreateView, RedirectView, UpdateView
 from django.views.generic.edit import ModelFormMixin
-from gatekeeper.forms import *
+from gatekeeper import forms
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -21,7 +25,7 @@ else:
 
 class UserRegistrationView(CreateView):
 
-    form_class = UserRegistrationForm
+    form_class = forms.UserRegistrationForm
     model = User
     template_name = 'registration/register.html'
     success_url = '/'
@@ -64,7 +68,7 @@ class UserRegistrationView(CreateView):
 
 class LoginView(FormView):
 
-    form_class = LoginForm
+    form_class = forms.LoginForm
     success_url = '/'
     template_name = 'registration/login.html'
     model = User
@@ -123,20 +127,22 @@ class UserProfileView(TemplateView):
             # anonymously for non-existent user
 
         return_to = self.request.GET.get('returnTo', '/')
-        form = UserProfileForm(instance=user)
+        form = forms.UserProfileForm(instance=user)
         form.initial['returnTo'] = return_to
         return {'form': form}
-    
-    def render_to_response(self):
-        if self.request.method == "POST":
-            message = "YES"
-        else:
-            message = "NO"
-        return render(message)    
-    
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        context = self.get_context_data(object=self.object)
-        return self.render_to_response(context)    
 
 
+class UserProfileUpdateView(UpdateView):
+    
+    model = User
+    form_class = forms.UserProfileUpdateForm 
+    template_name='profiles/profile_update.html'
+    success_url = "/update/"
+    
+    def get_success_url(self):
+        return reverse('update', kwargs={
+            'pk': self.object.pk,})
+    
+    def get_object(self):
+        return User.objects.get(pk=self.kwargs.get('pk')) # or request.POST  
+    

@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from gatekeeper.views import *
+from gatekeeper.forms import UserProfileUpdateForm
 from django.contrib.auth import views
 
 # import custom user model
@@ -37,4 +38,6 @@ urlpatterns = [
 
     # Profiles
     url(r'^profiles/$', UserProfileView.as_view(), name='profile_view'),
+    url(r'^update/(?P<pk>\d+)/$', UserProfileUpdateView.as_view(), name='update'),
+
 ]
