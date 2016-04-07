@@ -1,6 +1,7 @@
 
 # mport from Django
 from django.db import models
+from django.contrib.gis.db import models as geomodels
 from django.contrib.auth.models import *
 from django.utils.translation import ugettext_lazy as _
 from django.core import validators
@@ -8,6 +9,20 @@ from django.utils import timezone
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.utils.deconstruct import deconstructible
+from django.contrib.staticfiles.templatetags.staticfiles import static
+import os
+
+@deconstructible
+class Avatar_User_Dir(object):
+    
+    media = settings.MEDIA_ROOT
+    av = settings.AVATAR_URL.strip('/')
+    def __call__(self, instance, filename):
+        joined = os.path.join(self.media,self.av,str(instance.username),filename)
+        return joined
+
+avatar_user_dir= Avatar_User_Dir()
 
 
 class UserManager(BaseUserManager):
@@ -49,37 +64,24 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(_('username'),
                                 max_length=30,
                                 unique=True,
-                                db_index=True,
-                                help_text=_('Required. 30 characters '
-                                            'or fewer. Letters, '
-                                            'numbers and @/./+/-/_ '
-                                            'characters'),
-                                validators=[validators.RegexValidator(
-                                            r'^[\w.@+-]+$',
-                                            _('Enter a valid username. '
-                                           'This value may contain only '
-                                           'letters, numbers and '
-                                           '@/./+/-/_ characters.')), ],
-                                error_messages={'unique': _("A user with that "
-                                                            "username already "
-                                                            "exists."), }, )
+                                db_index=True)
     email = models.EmailField('email address', unique=True, default="")
     created = models.DateTimeField(_('created'), default=timezone.now)
     first_name = models.CharField(_('First Name'), max_length=30, blank=True)
     last_name = models.CharField(_('Last Name'), max_length=30, blank=True)
 
     # The additional attributes we wish to include.
-    homepage = models.URLField(default='http://www.none.com', blank=True)
+    homepage = models.URLField(default="", blank=True)
     picture = models.ImageField(null=True, blank=True,
-                                upload_to=settings.AVATAR_URL)
+                                upload_to=avatar_user_dir)
     latitude = models.DecimalField(max_digits=10,
                                    decimal_places=6,
                                    null=True,
-                                   default='53.483959')
+                                   default=settings.DEFAULT_LATITUDE)
     longitude = models.DecimalField(max_digits=10,
                                     decimal_places=6,
                                     null=True,
-                                    default='-2.244644')
+                                    default=settings.DEFAULT_LONGITUDE)
 
     # user permissions
     is_admin = models.BooleanField(_('admin status'),
@@ -135,3 +137,21 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+      
+    
+class PointEntry(geomodels.Model):
+
+    point = geomodels.PointField(srid=4326, blank=True)
+    longitude = models.FloatField(verbose_name='longitude')
+    latitude = models.FloatField(verbose_name='latitude')    
+    
+    
+    def save(self, *args, **kwargs):
+        self.point = Point(self.longitude, self.latitude)
+        super().save(*args, **kwargs)    
+    
+    def latitude(self):
+        return self.point.y
+    
+    def longitude(self):
+        return self.point.x   

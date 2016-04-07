@@ -11,6 +11,7 @@ urlpatterns = [
             url(r'^$', HomePageView.as_view(), name='home'), 
             url(r'^contact/$', ContactFormView.as_view(), name='contact'),
             url(r'^gatekeeper/', include('gatekeeper.urls')),
+            url(r'^transport/', include('transport.urls')),            
             
             # Uncomment the next line to enable the admin:       
             url(r'^admin/', include(admin.site.urls)),

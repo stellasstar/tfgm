@@ -42,14 +42,15 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'django.contrib.admindocs',
-    'rest_framework',    
+    'django.contrib.admindocs', 
+    'django.contrib.gis',
     'crispy_forms',
     'floppyforms',
     'captcha',    
     'gatekeeper',
     'findme',
     'waypoints',
+    'transport',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -99,15 +100,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.abspath(BASE_DIR + '/static/'),
+)
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-AVATAR_ROOT = os.path.join(BASE_DIR, 'user_images/avatars')
+AVATAR_ROOT = 'avatars'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+MEDIA_URL = '/images/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-AVATAR_URL = 'user_images/avatars/'
+
+AVATAR_URL = '/avatars/'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -139,19 +146,6 @@ AUTH_USER_MODEL = 'gatekeeper.UserProfile'
 #    'django.contrib.auth.backends.ModelBackend',
 #)
 
-# Django REST Framework
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.BasicAuthentication',
-    ),
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-    )
-}
-
 RECAPTCHA_PUBLIC_KEY = '6LcVu9ESAAAAANVWwbM5-PLuLES94GQ2bIYmSNTG'
 RECAPTCHA_PRIVATE_KEY = '6LcVu9ESAAAAAGxz7aEIACWRa3CVnXN3mFd-cajP'
 
@@ -163,4 +157,19 @@ EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = False 
 EMAIL_PORT = 1025
+
+# this puts the user by default at Manchester City Centre, Picadilly Gardens
+DEFAULT_LATITUDE = '53.483959'
+DEFAULT_LONGITUDE = '-2.244644'
+
+GOOGLE_API_KEY = 'AIzaSyDxOaCs2l1WYJf4jhNX8AEbTLf2SwncgN4'
+
+VALID_IMAGE_EXTENSIONS = [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".gif",
+]
+
+IMAGE_MAX_SIZE = 4*1024*1024
 

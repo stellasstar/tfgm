@@ -6,11 +6,14 @@ from django.http import Http404
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
+import os
+
+from PIL import Image
 from django.views.generic.edit import FormView
 from django.core.urlresolvers import reverse
 from django.views.generic import CreateView, RedirectView, UpdateView
 from django.views.generic.edit import ModelFormMixin
-from gatekeeper import forms
+from gatekeeper import forms, utils
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -44,8 +47,21 @@ class UserRegistrationView(CreateView):
         password = form.cleaned_data['password']
         self.object.set_password(password)
         self.object.save()
+        
+        url = form.cleaned_data['picture']
+        domain, path = utils.split_url(str(url))
+        filename = utils.get_url_tail(path)
+        if not utils.image_exists(domain, path):
+            return _invalidate(_("Couldn't retreive image."))   
+        
+        fobject = utils.retrieve_image(url)
+        if not utils.valid_url_extension(fobject):
+            return _invalidate(_("Downloaded file was not a valid image (jpg, jpeg, png, gif)"))    
+        
+        pil_image = Image.open(fobject)
+        if not utils.valid_image_size(pil_image)[0]:
+            return _invalidate(_("Image is too large (> 4mb)"))  
 
-        # This form only requires the "email" field, so will validate.
         reset_form = PasswordResetForm(self.request.POST)
         reset_form.is_valid()  # Must trigger validation
         # Copied from django/contrib/auth/views.py : password_reset
@@ -108,7 +124,7 @@ class UserProfileView(TemplateView):
     url: profiles/profile_view.html
     """
     template_name = 'profiles/profile_view.html'
-    http_method_names = {'get'}    
+    http_method_names = {'get'}   
 
     def get_context_data(self, **kwargs):
         """
@@ -130,8 +146,7 @@ class UserProfileView(TemplateView):
         form = forms.UserProfileForm(instance=user)
         form.initial['returnTo'] = return_to
         return {'form': form}
-
-
+    
 class UserProfileUpdateView(UpdateView):
     
     model = User

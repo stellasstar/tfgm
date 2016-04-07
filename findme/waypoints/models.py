@@ -12,3 +12,4 @@ class Waypoint(models.Model):
         return '%s %s %s' % (self.name, self.geometry.x, self.geometry.y)
     
     
+    

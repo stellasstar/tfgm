@@ -1,0 +1,40 @@
+{% endblock %}
+
+{% block meta_title %}{{user.first_name}}&nbsp; {{user.last_name}}{% endblock %}
+{% block title %}{{user.first_name}}&nbsp; {{user.last_name}}{% endblock %}
+{% block body_id %}account{% endblock %}
+
+{% block content %}
+
+
+                <div class="row">
+            <div class="columns large-12">
+                <!-- Add your site or application content here -->
+                <h1>Transportation:</h1>
+                {% load distance %}
+                <table border="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Transportation:</th>
+                            {% for object in object_list %}
+                            <th>{{object.name}}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for source in object_list %}
+                        <tr>
+                            <td>{{source.name}}</td>
+                            {% for destination in object_list %}
+                            <td>{{source |km_to:destination|floatformat:2}} km or  {{source |mi_to:destination|floatformat:2}} mi</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+{% endblock %}

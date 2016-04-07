@@ -11,7 +11,10 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
+from django.contrib.gis.geos import Point
+from django.conf import settings
 
+import httplib
 
 class LoginForm(AuthenticationForm):
 
@@ -53,7 +56,7 @@ class UserRegistrationForm(forms.ModelForm):
                                      'Register',
                                      css_class='btn-primary'))
         super(UserRegistrationForm, self).__init__(*args, **kwargs)
-
+            
 
 class UserProfileForm(forms.ModelForm):
     """Form for editing the data that is part of the User model"""
@@ -101,3 +104,5 @@ class UserProfileUpdateForm(forms.ModelForm):
             user_profile.user = user
         user_profile.save()
         return user_profile    
+    
+    

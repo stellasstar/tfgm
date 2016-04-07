@@ -1,5 +1,14 @@
 {% extends 'base.html' %}
+{% load crispy_forms_field %}
 {% load staticfiles%}
+
+
+{% block header %}
+<script type="text/javascript" src="{% static "js/gofindme.js" %}"></script>
+<script type="text/javascript" src="{% static "js/waypoints.js" %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'css/waypoints.css' %}" />
+
+{% endblock %}
 
 {% block meta_title %}{{user.first_name}}&nbsp; {{user.last_name}}{% endblock %}
 {% block title %}{{user.first_name}}&nbsp; {{user.last_name}}{% endblock %}
@@ -7,13 +16,29 @@
 
 {% block content %}
 
+
         {% if user.is_authenticated %}
         <h1>Hello&nbsp;{{user.first_name}}&nbsp;{{user.last_name}}.</h1>
 
         {% csrf_token %}
-        {% load crispy_forms_tags %}
-        {% crispy form %}
+            <table>
+    {% for field in form %}
+            {{ field.errors }}
+        <tr>
+        {% if field.label == "Picture" %}
+                    <td>{{ field.label }}</td>
+            <td>{{ field.value }}</td>
+                        <td><img src="/{{field.value.url}}"/></td>
+        {% else %}
+            <td>{{ field.label }}</td>
+            <td>{{ field.value }}</td>
         {% endif %}
+        </tr>
+    {% endfor %}
+</table>
+
+    {% endif %}
+
 
 
 {% endblock %}
