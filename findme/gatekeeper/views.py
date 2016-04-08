@@ -1,19 +1,27 @@
 from django.views.generic.base import TemplateView
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import PasswordResetForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
+from django.contrib import messages
+from django.conf import settings
 
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
+from django.core.files.base import ContentFile
+
 import os
 
 from PIL import Image
+from io import BytesIO
+from django.core.files.base import ContentFile
 from django.views.generic.edit import FormView
 from django.core.urlresolvers import reverse
 from django.views.generic import CreateView, RedirectView, UpdateView
 from django.views.generic.edit import ModelFormMixin
 from gatekeeper import forms, utils
+from findme import media_url
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -25,6 +33,19 @@ except ImportError:  # django < 1.5
 else:
     User = get_user_model()
 
+
+def make_thumbnail(image, name, ext, f):
+    """
+    Create and save the thumbnail for the photo (simple resize with PIL).
+    """
+    th = image.copy()
+    
+    thumb_name, thumb_extension = (name.lower(), ext.lower())
+    thumb = thumb_name + '_thumb' + thumb_extension
+    th.save(f, format=thumb_extension)
+    
+    return (th, thumb)
+    
 
 class UserRegistrationView(CreateView):
 
@@ -46,22 +67,31 @@ class UserRegistrationView(CreateView):
         self.object = form.save(commit=False)
         password = form.cleaned_data['password']
         self.object.set_password(password)
-        self.object.save()
         
         url = form.cleaned_data['picture']
-        domain, path = utils.split_url(str(url))
-        filename = utils.get_url_tail(path)
-        if not utils.image_exists(domain, path):
-            return _invalidate(_("Couldn't retreive image."))   
+        domain, path = utils.split_url(str(url))              
         
-        fobject = utils.retrieve_image(url)
-        if not utils.valid_url_extension(fobject):
-            return _invalidate(_("Downloaded file was not a valid image (jpg, jpeg, png, gif)"))    
+        try:
+            extension = utils.valid_url_extension(str.lower(path))
+        except not extension:
+            form.non_field_errors('File was not a valid image (jpg, jpeg, png, gif)')
         
-        pil_image = Image.open(fobject)
-        if not utils.valid_image_size(pil_image)[0]:
-            return _invalidate(_("Image is too large (> 4mb)"))  
-
+        try:
+            f = BytesIO()
+            pil_image = Image.open(url)
+            thumb, thumbname = make_thumbnail(pil_image, domain, path, f)
+            user = get_object_or_404(User, username=form.cleaned_data['username'])
+            
+        except:
+            form.non_field_errors('Image is too large (> 4mb)')
+        
+        # automatically login after registering 
+        messages.info(self.request, "Thanks for registering. You are now logged in.")
+        new_user = authenticate(username=form.cleaned_data['username'],
+                                password=form.cleaned_data['password'],
+                                )   
+        login(self.request, new_user)
+        
         reset_form = PasswordResetForm(self.request.POST)
         reset_form.is_valid()  # Must trigger validation
         # Copied from django/contrib/auth/views.py : password_reset
@@ -78,6 +108,9 @@ class UserRegistrationView(CreateView):
         }
         # This form sends the email on save()
         reset_form.save(**opts)
+        
+        # save the form
+        self.object.save()
 
         return redirect(self.success_url)
 
@@ -146,6 +179,7 @@ class UserProfileView(TemplateView):
         form = forms.UserProfileForm(instance=user)
         form.initial['returnTo'] = return_to
         return {'form': form}
+        
     
 class UserProfileUpdateView(UpdateView):
     

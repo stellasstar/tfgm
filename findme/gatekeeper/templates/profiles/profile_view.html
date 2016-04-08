@@ -19,19 +19,26 @@
 
         {% if user.is_authenticated %}
         <h1>Hello&nbsp;{{user.first_name}}&nbsp;{{user.last_name}}.</h1>
+        <td><img class="img-circle" width="150" height="200" src="{{form.picture}}"/></td>
 
         {% csrf_token %}
             <table>
     {% for field in form %}
-            {{ field.errors }}
+            {% if field.errors %}
+                {% for error in field.errors %}
+                  <li><a href="#id_{{ field.name }}" class="error">{{ error|escape }}</a></li>
+                {% endfor %}
+          {% endif %} 
+          {% if form.non_field_errors %}
+            {{ form.non_field_errors }}
+          {% endif %}
         <tr>
         {% if field.label == "Picture" %}
                     <td>{{ field.label }}</td>
-            <td>{{ field.value }}</td>
-                        <td><img src="/{{field.value.url}}"/></td>
+                    <td><img class="img-circle" width="150" height="200" src="{{field.value.url}}"/></td>
         {% else %}
-            <td>{{ field.label }}</td>
-            <td>{{ field.value }}</td>
+            <td {white-space: nowrap;}>{{ field.label }}&nbsp&nbsp&nbsp</td>
+            <td {white-space: nowrap;}>{{ field.value }}</td>
         {% endif %}
         </tr>
     {% endfor %}

@@ -49,6 +49,7 @@ class UserRegistrationForm(forms.ModelForm):
                   'latitude',
                   'longitude',
                   ]
+        widgets = {'thumbnail': forms.HiddenInput()}
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()

@@ -11,15 +11,18 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.deconstruct import deconstructible
 from django.contrib.staticfiles.templatetags.staticfiles import static
+from imagekit.models import ImageSpecField
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
 import os
 
 @deconstructible
 class Avatar_User_Dir(object):
     
-    media = settings.MEDIA_ROOT
+   # media = settings.MEDIA_ROOT
     av = settings.AVATAR_URL.strip('/')
     def __call__(self, instance, filename):
-        joined = os.path.join(self.media,self.av,str(instance.username),filename)
+        joined = os.path.join(self.av,str(instance.username),(filename).decode('utf-8').lower())
         return joined
 
 avatar_user_dir= Avatar_User_Dir()
@@ -72,8 +75,16 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     # The additional attributes we wish to include.
     homepage = models.URLField(default="", blank=True)
+#    picture = ProcessedImageField(null=True, blank=True,
+#                                 upload_to=avatar_user_dir,
+#                                 processors=[ResizeToFit(200, 100)],
+#                                 options={'quality': 90})    
     picture = models.ImageField(null=True, blank=True,
                                 upload_to=avatar_user_dir)
+    thumbnail = ProcessedImageField(upload_to=avatar_user_dir, blank=True,
+                               processors=[ResizeToFill(settings.AVATAR_DEFAULT_WIDTH, 
+                                                        settings.AVATAR_DEFAULT_HEIGHT)],
+                               options={'quality': 60})      
     latitude = models.DecimalField(max_digits=10,
                                    decimal_places=6,
                                    null=True,

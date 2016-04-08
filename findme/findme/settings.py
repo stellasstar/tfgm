@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs', 
     'django.contrib.gis',
+    'imagekit',
     'crispy_forms',
     'floppyforms',
     'captcha',    
@@ -67,6 +68,8 @@ ROOT_URLCONF = 'findme.urls'
 
 WSGI_APPLICATION = 'findme.wsgi.application'
 
+PROJECT_NAME = 'findme'
+PROJECT_CORE = 'findme'
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
@@ -106,9 +109,10 @@ STATICFILES_DIRS = (
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-AVATAR_ROOT = 'avatars'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
-MEDIA_URL = '/images/'
+AVATAR_ROOT = '/avatars/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+ADMIN_MEDIA_PREFIX = '/media/admin/' 
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -128,6 +132,17 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
 #     'django.template.loaders.eggs.Loader',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.contrib.messages.context_processors.messages",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.static",
+    "django.core.context_processors.media",
+    "django.core.context_processors.request",
+    "django.core.context_processors.tz",
 )
 
 LOGIN_REDIRECT_URL = '/'
@@ -172,4 +187,7 @@ VALID_IMAGE_EXTENSIONS = [
 ]
 
 IMAGE_MAX_SIZE = 4*1024*1024
+
+AVATAR_DEFAULT_WIDTH = 150
+AVATAR_DEFAULT_HEIGHT = 200
 
