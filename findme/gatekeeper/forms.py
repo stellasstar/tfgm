@@ -15,6 +15,9 @@ from django.contrib.gis.geos import Point
 from django.conf import settings
 from imagekit.models import ProcessedImageField
 
+from transport.models import Position
+from django.contrib.gis.geos import Point
+
 import httplib
 
 class LoginForm(AuthenticationForm):
@@ -50,7 +53,8 @@ class UserRegistrationForm(forms.ModelForm):
                   'latitude',
                   'longitude',
                   ]
-
+        
+      #  widgets = {'thumbnail': forms.HiddenInput()}
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
@@ -58,7 +62,7 @@ class UserRegistrationForm(forms.ModelForm):
                                     'Register',
                                      css_class='btn-primary'))
         super(UserRegistrationForm, self).__init__(*args, **kwargs)
-       
+        
 
 class UserProfileForm(forms.ModelForm):
     """Form for editing the data that is part of the User model"""

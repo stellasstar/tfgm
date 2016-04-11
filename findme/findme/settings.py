@@ -174,8 +174,12 @@ EMAIL_USE_TLS = False
 EMAIL_PORT = 1025
 
 # this puts the user by default at Manchester City Centre, Picadilly Gardens
-DEFAULT_LATITUDE = '53.483959'
-DEFAULT_LONGITUDE = '-2.244644'
+#DEFAULT_LATITUDE = '53.483959'
+#DEFAULT_LONGITUDE = '-2.244644'
+
+# this is in Strasbourg, France
+DEFAULT_LATITUDE = '48.87146'
+DEFAULT_LONGITUDE = '2.35500'
 
 GOOGLE_API_KEY = 'AIzaSyDxOaCs2l1WYJf4jhNX8AEbTLf2SwncgN4'
 

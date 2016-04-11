@@ -2,6 +2,7 @@
 # mport from Django
 from django.db import models
 from django.contrib.gis.db import models as geomodels
+from django.contrib.gis.geos import Point
 from django.contrib.auth.models import *
 from django.utils.translation import ugettext_lazy as _
 from django.core import validators
@@ -11,10 +12,10 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.deconstruct import deconstructible
 from django.contrib.staticfiles.templatetags.staticfiles import static
-from imagekit.models import ImageSpecField
-from imagekit.models import ProcessedImageField
-from imagekit.processors import ResizeToFill
+from django.contrib.gis.db import models as gis_models
+
 import os
+import string
 
 @deconstructible
 class Avatar_User_Dir(object):
@@ -81,10 +82,8 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 #                                 options={'quality': 90})    
     picture = models.ImageField(null=True, blank=True,
                                 upload_to=avatar_user_dir)
-    thumbnail = ProcessedImageField(upload_to=avatar_user_dir, blank=True,
-                               processors=[ResizeToFill(settings.AVATAR_DEFAULT_WIDTH, 
-                                                        settings.AVATAR_DEFAULT_HEIGHT)],
-                               options={'quality': 60})      
+    thumbnail = models.ImageField(null=True, blank=True,
+                                upload_to=avatar_user_dir)    
     latitude = models.DecimalField(max_digits=10,
                                    decimal_places=6,
                                    null=True,
@@ -92,7 +91,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     longitude = models.DecimalField(max_digits=10,
                                     decimal_places=6,
                                     null=True,
-                                    default=settings.DEFAULT_LONGITUDE)
+                                    default=settings.DEFAULT_LONGITUDE)    
 
     # user permissions
     is_admin = models.BooleanField(_('admin status'),
@@ -109,6 +108,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
                                                 'accounts.'))
 
     objects = UserManager()
+    geoobjects = geomodels.GeoManager()
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
@@ -128,7 +128,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     def get_full_name(self):
         full_name = '%s %s' % (self.first_name, self.last_name)
-        return full_name.strip()
+        return string.capwords(full_name.strip())
 
     def get_short_name(self):
         return self.first_name.strip()
@@ -148,21 +148,9 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
-      
     
-class PointEntry(geomodels.Model):
-
-    point = geomodels.PointField(srid=4326, blank=True)
-    longitude = models.FloatField(verbose_name='longitude')
-    latitude = models.FloatField(verbose_name='latitude')    
-    
-    
-    def save(self, *args, **kwargs):
+    def position(self):
         self.point = Point(self.longitude, self.latitude)
-        super().save(*args, **kwargs)    
+        return point
+        
     
-    def latitude(self):
-        return self.point.y
-    
-    def longitude(self):
-        return self.point.x   

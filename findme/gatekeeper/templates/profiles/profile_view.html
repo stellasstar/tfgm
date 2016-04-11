@@ -7,47 +7,58 @@
 <script type="text/javascript" src="{% static "js/gofindme.js" %}"></script>
 <script type="text/javascript" src="{% static "js/waypoints.js" %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'css/waypoints.css' %}" />
-
-<script>
-function putText() {
-    var hello='<h1 id="capital">"Hello " + {{user.first_name}} + " " + {{user.last_name}}</h1>';
-}
-</script>
 {% endblock %}
+
 
 {% block meta_title %}{{user.first_name}}&nbsp; {{user.last_name}}{% endblock %}
 {% block title %}{{user.first_name}}&nbsp; {{user.last_name}}{% endblock %}
 {% block body_id %}account{% endblock %}
 
 {% block content %}
+{% csrf_token %}
+
 
         {% if user.is_authenticated %}
-        <table align="center">
-        <tr>putText()</tr>
-        <td><img class="img-circle" width="150" height="200" src={{form.picture.value.url }}/></td>
-        <tr>&nbsp;</tr>
-        <td></td>
-        {% csrf_token %}
-    {% for field in form %}
-            {% if field.errors %}
-                {% for error in field.errors %}
-                  <li><a href="#id_{{ field.name }}" class="error">{{ error|escape }}</a></li>
-                {% endfor %}
-          {% endif %} 
-          {% if form.non_field_errors %}
-            {{ form.non_field_errors }}
-          {% endif %}
+        
+        <table align="center" border="1" cellpadding="5" cellspacing="5">
+        <tr><td colspan="2" align="center"><h1>Hello {{user.get_full_name}}</h1></td></tr>
+        
         <tr>
-        {% if field.label == "Picture" %}
-        {% else %}
-            <td {white-space: nowrap;}>{{ field.label }}&nbsp</td>
-            <td {white-space: nowrap;}>{{ field.value }}</td>
-        {% endif %}
+            <td colspan="2" align="center">
+                <img class="img-circle" width="150" height="200" 
+                                            src={{form.picture.value.url }}/>
+            </td>
         </tr>
-    {% endfor %}
-</table>
+        <tr><td colspan="2">&nbsp;</td></tr>
+            {% for field in form %}
+                    {% if field.errors %}
+                        {% for error in field.errors %}
+                          <li><a href="#id_{{ field.name }}" class="error">{{ error|escape }}</a></li>
+                        {% endfor %}
+                  {% endif %} 
+                  {% if form.non_field_errors %}
+                    {{ form.non_field_errors }}
+                  {% endif %}
+                <tr>
+                {% if field.label == "Picture" %}
+                {% else %}
+                    <td {white-space: nowrap;}>{{ field.label }}&nbsp</td>
+                    <td {white-space: nowrap;}>{{ field.value }}</td>
+                {% endif %}
+                </tr>
+            {% endfor %}
+            <tr><td colspan="2">&nbsp;</td></tr>
+            <tr><td colspan="2">&nbsp;</td></tr>
+            <tr><td colspan="2" align="center" id="wrapper"><i>
+                Click the allow button to let the browser show your map.
+            </i></td></tr>
+             <tr><td colspan="2" align="center" id="mapPlaceholder"></td></tr>
+             
+             <tr><td colspan="2">&nbsp;</td></tr>
+             <tr><td colspan="2">&nbsp;</td></tr>
+        </table>
 
-    {% endif %}
+        {% endif %}
 
 
 

@@ -1,3 +1,0 @@
-findme
-waypoints
-gatekeeper

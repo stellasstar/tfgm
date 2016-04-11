@@ -12,3 +12,13 @@ p.capitalize {
 #capital {
     text-transform:capitalize;
 }
+
+.logo {
+  position: absolute;
+  vertical-align:top;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 100px;
+  width: 110px;
+}

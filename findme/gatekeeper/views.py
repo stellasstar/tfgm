@@ -8,17 +8,23 @@ from django.conf import settings
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
-from django.core.files.base import ContentFile
+# image processing
+from PIL import Image
+import StringIO
+from django.core.files.storage import default_storage
+
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 import os
+import json
 
-from PIL import Image
+
 from django.core.files.base import ContentFile
 from django.views.generic.edit import FormView
 from django.core.urlresolvers import reverse
 from django.views.generic import CreateView, RedirectView, UpdateView
 from django.views.generic.edit import ModelFormMixin
-from gatekeeper import forms, utils
+from gatekeeper import forms, utils, models
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -31,17 +37,27 @@ else:
     User = get_user_model()
 
 
-def make_thumbnail(image, name, ext, f):
+def make_thumbnail(image, name, ext):
     """
     Create and save the thumbnail for the photo (simple resize with PIL).
     """
-    th = image.copy()
+    try:
+        image = Image.open(User.thumbnail)
+        image.thumbnail((settings.AVATAR_DEFAULT_HEIGHT, settings.AVATAR_DEFAULT_WIDTH))
+    except IOError:
+        return False
     
+    thumb_buffer = StringIO.StringIO()
+    
+    image.save(thumb_buffer, format=image.format)    
     thumb_name, thumb_extension = (name.lower(), ext.lower())
-    thumb = thumb_name + '_thumb' + thumb_extension
-    th.save(f, format=thumb_extension)
+    thumb = models.Avatar_User_Dir(thumb_name + '_thumb' + thumb_extension)
+
+    s3_thumb = default_storage.open(thumb, 'w')
+    s3_thumb.write(thumb_buffer.getvalue())
+    s3_thumb.close()   
     
-    return (th, thumb)
+    return True
     
 
 class UserRegistrationView(CreateView):
@@ -67,23 +83,36 @@ class UserRegistrationView(CreateView):
         self.object.set_password(password)
         
         url = form.cleaned_data['picture']
-        domain, path = utils.split_url(str(url))              
+            
+        if url:
+            
+            domain, path = utils.split_url(str(url))
+            
+            try:
+                extension = utils.valid_url_extension(str.lower(path))
+            except not extension:
+                    form.non_field_errors('File was not a valid image (jpg, jpeg, png, gif)')            
+            try:
+                pil_image = Image.open(url)
+            except utils.valid_image_size(pil_image):
+                form.non_field_errors('Image is too large (> 4mb)')
+            
+            #  saving this for later
+#            try:
+#                passed = False
+#                passed = make_thumbnail(pil_image, domain, path) 
+#            except not passed:
+#                form.non_field_errors("Couldn't make thumbnail image")
         
-        try:
-            extension = utils.valid_url_extension(str.lower(path))
-        except not extension:
-            form.non_field_errors('File was not a valid image (jpg, jpeg, png, gif)')
-        
-        try:
-            pil_image = Image.open(url)
-        except utils.valid_image_size(pil_image):
-            form.non_field_errors('Image is too large (> 4mb)')
+
+        # save the form
+        self.object.save()        
         
         # automatically login after registering 
         messages.info(self.request, "Thanks for registering. You are now logged in.")
-        new_user = authenticate(username=self.request.POST['username'],
-                                password=self.request.POST['password'])
-        if new_user is not None:
+        new_user = authenticate(username=username,
+                                password=password)
+        if new_user is not None and new_user.is_active:
             login(self.request, new_user)
         
         reset_form = PasswordResetForm(self.request.POST)
@@ -102,9 +131,6 @@ class UserRegistrationView(CreateView):
         }
         # This form sends the email on save()
         reset_form.save(**opts)
-        
-        # save the form
-        self.object.save()
 
         return redirect(self.success_url)
 

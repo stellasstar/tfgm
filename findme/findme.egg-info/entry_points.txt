@@ -1,3 +1,0 @@
-
-      [paste.paster_create_template]
-      

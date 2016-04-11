@@ -1,7 +1,7 @@
 
 var lat = null;
 var lng = null;
-var labels = "Stella";
+var labels = "";
 var labelIndex = labels.length;
 
 function geoFindMe() {

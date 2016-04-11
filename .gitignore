@@ -1,2 +1,4 @@
 *.pyc
 tfgm/
+findme/ffindme.egg-info/
+findme/media/
