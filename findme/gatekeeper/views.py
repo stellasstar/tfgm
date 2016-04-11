@@ -77,21 +77,22 @@ class UserRegistrationView(CreateView):
         # return super(UserRegistrationView, self).form_invalid(form)
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)
+        self.object, new_position = form.save(commit=False)
         username = form.cleaned_data['username']
         password = form.cleaned_data['password']
         self.object.set_password(password)
         
         url = form.cleaned_data['picture']
             
-        if url:
+        if url and not str(url).find('Default'):
             
             domain, path = utils.split_url(str(url))
             
             try:
                 extension = utils.valid_url_extension(str.lower(path))
             except not extension:
-                    form.non_field_errors('File was not a valid image (jpg, jpeg, png, gif)')            
+                    form.non_field_errors('File was not a valid image (jpg, jpeg, png, gif)')  
+
             try:
                 pil_image = Image.open(url)
             except utils.valid_image_size(pil_image):

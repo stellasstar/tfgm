@@ -25,8 +25,18 @@ class Avatar_User_Dir(object):
     def __call__(self, instance, filename):
         joined = os.path.join(self.av,str(instance.username),(filename).decode('utf-8').lower())
         return joined
+    
+@deconstructible
+class Default_Avatar(object):
+    
+   # media = settings.MEDIA_ROOT
+    av = settings.AVATAR_URL.strip('/')
+    def __call__(self):
+        joined = os.path.join(self.av,'default','woman.jpg')
+        return joined
 
 avatar_user_dir= Avatar_User_Dir()
+default_avatar = Default_Avatar()
 
 
 class UserManager(BaseUserManager):
@@ -81,15 +91,15 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 #                                 processors=[ResizeToFit(200, 100)],
 #                                 options={'quality': 90})    
     picture = models.ImageField(null=True, blank=True,
-                                upload_to=avatar_user_dir)
+                                upload_to=avatar_user_dir,
+                                default=default_avatar)
     thumbnail = models.ImageField(null=True, blank=True,
                                 upload_to=avatar_user_dir)    
-    latitude = models.DecimalField(max_digits=10,
-                                   decimal_places=6,
+    point = geomodels.PointField(blank=True, null=True)
+    latitude = models.FloatField(verbose_name='latitude',
                                    null=True,
                                    default=settings.DEFAULT_LATITUDE)
-    longitude = models.DecimalField(max_digits=10,
-                                    decimal_places=6,
+    longitude = models.FloatField(verbose_name='longitude',
                                     null=True,
                                     default=settings.DEFAULT_LONGITUDE)    
 

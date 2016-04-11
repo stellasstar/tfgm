@@ -11,7 +11,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
-from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import Point, GEOSException, GEOSGeometry, fromstr
 from django.conf import settings
 from imagekit.models import ProcessedImageField
 
@@ -54,6 +54,8 @@ class UserRegistrationForm(forms.ModelForm):
                   'longitude',
                   ]
         
+        widgets = {'point': forms.HiddenInput()}
+        
       #  widgets = {'thumbnail': forms.HiddenInput()}
 
     def __init__(self, *args, **kwargs):
@@ -62,6 +64,20 @@ class UserRegistrationForm(forms.ModelForm):
                                     'Register',
                                      css_class='btn-primary'))
         super(UserRegistrationForm, self).__init__(*args, **kwargs)
+        
+    def save(self, commit=True):
+        lString = 'POINT(%s %s)' % (str(self.fields['longitude'].initial), str(self.fields['latitude'].initial))
+        new_user = User.objects.create_user(
+            username=self.cleaned_data['username'],
+            password=self.cleaned_data['password'],
+            email = self.cleaned_data['email'])
+        new_position = Position(
+            name=self.cleaned_data['username'],
+            geometry = fromstr(lString))
+        if commit:
+            new_position.save()
+            new_user.save()
+        return new_user, new_position 
         
 
 class UserProfileForm(forms.ModelForm):
