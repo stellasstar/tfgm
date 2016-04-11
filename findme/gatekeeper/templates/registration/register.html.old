@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load staticfiles%}
+{% block title %}User Registration{% endblock %}
+{% block head %}User Registration{% endblock %}
+{% block extrastyle %}
+<link rel="stylesheet" type="text/css" href={% static 'bootstrap/css/style.css'%} />
+{% endblock %}
+{% block content %}
+       {% if registered %}
+        FindMe says: <strong>thank you for registering!</strong>
+        <a href="/">Return to the homepage.</a><br />
+        {% else %}
+        FindMe says: <strong>register here!</strong><br />
+
+        <table border="0"> 
+            <form id='user_form' method='post' action=''>{% csrf_token %}
+                {{ user_form.as_table }}
+            <input type="submit" name="submit" value="Register" />
+            </form>
+         </table>
+    {% endif %}
+    <br><br>
+    <a href="/">Login</a>
+{% endblock %}

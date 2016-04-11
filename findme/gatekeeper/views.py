@@ -1,5 +1,4 @@
 from django.views.generic.base import TemplateView
-from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import PasswordResetForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
@@ -14,14 +13,12 @@ from django.core.files.base import ContentFile
 import os
 
 from PIL import Image
-from io import BytesIO
 from django.core.files.base import ContentFile
 from django.views.generic.edit import FormView
 from django.core.urlresolvers import reverse
 from django.views.generic import CreateView, RedirectView, UpdateView
 from django.views.generic.edit import ModelFormMixin
 from gatekeeper import forms, utils
-from findme import media_url
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -65,6 +62,7 @@ class UserRegistrationView(CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
+        username = form.cleaned_data['username']
         password = form.cleaned_data['password']
         self.object.set_password(password)
         
@@ -77,20 +75,16 @@ class UserRegistrationView(CreateView):
             form.non_field_errors('File was not a valid image (jpg, jpeg, png, gif)')
         
         try:
-            f = BytesIO()
             pil_image = Image.open(url)
-            thumb, thumbname = make_thumbnail(pil_image, domain, path, f)
-            user = get_object_or_404(User, username=form.cleaned_data['username'])
-            
-        except:
+        except utils.valid_image_size(pil_image):
             form.non_field_errors('Image is too large (> 4mb)')
         
         # automatically login after registering 
         messages.info(self.request, "Thanks for registering. You are now logged in.")
-        new_user = authenticate(username=form.cleaned_data['username'],
-                                password=form.cleaned_data['password'],
-                                )   
-        login(self.request, new_user)
+        new_user = authenticate(username=self.request.POST['username'],
+                                password=self.request.POST['password'])
+        if new_user is not None:
+            login(self.request, new_user)
         
         reset_form = PasswordResetForm(self.request.POST)
         reset_form.is_valid()  # Must trigger validation

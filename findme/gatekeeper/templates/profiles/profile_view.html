@@ -8,6 +8,11 @@
 <script type="text/javascript" src="{% static "js/waypoints.js" %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'css/waypoints.css' %}" />
 
+<script>
+function putText() {
+    var hello='<h1 id="capital">"Hello " + {{user.first_name}} + " " + {{user.last_name}}</h1>';
+}
+</script>
 {% endblock %}
 
 {% block meta_title %}{{user.first_name}}&nbsp; {{user.last_name}}{% endblock %}
@@ -16,13 +21,13 @@
 
 {% block content %}
 
-
         {% if user.is_authenticated %}
-        <h1>Hello&nbsp;{{user.first_name}}&nbsp;{{user.last_name}}.</h1>
-        <td><img class="img-circle" width="150" height="200" src="{{form.picture}}"/></td>
-
+        <table align="center">
+        <tr>putText()</tr>
+        <td><img class="img-circle" width="150" height="200" src={{form.picture.value.url }}/></td>
+        <tr>&nbsp;</tr>
+        <td></td>
         {% csrf_token %}
-            <table>
     {% for field in form %}
             {% if field.errors %}
                 {% for error in field.errors %}
@@ -34,10 +39,8 @@
           {% endif %}
         <tr>
         {% if field.label == "Picture" %}
-                    <td>{{ field.label }}</td>
-                    <td><img class="img-circle" width="150" height="200" src="{{field.value.url}}"/></td>
         {% else %}
-            <td {white-space: nowrap;}>{{ field.label }}&nbsp&nbsp&nbsp</td>
+            <td {white-space: nowrap;}>{{ field.label }}&nbsp</td>
             <td {white-space: nowrap;}>{{ field.value }}</td>
         {% endif %}
         </tr>

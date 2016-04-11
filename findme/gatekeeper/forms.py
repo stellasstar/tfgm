@@ -13,6 +13,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django.contrib.gis.geos import Point
 from django.conf import settings
+from imagekit.models import ProcessedImageField
 
 import httplib
 
@@ -49,15 +50,15 @@ class UserRegistrationForm(forms.ModelForm):
                   'latitude',
                   'longitude',
                   ]
-        widgets = {'thumbnail': forms.HiddenInput()}
+
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
         self.helper.add_input(Submit('submit',
-                                     'Register',
+                                    'Register',
                                      css_class='btn-primary'))
         super(UserRegistrationForm, self).__init__(*args, **kwargs)
-            
+       
 
 class UserProfileForm(forms.ModelForm):
     """Form for editing the data that is part of the User model"""
