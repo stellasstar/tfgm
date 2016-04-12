@@ -68,9 +68,11 @@ class UserRegistrationView(CreateView):
     success_url = '/'
 
     def get(self, request):
+        self.object = None
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        return render(self.request, self.template_name, {'form': form})
+        return self.render_to_response(
+                          self.get_context_data(form=form))
 
     def form_invalid(self, form):
         return render(self.request, self.template_name, {'form': form})
@@ -178,7 +180,7 @@ class UserProfileView(TemplateView):
     url: profiles/profile_view.html
     """
     template_name = 'profiles/profile_view.html'
-    http_method_names = {'get'}   
+    form_class = forms.UserProfileForm
 
     def get_context_data(self, **kwargs):
         """
@@ -215,4 +217,5 @@ class UserProfileUpdateView(UpdateView):
     
     def get_object(self):
         return User.objects.get(pk=self.kwargs.get('pk')) # or request.POST  
+    
     

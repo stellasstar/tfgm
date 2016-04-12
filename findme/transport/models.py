@@ -4,6 +4,14 @@ from django.contrib.gis.db import models as gis_models
 from django.contrib.gis import geos
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.conf import settings
+
+# import custom user model
+try:
+    from django.contrib.auth import get_user_model
+    User = settings.AUTH_USER_MODEL
+except ImportError:
+    from django.contrib.auth.models import User 
 
 
 class Poly(gis_models.Model):
@@ -31,6 +39,9 @@ class TransportLink(gis_models.Model):
     
     
 class Position(gis_models.Model):
+    # Relations
+    user = models.ForeignKey(User, related_name='owner', null=True, blank=True)
+    # postion of user
     name = models.CharField(max_length=32)
     geometry = gis_models.PointField(srid=4326)
     objects = gis_models.GeoManager()

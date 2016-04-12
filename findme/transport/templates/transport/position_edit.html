@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load crispy_forms_field %}
+{% load staticfiles%}
+{% load leaflet_tags %}
+
+
+{% block meta_title %}{{user.get_full_name}}{% endblock %}
+{% block title %}{{user.get_full_name}}{% endblock %}
+{% block body_id %}Position{% endblock %}
+
+{% block content %}
+
+        {% if user.is_authenticated %}
+        {% csrf_token %}
+        {% load crispy_forms_tags %}
+        {% crispy form %}
+        {% endif %}
+
+
+{% endblock %}

@@ -9,13 +9,19 @@ from django.core import validators
 from django.utils import timezone
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.utils.deconstruct import deconstructible
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.contrib.gis.db import models as gis_models
+from transport.models import Position
 
 import os
 import string
+
+try:
+    from django.contrib.auth import get_user_model
+    User = settings.AUTH_USER_MODEL
+except ImportError:
+    from django.contrib.auth.models import User 
 
 @deconstructible
 class Avatar_User_Dir(object):
@@ -102,6 +108,8 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     longitude = models.FloatField(verbose_name='longitude',
                                     null=True,
                                     default=settings.DEFAULT_LONGITUDE)    
+    position = models.ForeignKey('transport.Position', related_name='default_position', 
+                                 null=True, blank=True)
 
     # user permissions
     is_admin = models.BooleanField(_('admin status'),
@@ -159,8 +167,11 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         # Simplest possible answer: All admins are staff
         return self.is_admin
     
-    def position(self):
+    def point(self):
         self.point = Point(self.longitude, self.latitude)
         return point
+    
+    def get_position(self):
+        return self.position
         
     

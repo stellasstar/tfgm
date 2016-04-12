@@ -3,16 +3,9 @@
 {% load staticfiles%}
 
 
-{% block header %}
-<script type="text/javascript" src="{% static "js/gofindme.js" %}"></script>
-<script type="text/javascript" src="{% static "js/waypoints.js" %}"></script>
-<link rel="stylesheet" type="text/css" href="{% static 'css/waypoints.css' %}" />
-{% endblock %}
-
-
-{% block meta_title %}{{user.first_name}}&nbsp; {{user.last_name}}{% endblock %}
-{% block title %}{{user.first_name}}&nbsp; {{user.last_name}}{% endblock %}
-{% block body_id %}account{% endblock %}
+{% block meta_title %}{{user.get_full_name}}{% endblock %}
+{% block title %}{{user.get_full_name}}{% endblock %}
+{% block body_id %}Profile View{% endblock %}
 
 {% block content %}
 {% csrf_token %}
@@ -54,7 +47,9 @@
             <tr><td colspan="2" align="center" id="wrapper"><i>
                 Click the allow button to let the browser show your map.
             </i></td></tr>
-             <tr><td colspan="2" align="center" id="mapPlaceholder"></td></tr>
+             <tr>
+                <td colspan="2" align="center" id="defaultPositionMap">
+             </tr>
              <tr><td colspan="2">&nbsp;</td></tr>
              <tr><td colspan="2">&nbsp;</td></tr>
         </table>

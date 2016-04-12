@@ -12,5 +12,5 @@ sudo -u postgres psql --dbname=$NAME -c "CREATE EXTENSION postgis"
 sudo -u postgres psql --dbname=$NAME -c "CREATE EXTENSION postgis_topology;"
 
 python manage.py makemigrations findme
-python manage.py makemigrations gatekeeper
 python manage.py makemigrations transport
+python manage.py makemigrations gatekeeper

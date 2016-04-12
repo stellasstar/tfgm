@@ -8,7 +8,7 @@
 {% block content %}
 
     {% if user.is_authenticated %}
-        <h1>Hello {{user.first_name}}&nbsp; {{user.last_name}}.  You've already logged in.  </h1>
+        <h1>HHello {{user.get_full_name}}.  You've already logged in.  </h1>
          <br />
         {% else %}
     <p></p>
