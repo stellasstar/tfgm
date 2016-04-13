@@ -109,10 +109,6 @@ class UserRegistrationView(CreateView):
         password = form.cleaned_data['password']
         self.object.set_password(password)
         
-        # save the form 
-        self.object.save()  
-        new_position.save()        
-        
         url = form.cleaned_data['picture']
             
         if url and not str(url).find('Default'):
@@ -138,8 +134,7 @@ class UserRegistrationView(CreateView):
         
 
         # save the form again
-        self.object.save()  
-        new_position.save()
+        form.save(commit=True)
         
         # automatically login after registering 
         messages.info(self.request, "Thanks for registering. You are now logged in.")

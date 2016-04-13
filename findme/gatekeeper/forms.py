@@ -66,16 +66,16 @@ class UserRegistrationForm(forms.ModelForm):
         
     def save(self, commit=True, *args, **kwargs):
         lString = 'POINT(%s %s)' % (str(self.fields['longitude'].initial), str(self.fields['latitude'].initial))
+        picture = self.fields['picture']
         new_user = super(UserRegistrationForm, self).save(commit=False, *args, **kwargs)
         new_position = Position(
             user = new_user,
             name=self.cleaned_data['username'],
-            geometry = fromstr(lString))
-        new_user.default_position = new_position
-        new_position.user = new_user
+            geometry = fromstr(lString))       
         if commit:
+            new_user.save()
             new_position.save()
-            new_user.default_position = new_position            
+            new_user.position = new_position            
             new_user.save()
             new_position.user = new_user
             new_position.save()            
