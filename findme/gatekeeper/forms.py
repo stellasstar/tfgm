@@ -76,9 +76,7 @@ class UserRegistrationForm(forms.ModelForm):
             new_user.save()
             new_position.save()
             new_user.position = new_position            
-            new_user.save()
-            new_position.user = new_user
-            new_position.save()            
+            new_user.save()          
         return new_user, new_position 
 
 class UserProfileForm(forms.ModelForm):

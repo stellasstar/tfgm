@@ -2,23 +2,15 @@ var map;
 var geocoder;
 var position;
 
-var data = {{json_data}}
+var data = JSON.parse(document.getElementById('json_value').value);
+alert(data)
 
-print data
+var infowindow = new google.maps.InfoWindow();
 
-if (navigator.geolocation)
+function showDefaultProfileLocation()
 {
-    navigator.geolocation.getCurrentPosition();
-}
-else
-{
-   alert("Geolocation API not supported.");
-}
-
-function showProfileLocation()
-{
-    var latitude = {{form.instance.latitude}}
-    var longitude = {{form.instance.longitude}}
+    var latitude = {{data.latitude}};
+    var longitude = {{data.longitude}};
     var coords = new google.maps.LatLng(latitude, longitude);
 
     var mapOptions = {
@@ -26,16 +18,20 @@ function showProfileLocation()
     center: coords,
     mapTypeControl: false,
     mapTypeId: google.maps.MapTypeId.ROADMAP
-};
+};  // end mapOptions
 
 //create the map, and place it in the HTML map div
 map = new google.maps.Map(
 document.getElementById("defaultPositionMap"), mapOptions
-);
+); 
 
 //place the initial marker
 var marker = new google.maps.Marker({
 position: coords,
 map: map,
-});
-}
+}); // end marker
+
+} // end function
+
+
+

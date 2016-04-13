@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404, JsonResponse
 from django.contrib import messages
 from django.conf import settings
+from django.forms.models import model_to_dict
 
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -60,30 +61,6 @@ def make_thumbnail(image, name, ext):
     
     return True
 
-
-class JSONResponseMixin(object):
-    """
-    A mixin that can be used to render a JSON response.
-    """
-    def render_to_json_response(self, context, **response_kwargs):
-        """
-        Returns a JSON response, transforming 'context' to make the payload.
-        """
-        return JsonResponse(
-            self.get_data(context),
-            **response_kwargs
-        )
-
-    def get_data(self, context):
-        """
-        Returns an object that will be serialized as JSON by json.dumps().
-        """
-        # Note: This is *EXTREMELY* naive; in reality, you'll need
-        # to do much more complex handling to ensure that arbitrary
-        # objects -- such as Django model instances or querysets
-        # -- can be serialized as JSON.
-        return context
-    
 
 class UserRegistrationView(CreateView):
 
@@ -214,8 +191,10 @@ class UserProfileView(TemplateView):
         Load up the default data to
         show in the display form.
         """
+        context = super(UserProfileView, self).get_context_data(**kwargs)
         username = self.kwargs.get('username')
         position = self.kwargs.get('position')
+        data = []
 
         if username:
             user = get_object_or_404(User, username=username)
@@ -227,14 +206,29 @@ class UserProfileView(TemplateView):
             # anonymously for non-existent user
         
         if user.is_authenticated():
-           position = get_object_or_404(Position, user=user)
+            position = Position.objects.filter(user=user)
         else:
             raise Http404        
 
         return_to = self.request.GET.get('returnTo', '/')
         form = forms.UserProfileForm(instance=user)
         form.initial['returnTo'] = return_to
-        return {'form': form}  
+        
+        position_dict = position.values()[0]
+        geometry = position_dict.pop('geometry')
+        
+        for key in position_dict.keys():
+            value = position_dict.get(key)
+            data.append({ key : value })
+        
+        data.append({ 'latitude' : geometry.y })
+        data.append({ 'longitude' : geometry.x })
+        data.append({ 'srid' : geometry.srid })
+        
+        context['json_data'] = simplejson.dumps(data, cls=simplejson.encoder.JSONEncoderForHTML)
+        context['form'] = form  
+        
+        return context 
         
     
 class UserProfileUpdateView(UpdateView):

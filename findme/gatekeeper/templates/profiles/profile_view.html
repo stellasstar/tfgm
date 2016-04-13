@@ -44,11 +44,25 @@
             {% endfor %}
             <tr><td colspan="2">&nbsp;</td></tr>
             <tr><td colspan="2">&nbsp;</td></tr>
+            
+            <tr><td>
+            {% for field in json_data %}
+                    
+                    {{ field }}
+                {% endfor %}
+                
+            </td></tr>
+                
+                
             <tr><td colspan="2" align="center" id="wrapper"><i>
                 Click the allow button to let the browser show your map.
             </i></td></tr>
              <tr>
-                <td colspan="2" align="center" id="defaultPositionMap">
+                <td colspan="2" align="center">
+                <div id="defaultPositionMap">
+                <input id="json_data" type="text" style="display:none" value="{{ json_data }}"/>
+                </div>
+                </td>
              </tr>
              <tr><td colspan="2">&nbsp;</td></tr>
              <tr><td colspan="2">&nbsp;</td></tr>
