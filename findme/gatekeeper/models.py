@@ -100,8 +100,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
                                 upload_to=avatar_user_dir,
                                 default=default_avatar)
     thumbnail = models.ImageField(null=True, blank=True,
-                                upload_to=avatar_user_dir)    
-    point = geomodels.PointField(blank=True, null=True)
+                                upload_to=avatar_user_dir)
     latitude = models.FloatField(verbose_name='latitude',
                                    null=True,
                                    default=settings.DEFAULT_LATITUDE)
@@ -167,11 +166,10 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         # Simplest possible answer: All admins are staff
         return self.is_admin
     
-    def point(self):
-        self.point = Point(self.longitude, self.latitude)
-        return point
-    
     def get_position(self):
         return self.position
+    
+    def to_json_dict(self):
+        return {'name': self.name}    
         
     

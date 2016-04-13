@@ -71,9 +71,14 @@ class UserRegistrationForm(forms.ModelForm):
             user = new_user,
             name=self.cleaned_data['username'],
             geometry = fromstr(lString))
+        new_user.default_position = new_position
+        new_position.user = new_user
         if commit:
             new_position.save()
+            new_user.default_position = new_position            
             new_user.save()
+            new_position.user = new_user
+            new_position.save()            
         return new_user, new_position 
 
 class UserProfileForm(forms.ModelForm):

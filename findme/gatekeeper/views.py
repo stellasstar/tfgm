@@ -1,7 +1,7 @@
 from django.views.generic.base import TemplateView
 from django.contrib.auth.forms import PasswordResetForm
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.contrib import messages
 from django.conf import settings
 
@@ -12,10 +12,10 @@ from django.contrib.auth.decorators import login_required
 from PIL import Image
 import StringIO
 from django.core.files.storage import default_storage
-
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 import os
+import simplejson
 import json
 
 
@@ -25,6 +25,7 @@ from django.core.urlresolvers import reverse
 from django.views.generic import CreateView, RedirectView, UpdateView
 from django.views.generic.edit import ModelFormMixin
 from gatekeeper import forms, utils, models
+from transport.models import Position
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -58,6 +59,30 @@ def make_thumbnail(image, name, ext):
     s3_thumb.close()   
     
     return True
+
+
+class JSONResponseMixin(object):
+    """
+    A mixin that can be used to render a JSON response.
+    """
+    def render_to_json_response(self, context, **response_kwargs):
+        """
+        Returns a JSON response, transforming 'context' to make the payload.
+        """
+        return JsonResponse(
+            self.get_data(context),
+            **response_kwargs
+        )
+
+    def get_data(self, context):
+        """
+        Returns an object that will be serialized as JSON by json.dumps().
+        """
+        # Note: This is *EXTREMELY* naive; in reality, you'll need
+        # to do much more complex handling to ensure that arbitrary
+        # objects -- such as Django model instances or querysets
+        # -- can be serialized as JSON.
+        return context
     
 
 class UserRegistrationView(CreateView):
@@ -84,6 +109,10 @@ class UserRegistrationView(CreateView):
         password = form.cleaned_data['password']
         self.object.set_password(password)
         
+        # save the form 
+        self.object.save()  
+        new_position.save()        
+        
         url = form.cleaned_data['picture']
             
         if url and not str(url).find('Default'):
@@ -108,8 +137,9 @@ class UserRegistrationView(CreateView):
 #                form.non_field_errors("Couldn't make thumbnail image")
         
 
-        # save the form
-        self.object.save()        
+        # save the form again
+        self.object.save()  
+        new_position.save()
         
         # automatically login after registering 
         messages.info(self.request, "Thanks for registering. You are now logged in.")
@@ -181,6 +211,8 @@ class UserProfileView(TemplateView):
     """
     template_name = 'profiles/profile_view.html'
     form_class = forms.UserProfileForm
+    success_url = "/profiles/"
+    model = User
 
     def get_context_data(self, **kwargs):
         """
@@ -188,6 +220,7 @@ class UserProfileView(TemplateView):
         show in the display form.
         """
         username = self.kwargs.get('username')
+        position = self.kwargs.get('position')
 
         if username:
             user = get_object_or_404(User, username=username)
@@ -197,11 +230,16 @@ class UserProfileView(TemplateView):
             raise Http404
             # Case where user gets to this view
             # anonymously for non-existent user
+        
+        if user.is_authenticated():
+           position = get_object_or_404(Position, user=user)
+        else:
+            raise Http404        
 
         return_to = self.request.GET.get('returnTo', '/')
         form = forms.UserProfileForm(instance=user)
         form.initial['returnTo'] = return_to
-        return {'form': form}
+        return {'form': form}  
         
     
 class UserProfileUpdateView(UpdateView):

@@ -2,6 +2,10 @@ var map;
 var geocoder;
 var position;
 
+var data = {{json_data}}
+
+print data
+
 if (navigator.geolocation)
 {
     navigator.geolocation.getCurrentPosition();
