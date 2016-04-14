@@ -1,5 +1,6 @@
 from django.views.generic.base import TemplateView
 from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404, JsonResponse
 from django.contrib import messages
@@ -18,7 +19,6 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 import os
 import simplejson
 import json
-
 
 from django.core.files.base import ContentFile
 from django.views.generic.edit import FormView
@@ -68,17 +68,6 @@ class UserRegistrationView(CreateView):
     model = User
     template_name = 'registration/register.html'
     success_url = '/'
-
-    def get(self, request):
-        self.object = None
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        return self.render_to_response(
-                          self.get_context_data(form=form))
-
-    def form_invalid(self, form):
-        return render(self.request, self.template_name, {'form': form})
-        # return super(UserRegistrationView, self).form_invalid(form)
 
     def form_valid(self, form):
         self.object, new_position = form.save(commit=False)
@@ -146,14 +135,7 @@ class LoginView(FormView):
     success_url = '/'
     template_name = 'registration/login.html'
     model = User
-
-    def get(self, request):
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        return render(self.request, self.template_name, {'form': form})
-
-    def form_invalid(self, form):
-        return render(self.request, self.template_name, {'form': form})
+    redirect_field_name = 'redirect_to'
 
     def form_valid(self, form):
         username = form.cleaned_data['username']
@@ -176,7 +158,7 @@ class LogOutView(RedirectView):
         return super(LogOutView, self).get(request, *args, **kwargs)
 
 
-class UserProfileView(TemplateView):
+class UserProfileView(LoginRequiredMixin, TemplateView):
     """
     Profile View Page
     url: profiles/profile_view.html
@@ -185,6 +167,7 @@ class UserProfileView(TemplateView):
     form_class = forms.UserProfileForm
     success_url = "/profiles/"
     model = User
+    redirect_field_name = 'redirect_to'
 
     def get_context_data(self, **kwargs):
         """
@@ -231,12 +214,13 @@ class UserProfileView(TemplateView):
         return context 
         
     
-class UserProfileUpdateView(UpdateView):
+class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
     
     model = User
     form_class = forms.UserProfileUpdateForm 
     template_name='profiles/profile_update.html'
     success_url = "/update/"
+    redirect_field_name = 'redirect_to'
     
     def get_success_url(self):
         return reverse('update', kwargs={

@@ -11,12 +11,13 @@
         <h1>Hello {{user.get_full_name}}.  You've already logged in.  </h1>
          <br />
         {% else %}
-    <p></p>
-    <p></p>
-    <p></p>
-        {% csrf_token %}
-        {% load crispy_forms_tags %}
-        {% crispy form %}
-        {% endif %}
+    <form>
+        <div class="form-group" style="margin-top: 30px;">
+            {% csrf_token %}
+            {% load crispy_forms_tags %}
+            {% crispy form %}
+            {% endif %}
+        </div>
+    </form>
     
 {% endblock %}

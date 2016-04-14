@@ -1,8 +1,9 @@
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth import views
-from findme.views import HomePageView, ContactFormView
+from findme.views import HomePageView, ContactFormView, StaticView
 from django.conf import settings
+from django.http import Http404
 from django.views.static import * 
 
 admin.autodiscover()
@@ -11,6 +12,7 @@ urlpatterns = [
             # index page
             url(r'^$', HomePageView.as_view(), name='home'), 
             url(r'^contact/$', ContactFormView.as_view(), name='contact'),
+            url(r'^(?P<page>.+\.html)$', StaticView.as_view()),
             url(r'^gatekeeper/', include('gatekeeper.urls')),
             url(r'^transport/', include('transport.urls')),            
             

@@ -1,7 +1,5 @@
 var map;
 var geocoder;
-var meLat;
-var meLong;
 
 if (navigator.geolocation)
 {

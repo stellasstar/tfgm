@@ -3,21 +3,13 @@ from django.views.generic.base import TemplateView
 from django.conf import settings
 from django.core.mail import send_mail
 from django.views.generic import FormView
-from django.shortcuts import render, redirect, render_to_response, get_object_or_404
+from django.http import Http404
 
 class ContactFormView(FormView):
 
     form_class = ContactForm
-    template_name = "email_form.html"
-    success_url = '/contact/'
-    
-    def get(self, request):
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        return render(self.request, self.template_name, {'form':form})
-    
-    def form_invalid(self, form):
-        return render(self.request, self.template_name, {'form':form}) 
+    template_name = 'email_form.html'
+    success_url = '/email_sent.html'
 
     def form_valid(self, form):
         message = "{name} / {email} said: ".format(
@@ -31,12 +23,20 @@ class ContactFormView(FormView):
             recipient_list=[settings.LIST_OF_EMAIL_RECIPIENTS],
         )
         return super(ContactFormView, self).form_valid(form)
+    
 
 class HomePageView(TemplateView):
 
     template_name = "home.html"
 
-    def get_context_data(self, **kwargs):
-        context = super(HomePageView, self).get_context_data(**kwargs)
-        return context
+    
+class StaticView(TemplateView):
+    
+    def get(self, request, page, *args, **kwargs):
+        self.template_name = page
+        response = super(StaticView, self).get(request, *args, **kwargs)
+        try:
+            return response.render()
+        except TemplateDoesNotExist:
+            raise Http404
 

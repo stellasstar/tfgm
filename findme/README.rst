@@ -22,21 +22,17 @@ virtualenv --setuptools venv
 source venv/bin/activate
 Cd findme
 
-3) Install Django 
-
-Pip Install Django
-
-4)  install other dependencies through pip
+3)  install other dependencies through pip
 pip install -r requirements.txt --upgrade -e .
 
-5)  Configuring PostgreSQL:
+4)  Configuring PostgreSQL:
 
 Ensure that there is a line in /etc/postgresql/9.3/main/pg_hba.conf that allows local connections using md5:
 
 # "local" is for Unix domain socket connections only
 local   all         all                               md5
 
-6)  Unfortunately the django management command zap_and_create_postgis_db does not work until a PostgreSQL database with postgis already exists. The role and password can be taken from settings.py, and the builddb.sh file can be edited with this information.  builddb.sh will install the initial database, and rebuild.sh will build the necessary tables.
+5)  Unfortunately the django management command zap_and_create_postgis_db does not work until a PostgreSQL database with postgis already exists. The role and password can be taken from settings.py, and the builddb.sh file can be edited with this information.  builddb.sh will install the initial database, and rebuild.sh will build the necessary tables.
 
 ./findme/scripts/builddb.sh
 ./findme/scripts/rebuild.sh

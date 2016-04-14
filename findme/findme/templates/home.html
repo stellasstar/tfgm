@@ -6,7 +6,7 @@
 {% block content %}
 
     {% if user.is_authenticated %}
-    <h1>Hello {{user.first_name}}&nbsp; {{user.last_name}}!</h1>
+    <h1>Hello {{user.get_full_name}}!</h1>
     {% else %}
     <h1>Hello World!</h1> 
     <h1>Please click on Any Mouse in the right hand corner to Login or Register.</h1>
