@@ -28,21 +28,13 @@ class Avatar_User_Dir(object):
     
    # media = settings.MEDIA_ROOT
     av = settings.AVATAR_URL.strip('/')
+    url = ''
     def __call__(self, instance, filename):
         joined = os.path.join(self.av,str(instance.username),(filename).decode('utf-8').lower())
-        return joined
-    
-@deconstructible
-class Default_Avatar(object):
-    
-   # media = settings.MEDIA_ROOT
-    av = settings.AVATAR_URL.strip('/')
-    def __call__(self):
-        joined = os.path.join(self.av,'default','woman.jpg')
+        url = joined
         return joined
 
 avatar_user_dir= Avatar_User_Dir()
-default_avatar = Default_Avatar()
 
 
 class UserManager(BaseUserManager):
@@ -98,15 +90,17 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 #                                 options={'quality': 90})    
     picture = models.ImageField(null=True, blank=True,
                                 upload_to=avatar_user_dir,
-                                default=default_avatar)
+                                default=settings.AVATAR_URL.strip('/') + '/' + settings.DEFAULT_AVATAR)
     thumbnail = models.ImageField(null=True, blank=True,
                                 upload_to=avatar_user_dir)
-    latitude = models.FloatField(verbose_name='latitude',
-                                   null=True,
-                                   default=settings.DEFAULT_LATITUDE)
-    longitude = models.FloatField(verbose_name='longitude',
+    latitude = models.DecimalField(max_digits=10,
+                               decimal_places=6,
+                               null=True,
+                               default=settings.DEFAULT_LATITUDE)
+    longitude = models.DecimalField(max_digits=10,
+                                    decimal_places=6,
                                     null=True,
-                                    default=settings.DEFAULT_LONGITUDE)    
+                                    default=settings.DEFAULT_LONGITUDE)  
     position = models.ForeignKey('transport.Position', related_name='default_position', 
                                  null=True, blank=True)
 
@@ -168,8 +162,8 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     
     def get_position(self):
         return self.position
+     
     
-    def to_json_dict(self):
-        return {'name': self.name}    
+
         
     

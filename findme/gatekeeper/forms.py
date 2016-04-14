@@ -18,7 +18,6 @@ from django.forms.models import inlineformset_factory
 from imagekit.models import ProcessedImageField
 
 from transport.models import Position
-
 import httplib
 
 class LoginForm(AuthenticationForm):
@@ -65,8 +64,7 @@ class UserRegistrationForm(forms.ModelForm):
         super(UserRegistrationForm, self).__init__(*args, **kwargs)
         
     def save(self, commit=True, *args, **kwargs):
-        lString = 'POINT(%s %s)' % (str(self.fields['longitude'].initial), str(self.fields['latitude'].initial))
-        picture = self.fields['picture']
+        lString = 'POINT(%s %s)' % (str(self.cleaned_data['longitude']), str(self.cleaned_data['latitude']))
         new_user = super(UserRegistrationForm, self).save(commit=False, *args, **kwargs)
         new_position = Position(
             user = new_user,
@@ -76,7 +74,9 @@ class UserRegistrationForm(forms.ModelForm):
             new_user.save()
             new_position.save()
             new_user.position = new_position            
-            new_user.save()          
+            new_user.save()  
+            new_position.user = new_user
+            new_position.save()
         return new_user, new_position 
 
 class UserProfileForm(forms.ModelForm):
@@ -119,12 +119,20 @@ class UserProfileUpdateForm(forms.ModelForm):
                                      css_class='btn-primary'))   
         super(UserProfileUpdateForm, self).__init__(*args, **kwargs)
 
-    def save(self, user=None):
-        user_profile = super(UserProfileUpdateForm, self).save(commit=False)
-        if user:
-            user_profile.user = user
-        user_profile.save()
-        return user_profile    
-    
+    def save(self, commit=True, *args, **kwargs):
+        lString = 'POINT(%s %s)' % (str(self.cleaned_data['longitude']), str(self.cleaned_data['latitude']))
+        new_user = super(UserProfileUpdateForm, self).save(commit=False, *args, **kwargs)
+        old_position = Position.objects.filter(user=new_user)
+        new_position = Position(
+                        user = new_user,
+                        name=old_position.values()[0].get('name'),
+                        geometry = fromstr(lString))  
+
+        new_user.save()
+        new_position.save()
+        new_user.position = new_position            
+        new_user.save()  
+        new_position.user = new_user
+        new_position.save()
     
     

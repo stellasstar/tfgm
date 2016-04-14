@@ -213,7 +213,7 @@ class UserProfileView(TemplateView):
         return_to = self.request.GET.get('returnTo', '/')
         form = forms.UserProfileForm(instance=user)
         form.initial['returnTo'] = return_to
-        
+
         position_dict = position.values()[0]
         geometry = position_dict.pop('geometry')
         
@@ -225,7 +225,7 @@ class UserProfileView(TemplateView):
         data.append({ 'longitude' : geometry.x })
         data.append({ 'srid' : geometry.srid })
         
-        context['json_data'] = simplejson.dumps(data, cls=simplejson.encoder.JSONEncoderForHTML)
+        context['json_data'] = simplejson.dumps(data, cls=simplejson.JSONEncoderForHTML)
         context['form'] = form  
         
         return context 
@@ -240,7 +240,7 @@ class UserProfileUpdateView(UpdateView):
     
     def get_success_url(self):
         return reverse('update', kwargs={
-            'pk': self.object.pk,})
+            'pk': self.kwargs.get('pk')})
     
     def get_object(self):
         return User.objects.get(pk=self.kwargs.get('pk')) # or request.POST  

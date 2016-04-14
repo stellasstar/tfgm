@@ -72,3 +72,6 @@ class Position(gis_models.Model):
     def get_geometry(self):
         return self.geometry
     
+    def get_name(self):
+        return self.name
+    

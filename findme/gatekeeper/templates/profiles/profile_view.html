@@ -13,7 +13,11 @@
 
         {% if user.is_authenticated %}
         
-        <table align="center" border="1" cellpadding="5" cellspacing="5">
+        <script>
+            var var_json = '{{ json_data|escapejs }}';
+        </script>
+        
+        <table align="center" border="0" cellpadding="5" cellspacing="5">
         <tr><td colspan="2" align="center"><h1>Hello {{user.get_full_name}}</h1></td></tr>
         
         <tr>
@@ -44,15 +48,7 @@
             {% endfor %}
             <tr><td colspan="2">&nbsp;</td></tr>
             <tr><td colspan="2">&nbsp;</td></tr>
-            
-            <tr><td>
-            {% for field in json_data %}
-                    
-                    {{ field }}
-                {% endfor %}
-                
-            </td></tr>
-                
+
                 
             <tr><td colspan="2" align="center" id="wrapper"><i>
                 Click the allow button to let the browser show your map.
@@ -60,7 +56,6 @@
              <tr>
                 <td colspan="2" align="center">
                 <div id="defaultPositionMap">
-                <input id="json_data" type="text" style="display:none" value="{{ json_data }}"/>
                 </div>
                 </td>
              </tr>

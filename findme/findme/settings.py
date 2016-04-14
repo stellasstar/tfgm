@@ -119,6 +119,7 @@ ADMIN_MEDIA_PREFIX = '/media/admin/'
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 
 AVATAR_URL = '/avatars/'
+DEFAULT_AVATAR = 'default/woman.jpg'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
