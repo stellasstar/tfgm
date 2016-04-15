@@ -50,7 +50,6 @@ INSTALLED_APPS = (
     'captcha',    
     'gatekeeper',
     'findme',
-    'waypoints',
     'transport',
 )
 
