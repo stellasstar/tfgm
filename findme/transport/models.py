@@ -1,5 +1,6 @@
 from urllib2 import URLError
 
+from django.utils.translation import gettext as _
 from django.contrib.gis.db import models as gis_models
 from django.contrib.gis import geos
 from django.db import models
@@ -20,23 +21,51 @@ class Poly(gis_models.Model):
     objects = gis_models.GeoManager()
 
 
-class TransportLink(gis_models.Model):
-    name = models.CharField(max_length=200)
-    geom = gis_models.PointField()
+class Waypoint(gis_models.Model):
+    name = models.CharField(max_length=32)
+    address = models.CharField(max_length=100, null=True, blank=True)
+    city = models.CharField(max_length=50, null=True, blank=True)  
+    latitude = models.DecimalField(max_digits=10,
+                                   decimal_places=6,
+                                   null=True)
+    longitude = models.DecimalField(max_digits=10,
+                                    decimal_places=6,
+                                    null=True)      
     location = gis_models.PointField(u"longitude/latitude",
-                                     geography=True, blank=True, null=True)
-
+                                     geography=True, blank=True, null=True,srid=4326)
+    
     gis = gis_models.GeoManager()
     objects = models.Manager()
-
+    
+    gis.filter() # with GIS queries
+    objects.filter() # only standard queries    
+    
+    class Meta:
+        verbose_name = _('waypoint')
+        verbose_name_plural = _('waypoints') 
+    
     def __unicode__(self):
         return self.name
     
     def get_lat_long(self):
-        """Add an easy getter function, which returns the geometry coords in
+        """Add an easy getter function, which returns the location coords in
         latitude longitude order
         """
-        return (self.geom.coords[1], self.geom.coords[0])  
+        return (self.location.coords[1], self.location.coords[0])  
+    
+    def save(self, **kwargs):
+        if not self.location:
+            address = u'%s %s' % (self.city, self.address)
+            address = address.encode('utf-8')
+            geocoder = Google()
+            try:
+                _, latlon = geocoder.geocode(address)
+            except (URLError, GQueryError, ValueError):
+                pass
+            else:
+                point = "POINT(%s %s)" % (latlon[1], latlon[0])
+                self.location = geos.fromstr(point)
+        super(Waypoint, self).save()     
     
     
 class Position(gis_models.Model):
@@ -75,3 +104,13 @@ class Position(gis_models.Model):
     def get_name(self):
         return self.name
     
+
+# Auto-generated `LayerMapping` dictionary for Unit model
+waypoint_mapping = {
+    'name' : 'Name',
+    'longitude' : 'Longitude',
+    'latitude' : 'Latitude',
+    'address' : 'Address',
+    'city' : 'City',
+    'location' : 'UNKNOWN',
+}

@@ -1,23 +1,40 @@
-<script>
+{% extends 'base.html' %}
+{% load staticfiles%}
+{% block title %}Transportation Links{% endblock %}
+{% block head %}Transportation Links{% endblock %}
 
-var map, marker, waypointByID = {};
-var currentObject;
-var map;
-var geocoder;
-var meLat;
-var meLong;
+{% block content %}
+{% csrf_token %}
 
 
-function initialize() {
+        {% csrf_token %}
 
-    map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 12,
-        center: new google.maps.LatLng(53.4667, -2.2333),
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    });
-    geocoder = new google.maps.Geocoder();
-}
 
-</script>
+        {% if user.is_authenticated %}
+        
+        <script>
+            var var_json = '{{ json|escapejs }}';
+        </script>
+        
+        <table align="center" border="0" cellpadding="5" cellspacing="5">
+        <tr><td colspan="2" align="center"><h1>Hello {{user.get_full_name}}</h1></td></tr>
+        
+                    <tr><td colspan="2" align="center" id="wrapper"><i>
+                Click the allow button to let the browser show your map.
+            </i></td></tr>
+             <tr>
+                <td colspan="2" align="center">
+                <div id={{map}}></div>
+                </td>
+             </tr>
+             <tr><td colspan="2">&nbsp;</td></tr>
+             <tr><td colspan="2">&nbsp;</td></tr>
+        </table>
+        {% endif %}
+
+
+
+{% endblock %}
+
 
 

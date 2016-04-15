@@ -2,7 +2,7 @@ from django.views.generic.base import TemplateView
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import Http404, JsonResponse
+from django.http import Http404, JsonResponse, HttpResponse, HttpResponseNotFound
 from django.contrib import messages
 from django.conf import settings
 from django.forms.models import model_to_dict
@@ -15,6 +15,7 @@ from PIL import Image
 import StringIO
 from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.conf import settings
 
 import os
 import simplejson
@@ -184,14 +185,14 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
         elif self.request.user.is_authenticated():
             user = self.request.user
         else:
-            raise Http404
+            return HttpResponseNotFound('<h1>Page not found</h1>')
             # Case where user gets to this view
             # anonymously for non-existent user
         
         if user.is_authenticated():
             position = Position.objects.filter(user=user)
         else:
-            raise Http404        
+            return HttpResponseNotFound('<h1>Page not found</h1>')      
 
         return_to = self.request.GET.get('returnTo', '/')
         form = forms.UserProfileForm(instance=user)
@@ -208,8 +209,12 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
         data.append({ 'longitude' : geometry.x })
         data.append({ 'srid' : geometry.srid })
         
+        # where you want the map to be
+        data.append({ 'map' : 'defaultPositionMap'})
+        
         context['json_data'] = simplejson.dumps(data, cls=simplejson.JSONEncoderForHTML)
         context['form'] = form  
+        context['map'] = 'defaultPositionMap'
         
         return context 
         

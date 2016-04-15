@@ -1,18 +1,36 @@
 from django import forms
-from django.views.generic import ListView, UpdateView
-from leaflet.forms.widgets import LeafletWidget
+from transport.models import Position, Waypoint
 
-from transport.models import Position
+class AddressForm(forms.Form):
+    address = forms.CharField()
+    
+class WaypointForm(forms.ModelForm):
+    """Form for creating the data that is part of the Waypoint model"""  
 
+    class Meta():
+        model = Waypoint
+        fields = ['name',
+                  'address',
+                  'city',
+                  'latitude',
+                  'longitude',
+                  ]  
 
-class PositionForm(forms.ModelForm):
-    class Meta:
-        model = Position
-        widgets = {'geometry': LeafletWidget()}
+    def __init__(self, *args, **kwargs):
+        super(WaypointForm, self).__init__(*args, **kwargs)
+        
 
+class WaypointUpdateForm(forms.ModelForm):
+    """Form for editing the data that is part of the Waypoint model"""  
 
-class EditPositionForm(UpdateView):
-    model = Position
-    form_class = PositionForm
-    template_name = 'position.html'
+    class Meta():
+        model = Waypoint
+        fields = ['name',
+                  'address',
+                  'city',
+                  'latitude',
+                  'longitude',
+                  ]  
 
+    def __init__(self, *args, **kwargs):
+        super(WaypointUpdateForm, self).__init__(*args, **kwargs)

@@ -80,7 +80,6 @@ class UserRegistrationForm(forms.ModelForm):
         return new_user, new_position 
 
 class UserProfileForm(forms.ModelForm):
-    """Form for editing the data that is part of the User model"""
 
     class Meta():
         model = User

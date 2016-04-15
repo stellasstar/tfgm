@@ -5,6 +5,8 @@ from findme.views import HomePageView, ContactFormView, StaticView
 from django.conf import settings
 from django.http import Http404
 from django.views.static import * 
+import django.views.defaults
+import django.views.generic
 
 admin.autodiscover()
 
@@ -27,6 +29,9 @@ urlpatterns = [
                 'document_root': settings.MEDIA_ROOT}, name="media"),
             url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {
                 'document_root': settings.STATIC_ROOT,
-                }),            
+                }),   
+            
+            # Other url patterns ...
+            url(r'^404/$', 'django.views.defaults.page_not_found'),   
               
 ]

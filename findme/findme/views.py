@@ -3,7 +3,17 @@ from django.views.generic.base import TemplateView
 from django.conf import settings
 from django.core.mail import send_mail
 from django.views.generic import FormView
-from django.http import Http404
+from django.http import Http404, HttpResponseServerError, HttpResponseNotFound
+
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+
+
+def handler404(request, template_name='404.html'):
+    t = get_template(template_name)
+    ctx = Context({})
+    return HttpResponseNotFound(t.render(ctx))
+
 
 class ContactFormView(FormView):
 

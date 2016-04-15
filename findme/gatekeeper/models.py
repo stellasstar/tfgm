@@ -23,6 +23,7 @@ try:
 except ImportError:
     from django.contrib.auth.models import User 
 
+
 @deconstructible
 class Avatar_User_Dir(object):
     

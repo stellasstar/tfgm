@@ -12,16 +12,18 @@ var marker;
 // latitude = data.[5].latitude
 // longitude = data[6].longitude
 // srid = data[7].srid
+// map = data[8].map
 
 
 $(document).ready( function() {
 
     data = $.parseJSON(var_json);
-    //alert(data[5].latitude);                           //THIS WORKS!!!
+    //alert(data[8].map);                           //THIS WORKS!!!
     
     
     var latitude = data[5].latitude;
     var longitude = data[6].longitude;
+    var map_location = data[8].map
     
     var contentString = '<div>'+
       data[2].name  + '\n' +
@@ -47,7 +49,7 @@ $(document).ready( function() {
     
     //create the map, and place it in the HTML map div
     map = new google.maps.Map(
-        document.getElementById("defaultPositionMap"), 
+        document.getElementById(map_location), 
         mapOptions
     ); 
     
