@@ -36,4 +36,3 @@ local   all         all                               md5
 
 ./findme/scripts/builddb.sh
 ./findme/scripts/rebuild.sh
-
