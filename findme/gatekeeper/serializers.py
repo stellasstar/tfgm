@@ -62,10 +62,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class LoginSerializer(serializers.Serializer):
 
-    username=serializers.CharField(max_length=
-                                   User._meta.
-                                   get_field('username').max_length)
-    password=serializers.CharField(max_length=PASSWORD_MAX_LENGTH)
+    username = serializers.CharField(max_length=User._meta.
+                                     get_field('username').max_length)
+    password = serializers.CharField(max_length=PASSWORD_MAX_LENGTH)
 
     def user_credentials(self, attrs):
         """

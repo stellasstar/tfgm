@@ -20,6 +20,7 @@ from imagekit.models import ProcessedImageField
 from transport.models import Position
 import httplib
 
+
 class LoginForm(AuthenticationForm):
 
         username = forms.CharField(required=True)
@@ -53,31 +54,35 @@ class UserRegistrationForm(forms.ModelForm):
                   'latitude',
                   'longitude',
                   ]
-                
-      #  widgets = {'thumbnail': forms.HiddenInput()}
+
+        #  widgets={'thumbnail': forms.HiddenInput()}
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
         self.helper.add_input(Submit('submit',
-                                    'Register',
+                                     'Register',
                                      css_class='btn-primary'))
         super(UserRegistrationForm, self).__init__(*args, **kwargs)
-        
+
     def save(self, commit=True, *args, **kwargs):
-        lString = 'POINT(%s %s)' % (str(self.cleaned_data['longitude']), str(self.cleaned_data['latitude']))
-        new_user = super(UserRegistrationForm, self).save(commit=False, *args, **kwargs)
+        lat = str(self.cleaned_data['longitude'])
+        lng = str(self.cleaned_data['latitude'])
+        lString = 'POINT(%s %s)' % (lat, lng)
+        new_user = super(UserRegistrationForm,
+                         self).save(commit=False, *args, **kwargs)
         new_position = Position(
-            user = new_user,
-            name=self.cleaned_data['username'],
-            geometry = fromstr(lString))       
+                        user=new_user,
+                        name=self.cleaned_data['username'],
+                        geometry=fromstr(lString))
         if commit:
             new_user.save()
             new_position.save()
-            new_user.position = new_position            
-            new_user.save()  
+            new_user.position = new_position
+            new_user.save()
             new_position.user = new_user
             new_position.save()
-        return new_user, new_position 
+        return new_user, new_position
+
 
 class UserProfileForm(forms.ModelForm):
 
@@ -91,7 +96,7 @@ class UserProfileForm(forms.ModelForm):
                   'picture',
                   'latitude',
                   'longitude',
-                  ]  
+                  ]
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
@@ -109,29 +114,30 @@ class UserProfileUpdateForm(forms.ModelForm):
                   'picture',
                   'latitude',
                   'longitude',
-                  ]  
+                  ]
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
         self.helper.add_input(Submit('submit',
                                      'Update',
-                                     css_class='btn-primary'))   
+                                     css_class='btn-primary'))
         super(UserProfileUpdateForm, self).__init__(*args, **kwargs)
 
     def save(self, commit=True, *args, **kwargs):
-        lString = 'POINT(%s %s)' % (str(self.cleaned_data['longitude']), str(self.cleaned_data['latitude']))
-        new_user = super(UserProfileUpdateForm, self).save(commit=False, *args, **kwargs)
+        lat = str(self.cleaned_data['longitude'])
+        lng = str(self.cleaned_data['latitude'])
+        lString = 'POINT(%s %s)' % (lat, lng)
+        new_user = super(UserProfileUpdateForm,
+                         self).save(commit=False, *args, **kwargs)
         old_position = Position.objects.filter(user=new_user)
         new_position = Position(
-                        user = new_user,
+                        user=new_user,
                         name=old_position.values()[0].get('name'),
-                        geometry = fromstr(lString))  
+                        geometry=fromstr(lString))
 
         new_user.save()
         new_position.save()
-        new_user.position = new_position            
-        new_user.save()  
+        new_user.position = new_position
+        new_user.save()
         new_position.user = new_user
         new_position.save()
-    
-    

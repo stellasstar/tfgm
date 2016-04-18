@@ -46,13 +46,13 @@ class Waypoint(gis_models.Model):
     
     def __unicode__(self):
         return self.name
-    
+
     def get_lat_long(self):
         """Add an easy getter function, which returns the location coords in
         latitude longitude order
         """
-        return (self.location.coords[1], self.location.coords[0])  
-    
+        return (self.location.coords[1], self.location.coords[0])
+
     def save(self, **kwargs):
         if not self.location:
             address = u'%s %s' % (self.city, self.address)
@@ -65,25 +65,32 @@ class Waypoint(gis_models.Model):
             else:
                 point = "POINT(%s %s)" % (latlon[1], latlon[0])
                 self.location = geos.fromstr(point)
-        super(Waypoint, self).save()     
-    
-    
+        super(Waypoint, self).save()
+
+
 class Position(gis_models.Model):
+
     # Relations
-    user = models.ForeignKey(User, related_name='owned_positions', null=True, blank=True)
+    user = models.ForeignKey(User,
+                             related_name='owned_positions',
+                             null=True,
+                             blank=True)
     # postion of user
     name = models.CharField(max_length=32)
     address = models.CharField(max_length=100, null=True, blank=True)
-    city = models.CharField(max_length=50, null=True, blank=True)    
+    city = models.CharField(max_length=50, null=True, blank=True)
     geometry = gis_models.PointField(u"longitude/latitude",
-                                     geography=True, blank=True, null=True,srid=4326)
-    
+                                     geography=True,
+                                     blank=True,
+                                     null=True,
+                                     srid=4326)
+
     gis = gis_models.GeoManager()
     objects = models.Manager()
 
     def __str__(self):
         return '%s %s %s' % (self.name, self.geometry.x, self.geometry.y)
-    
+
     def save(self, **kwargs):
         if not self.geometry:
             address = u'%s %s' % (self.city, self.address)
@@ -96,21 +103,21 @@ class Position(gis_models.Model):
             else:
                 point = "POINT(%s %s)" % (latlon[1], latlon[0])
                 self.geometry = geos.fromstr(point)
-        super(Position, self).save()    
-    
+        super(Position, self).save()
+
     def get_geometry(self):
         return self.geometry
-    
+
     def get_name(self):
         return self.name
-    
 
-# Auto-generated `LayerMapping` dictionary for Unit model
+
+# Auto-generated `LayerMapping` dictionary for Waypoint model
 waypoint_mapping = {
-    'name' : 'Name',
-    'longitude' : 'Longitude',
-    'latitude' : 'Latitude',
-    'address' : 'Address',
-    'city' : 'City',
-    'location' : 'UNKNOWN',
+    'name': 'Name',
+    'longitude': 'Longitude',
+    'latitude': 'Latitude',
+    'address': 'Address',
+    'city': 'City',
+    'location': 'UNKNOWN',
 }

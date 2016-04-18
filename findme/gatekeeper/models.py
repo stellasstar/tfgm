@@ -21,21 +21,24 @@ try:
     from django.contrib.auth import get_user_model
     User = settings.AUTH_USER_MODEL
 except ImportError:
-    from django.contrib.auth.models import User 
+    from django.contrib.auth.models import User
 
 
 @deconstructible
 class Avatar_User_Dir(object):
-    
-   # media = settings.MEDIA_ROOT
+
+    # media = settings.MEDIA_ROOT
     av = settings.AVATAR_URL.strip('/')
     url = ''
+
     def __call__(self, instance, filename):
-        joined = os.path.join(self.av,str(instance.username),(filename).decode('utf-8').lower())
+        joined = os.path.join(self.av,
+                              str(instance.username),
+                              (filename).decode('utf-8').lower())
         url = joined
         return joined
 
-avatar_user_dir= Avatar_User_Dir()
+avatar_user_dir = Avatar_User_Dir()
 
 
 class UserManager(BaseUserManager):
@@ -88,21 +91,23 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 #    picture = ProcessedImageField(null=True, blank=True,
 #                                 upload_to=avatar_user_dir,
 #                                 processors=[ResizeToFit(200, 100)],
-#                                 options={'quality': 90})    
+#                                 options={'quality': 90})
     picture = models.ImageField(null=True, blank=True,
                                 upload_to=avatar_user_dir,
-                                default=settings.AVATAR_URL.strip('/') + '/' + settings.DEFAULT_AVATAR)
+                                default=settings.AVATAR_URL.strip('/') +
+                                '/' + settings.DEFAULT_AVATAR)
     thumbnail = models.ImageField(null=True, blank=True,
-                                upload_to=avatar_user_dir)
+                                  upload_to=avatar_user_dir)
     latitude = models.DecimalField(max_digits=10,
-                               decimal_places=6,
-                               null=True,
-                               default=settings.DEFAULT_LATITUDE)
+                                   decimal_places=6,
+                                   null=True,
+                                   default=settings.DEFAULT_LATITUDE)
     longitude = models.DecimalField(max_digits=10,
                                     decimal_places=6,
                                     null=True,
-                                    default=settings.DEFAULT_LONGITUDE)  
-    position = models.ForeignKey('transport.Position', related_name='default_position', 
+                                    default=settings.DEFAULT_LONGITUDE)
+    position = models.ForeignKey('transport.Position',
+                                 related_name='default_position',
                                  null=True, blank=True)
 
     # user permissions
@@ -160,11 +165,6 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
-    
+
     def get_position(self):
         return self.position
-     
-    
-
-        
-    

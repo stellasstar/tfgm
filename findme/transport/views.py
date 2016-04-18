@@ -5,7 +5,8 @@ from django.views.generic.base import TemplateView
 
 from django.contrib.gis import geos
 from django.contrib.gis import measure
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, Http404
+from django.http import (HttpResponse, HttpResponseBadRequest,
+                         HttpResponseNotFound, Http404)
 from django.contrib.gis.geos import Point
 from djgeojson.serializers import Serializer as GeoJSONSerializer
 from django.conf import settings
@@ -33,10 +34,10 @@ def geocode_address(address):
         return None
     else:
         return latlon
-    
+
 
 class WaypointView(TemplateView):
-    
+
     model = Waypoint
     template_name = 'transport/transport.html'
     success_url = "/transport/"
@@ -59,42 +60,40 @@ class WaypointView(TemplateView):
         else:
             raise Http404
             # Case where user gets to this view
-            # anonymously for non-existent user     
-            
+            # anonymously for non-existent user
+
         if user.is_authenticated():
             position = Position.objects.filter(user=user)
         else:
-            raise Http404         
-        
-        position_dict = position.values()[0]  
+            raise Http404
+
+        position_dict = position.values()[0]
         name = position_dict.get('name')
-        
-        
+
         position_dict = position.values()[0]
         geometry = position_dict.pop('geometry')
-    
+
         for key in position_dict.keys():
             value = position_dict.get(key)
-            data.append({ key : value })
-    
-        data.append({ 'latitude' : geometry.y })
-        data.append({ 'longitude' : geometry.x })
-        data.append({ 'srid' : geometry.srid })         
-      
-        # where you want the map to be
-        data.append({ 'map' : 'map_canvas'})
+            data.append({key: value})
 
-        context['map'] = 'map_canvas'        
-        context['json'] = simplejson.dumps(data, cls=simplejson.JSONEncoderForHTML)      
+        data.append({'latitude': geometry.y})
+        data.append({'longitude': geometry.x})
+        data.append({'srid': geometry.srid})
+
+        # where you want the map to be
+        data.append({'map': 'map_canvas'})
+
+        cls = simplejson.JSONEncoderForHTML
+        context['map'] = 'map_canvas'
+        context['json'] = simplejson.dumps(data, cls=cls)
         context['position'] = position
         context['name'] = name
         context['user'] = user
 
-        return context 
-    
-    
+        return context
+
+
 class PositionView(ListView):
-    
+
     model = Position
-    
-    
