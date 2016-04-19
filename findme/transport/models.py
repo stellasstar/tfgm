@@ -5,8 +5,8 @@ from django.contrib.gis.db import models as gis_models
 from django.contrib.gis import geos
 from django.db import models
 from django.conf import settings
-from geopy.geocoders.googlev3 import GoogleV3
-from geopy.geocoders.googlev3 import GeocoderQueryError
+import googlemaps
+from datetime import datetime
 
 # import custom user model
 try:
@@ -58,15 +58,19 @@ class Waypoint(gis_models.Model):
 
     def save(self, **kwargs):
         if not self.location:
-            address = u'%s %s' % (self.city, self.address)
+            gmap = googlemaps(settings.GOOGLE_API_KEY)
+            address = u'%s %s' % (self.address, self.city)
             address = address.encode('utf-8')
-            geocoder = GoogleV3()
             try:
-                _, latlon = geocoder.geocode(address)
+                result = gmaps.geocode(address)
+                placemark = result['Placemark'][0]
+                self.longitude, self.latitude = placemark['Point']['coordinates'][0:2]  
+                point = "POINT(%s %s)" % (str(self.longitude), str(self.latitude))
+                self.location = geos.fromstr(point)                
             except (URLError, GeocoderQueryError, ValueError):
                 pass
             else:
-                point = "POINT(%s %s)" % (latlon[1], latlon[0])
+                point = "POINT(%s %s)" % (str(self.longitude), str(self.latitude))
                 self.location = geos.fromstr(point)
         super(Waypoint, self).save()
 
@@ -95,16 +99,18 @@ class Position(gis_models.Model):
         return '%s %s %s' % (self.name, self.geometry.x, self.geometry.y)
 
     def save(self, **kwargs):
-        if not self.geometry:
-            address = u'%s %s' % (self.city, self.address)
-            address = address.encode('utf-8')
-            geocoder = GoogleV3()
+        if self.address and not self.geometry:
+            gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
             try:
-                _, latlon = geocoder.geocode(address)
+                result = gmaps.geocode(address)
+                placemark = result['Placemark'][0]
+                self.longitude, self.latitude = placemark['Point']['coordinates'][0:2]  
+                point = "POINT(%s %s)" % (str(self.longitude), str(self.latitude))
+                self.geometry = geos.fromstr(point)                
             except (URLError, GeocoderQueryError, ValueError):
                 pass
             else:
-                point = "POINT(%s %s)" % (latlon[1], latlon[0])
+                point = "POINT(%s %s)" % (str(self.longitude), str(self.latitude))
                 self.geometry = geos.fromstr(point)
         super(Position, self).save()
 

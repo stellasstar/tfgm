@@ -6,9 +6,9 @@ from django.views.generic.base import TemplateView
 from django.shortcuts import get_object_or_404
 
 from django.http import HttpResponseNotFound
+from django.conf import settings
 
-from geopy.geocoders.googlev3 import GoogleV3
-from geopy.geocoders.googlev3 import GeocoderQueryError
+import googlemaps
 from transport.forms import WaypointForm
 from transport.models import Waypoint, Position
 
@@ -22,15 +22,29 @@ else:
 
 
 def geocode_address(address):
+    gmap = googlemaps(settings.GOOGLE_API_KEY)
+    address = u'%s %s' % (self.address, self.city)
     address = address.encode('utf-8')
-    geocoder = GoogleV3()
     try:
-        _, latlon = geocoder.geocode(address)
+        result = gmaps.geocode(address)
+        placemark = result['Placemark'][0]
+        lng, lat = placemark['Point']['coordinates'][0:2]  
+        latlon = (lat, lng)
     except (URLError, GeocoderQueryError, ValueError):
         return None
     else:
         return latlon
 
+def return_address(lat, lng):
+    latlng = (lat, lng)
+    gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
+    try:
+        reverse = gmap.reverse_geocode(latlng)
+        addy = reverse[0].get('formatted_address')
+        city = reverse[0].get('address_components')[3].get('long_name')
+        return addy, city
+    except:
+        pass
 
 class WaypointView(TemplateView):
 
@@ -38,6 +52,8 @@ class WaypointView(TemplateView):
     template_name = 'transport/transport.html'
     success_url = "/transport/"
     form_class = WaypointForm
+    map_to_show = 'map_canvas'
+    GOOGLE_KEY = settings.GOOGLE_API_KEY
 
     def get_context_data(self, **kwargs):
         """
@@ -68,6 +84,12 @@ class WaypointView(TemplateView):
 
         position_dict = position.values()[0]
         geometry = position_dict.pop('geometry')
+        
+        # get address for location
+        if position_dict['address'] is None:
+            address, city = return_address(geometry.y, geometry.x)
+            position_dict['address'] = address
+            position_dict['city'] = city
 
         for key in position_dict.keys():
             value = position_dict.get(key)
@@ -78,12 +100,13 @@ class WaypointView(TemplateView):
         data.append({'srid': geometry.srid})
 
         # where you want the map to be
-        data.append({'map': 'map_canvas'})
+        data.append({'map': self.map_to_show})
+        data.append({'GOOGLE_KEY': self.GOOGLE_KEY})
+        context['map'] = self.map_to_show
 
         cls = simplejson.JSONEncoderForHTML
-        context['map'] = 'map_canvas'
         context['json'] = simplejson.dumps(data, cls=cls)
-        context['position'] = position
+        context['position'] = position_dict
         context['name'] = name
         context['user'] = user
 

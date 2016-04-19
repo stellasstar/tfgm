@@ -171,6 +171,8 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
     success_url = "/profiles/"
     model = User
     redirect_field_name = 'redirect_to'
+    map_to_show = 'defaultPositionMap'
+    GOOGLE_KEY = settings.GOOGLE_API_KEY
 
     def get_context_data(self, **kwargs):
         """
@@ -212,12 +214,13 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
         data.append({'srid': geometry.srid})
 
         # where you want the map to be
-        data.append({'map': 'defaultPositionMap'})
+        data.append({'map': self.map_to_show})
+        data.append({'GOOGLE_KEY': self.GOOGLE_KEY})
+        context['map'] = self.map_to_show
 
         cls = simplejson.JSONEncoderForHTML
         context['json_data'] = simplejson.dumps(data, cls=cls)
         context['form'] = form
-        context['map'] = 'defaultPositionMap'
 
         return context
 

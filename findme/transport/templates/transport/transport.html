@@ -15,10 +15,16 @@
         <script>
             var var_json = '{{ json|escapejs }}';
         </script>
-        
+        {{position}}
         <table align="center" border="0" cellpadding="5" cellspacing="5">
         <tr><td colspan="2" align="center"><h1>Hello {{user.get_full_name}}</h1></td></tr>
-        
+        <tr><td colspan="2" align="center">
+        <form type="get" action="." style="margin: 0">
+            <input  id="search_box" type="text" name="search_box"  
+                    value={{position.address}} placeholder="Search..." >
+            <button id="search_submit" type="submit" >Address</button>
+        </form>
+        </td></tr>
                     <tr><td colspan="2" align="center" id="wrapper"><i>
                 Click the allow button to let the browser show your map.
             </i></td></tr>

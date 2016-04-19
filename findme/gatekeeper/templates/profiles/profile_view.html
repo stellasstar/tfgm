@@ -14,9 +14,9 @@
         {% if user.is_authenticated %}
         
         <script>
-            var var_json = '{{ json_data|escapejs }}';
+                var var_json = '{{ json_data|escapejs }}';
         </script>
-        
+
         <table align="center" border="0" cellpadding="5" cellspacing="5">
         <tr><td colspan="2" align="center"><h1>Hello {{user.get_full_name}}</h1></td></tr>
         
@@ -64,7 +64,5 @@
         </table>
 
         {% endif %}
-
-
-
 {% endblock %}
+

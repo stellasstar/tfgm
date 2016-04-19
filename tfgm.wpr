@@ -50,7 +50,7 @@ proj.launch-config = {loc('mysite/manage.py'): ('custom',
          'launch-fUNXX9ItHrRE17rA')),
                       loc('tfgm/src/social-auth/example/manage.py'): ('custo'\
         'm',
-        ('',
+        (u'',
          'launch-gAEo8FGHv2UYvFhR'))}
 proj.main-file = loc('tfgm/src/social-auth/example/manage.py')
 testing.test-framework = {loc('mysite/manage.py'): ':internal djangotest',
