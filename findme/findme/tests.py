@@ -1,9 +1,9 @@
 from django.test import TestCase
 from django.test.client import RequestFactory
 
-from project import urls
+from findme import urls
 
-from ..views import handler404, handler500
+from .views import handler404
 
 
 class TestErrorPages(TestCase):

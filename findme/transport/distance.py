@@ -1,6 +1,6 @@
 from django import template
 
-from transport.models import TransportLink
+from transport.models import Waypoint
 from geopy.distance import distance
 
 
@@ -9,9 +9,9 @@ register = template.Library()
 
 def calc_distance(value, arg, unit="km"):
 
-    if not isinstance(value, Location):
+    if not isinstance(value, Waypoint.location):
         raise TypeError("First value is not a location")
-    if not isinstance(arg, Location):
+    if not isinstance(arg, Waypoint.location):
         raise TypeError("Argument is not a location")
 
     if unit == "km":

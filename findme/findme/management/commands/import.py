@@ -1,7 +1,4 @@
-import os
-import units
-
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.contrib.gis.utils import LayerMapping
 from django.conf import settings
 
@@ -16,5 +13,3 @@ class Command(BaseCommand):
         lm = LayerMapping(Waypoint, waypoint_shp, waypoint_mapping,
                           transform=False, encoding='iso-8859-1')
         lm.save(strict=True, verbose=True)
-            
-            :wq

@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-import os
 
 version = '0.0.1dev0'
 
@@ -14,7 +13,7 @@ setup(name='findme',
       install_requires=[
         'Django'
       ],
-      entry_points = """
+      entry_points="""
       [paste.paster_create_template]
       """
       )

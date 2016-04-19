@@ -1,7 +1,6 @@
-from django.conf.urls import include, url
+from django.conf.urls import url
 
 from django.contrib import admin
-from django.views.generic import RedirectView
 from django.views.generic.base import TemplateView
 from transport.views import WaypointView
 
@@ -16,5 +15,4 @@ urlpatterns = [
             name='near-me'),
 
         url(r'^$', WaypointView.as_view(), name='transport'),
-
 ]

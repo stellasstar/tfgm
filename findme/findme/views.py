@@ -3,10 +3,10 @@ from django.views.generic.base import TemplateView
 from django.conf import settings
 from django.core.mail import send_mail
 from django.views.generic import FormView
-from django.http import Http404, HttpResponseServerError, HttpResponseNotFound
+from django.http import HttpResponseNotFound
 
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.template import Context
+from django.template.loader import get_template, TemplateDoesNotExist
 
 
 def handler404(request, template_name='404.html'):
@@ -33,20 +33,19 @@ class ContactFormView(FormView):
             recipient_list=[settings.LIST_OF_EMAIL_RECIPIENTS],
         )
         return super(ContactFormView, self).form_valid(form)
-    
+
 
 class HomePageView(TemplateView):
 
     template_name = "home.html"
 
-    
+
 class StaticView(TemplateView):
-    
+
     def get(self, request, page, *args, **kwargs):
         self.template_name = page
         response = super(StaticView, self).get(request, *args, **kwargs)
         try:
             return response.render()
         except TemplateDoesNotExist:
-            raise Http404
-
+            raise HttpResponseNotFound

@@ -23,9 +23,9 @@ SECRET_KEY = 'gwn*hqfaxbsrn6mmhzj5$&tndxn(^9q_27pw2*nmbxuw#(_3(!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = DEBUG
 
-#ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 ADMINS = (
     ('Stella Silverstein', 'stella.silverstein@isotoma.com'),
@@ -42,12 +42,12 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'django.contrib.admindocs', 
+    'django.contrib.admindocs',
     'django.contrib.gis',
     'imagekit',
     'crispy_forms',
     'floppyforms',
-    'captcha',    
+    'captcha',
     'gatekeeper',
     'findme',
     'transport',
@@ -111,7 +111,7 @@ STATICFILES_DIRS = (
 AVATAR_ROOT = '/avatars/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-ADMIN_MEDIA_PREFIX = '/media/admin/' 
+ADMIN_MEDIA_PREFIX = '/media/admin/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -121,18 +121,19 @@ AVATAR_URL = '/avatars/'
 DEFAULT_AVATAR = 'default/woman.jpg'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Put strings here, like "/home/html/django_templates"
+    # or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-      os.path.join(os.path.dirname(__file__), 'templates'),
+    os.path.join(os.path.dirname(__file__), 'templates'),
 )
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-)
+    # 'django.template.loaders.eggs.Loader',
+    )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
@@ -154,23 +155,23 @@ LOGIN_URL = 'http://localhost:8000/'
 django.contrib.auth.LOGIN_URL = '/'
 
 AUTH_USER_MODEL = 'gatekeeper.UserProfile'
-#AUTH_PROFILE_MODULE = 'gatekeeper.UserProfile' 
+# AUTH_PROFILE_MODULE = 'gatekeeper.UserProfile'
 
-#AUTHENTICATION_BACKENDS = (
-#    'django_facebook.auth_backends.FacebookBackend',
-#    'django.contrib.auth.backends.ModelBackend',
-#)
+# AUTHENTICATION_BACKENDS = (
+#     'django_facebook.auth_backends.FacebookBackend',
+#     'django.contrib.auth.backends.ModelBackend',
+# )
 
 RECAPTCHA_PUBLIC_KEY = '6LcVu9ESAAAAANVWwbM5-PLuLES94GQ2bIYmSNTG'
 RECAPTCHA_PRIVATE_KEY = '6LcVu9ESAAAAAGxz7aEIACWRa3CVnXN3mFd-cajP'
 
 LIST_OF_EMAIL_RECIPIENTS = 'stella.silverstein@isotoma.com'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'testing@example.com'
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
-EMAIL_USE_TLS = False 
+EMAIL_USE_TLS = False
 EMAIL_PORT = 1025
 
 # this is in Manchester

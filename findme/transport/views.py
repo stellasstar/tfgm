@@ -1,16 +1,15 @@
 from urllib2 import URLError
+import simplejson
 
-from django.views.generic import ListView, UpdateView, CreateView
+from django.views.generic import ListView
 from django.views.generic.base import TemplateView
+from django.shortcuts import get_object_or_404
 
-from django.contrib.gis import geos
-from django.contrib.gis import measure
-from django.http import (HttpResponse, HttpResponseBadRequest,
-                         HttpResponseNotFound, Http404)
-from django.contrib.gis.geos import Point
-from djgeojson.serializers import Serializer as GeoJSONSerializer
-from django.conf import settings
-from transport.forms import AddressForm, WaypointForm
+from django.http import HttpResponseNotFound
+
+from geopy.geocoders.googlev3 import GoogleV3
+from geopy.geocoders.googlev3 import GeocoderQueryError
+from transport.forms import WaypointForm
 from transport.models import Waypoint, Position
 
 # import custom user model
@@ -21,16 +20,13 @@ except ImportError:  # django < 1.5
 else:
     User = get_user_model()
 
-import json
-import simplejson
-
 
 def geocode_address(address):
     address = address.encode('utf-8')
-    geocoder = Google()
+    geocoder = GoogleV3()
     try:
         _, latlon = geocoder.geocode(address)
-    except (URLError, GQueryError, ValueError):
+    except (URLError, GeocoderQueryError, ValueError):
         return None
     else:
         return latlon
@@ -58,14 +54,14 @@ class WaypointView(TemplateView):
         elif self.request.user.is_authenticated():
             user = self.request.user
         else:
-            raise Http404
+            raise HttpResponseNotFound
             # Case where user gets to this view
             # anonymously for non-existent user
 
         if user.is_authenticated():
             position = Position.objects.filter(user=user)
         else:
-            raise Http404
+            raise HttpResponseNotFound
 
         position_dict = position.values()[0]
         name = position_dict.get('name')

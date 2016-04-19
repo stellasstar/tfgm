@@ -4,16 +4,16 @@ from django.utils.translation import gettext as _
 from django.contrib.gis.db import models as gis_models
 from django.contrib.gis import geos
 from django.db import models
-from django.core.exceptions import ValidationError
 from django.conf import settings
 from geopy.geocoders.googlev3 import GoogleV3
 from geopy.geocoders.googlev3 import GeocoderQueryError
+
 # import custom user model
 try:
-    from django.contrib.auth import get_user_model
+    # from django.contrib.auth import get_user_model
     User = settings.AUTH_USER_MODEL
 except ImportError:
-    from django.contrib.auth.models import User 
+    from django.contrib.auth.models import User
 
 
 class Poly(gis_models.Model):
@@ -24,26 +24,29 @@ class Poly(gis_models.Model):
 class Waypoint(gis_models.Model):
     name = models.CharField(max_length=32)
     address = models.CharField(max_length=100, null=True, blank=True)
-    city = models.CharField(max_length=50, null=True, blank=True)  
+    city = models.CharField(max_length=50, null=True, blank=True)
     latitude = models.DecimalField(max_digits=10,
                                    decimal_places=6,
                                    null=True)
     longitude = models.DecimalField(max_digits=10,
                                     decimal_places=6,
-                                    null=True)      
+                                    null=True)
     location = gis_models.PointField(u"longitude/latitude",
-                                     geography=True, blank=True, null=True,srid=4326)
-    
+                                     geography=True,
+                                     blank=True,
+                                     null=True,
+                                     srid=4326)
+
     gis = gis_models.GeoManager()
     objects = models.Manager()
-    
-    gis.filter() # with GIS queries
-    objects.filter() # only standard queries    
-    
+
+    gis.filter()  # with GIS queries
+    objects.filter()  # only standard queries
+
     class Meta:
         verbose_name = _('waypoint')
-        verbose_name_plural = _('waypoints') 
-    
+        verbose_name_plural = _('waypoints')
+
     def __unicode__(self):
         return self.name
 
@@ -57,10 +60,10 @@ class Waypoint(gis_models.Model):
         if not self.location:
             address = u'%s %s' % (self.city, self.address)
             address = address.encode('utf-8')
-            geocoder = Google()
+            geocoder = GoogleV3()
             try:
                 _, latlon = geocoder.geocode(address)
-            except (URLError, GQueryError, ValueError):
+            except (URLError, GeocoderQueryError, ValueError):
                 pass
             else:
                 point = "POINT(%s %s)" % (latlon[1], latlon[0])
