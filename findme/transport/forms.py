@@ -12,12 +12,7 @@ class WaypointForm(forms.ModelForm):
 
     class Meta():
         model = Waypoint
-        fields = ['name',
-                  'address',
-                  'city',
-                  'latitude',
-                  'longitude',
-                  ]
+        fields = []
 
     def __init__(self, *args, **kwargs):
         super(WaypointForm, self).__init__(*args, **kwargs)
@@ -28,12 +23,7 @@ class WaypointUpdateForm(forms.ModelForm):
 
     class Meta():
         model = Waypoint
-        fields = ['name',
-                  'address',
-                  'city',
-                  'latitude',
-                  'longitude',
-                  ]
+        fields = []
 
     def __init__(self, *args, **kwargs):
         super(WaypointUpdateForm, self).__init__(*args, **kwargs)

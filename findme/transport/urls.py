@@ -13,6 +13,5 @@ urlpatterns = [
         url(r'^nearby/$',
             TemplateView.as_view(template_name='transport/nearby.html'),
             name='near-me'),
-
         url(r'^$', WaypointView.as_view(), name='transport'),
 ]

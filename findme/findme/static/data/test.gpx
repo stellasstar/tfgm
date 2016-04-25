@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" creator="G7ToWin A.00.200a" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+
+  <metadata>
+    <link href="http://www.gpsinformation.org/ronh/g7towin.htm">
+      <text>G7ToWin</text>
+    </link>
+    <time>2006-06-06T20:12:51Z</time>
+    <bounds minlat="50.6233720" minlon="-1.3819870" maxlat="55" maxlon="178"/>
+  </metadata>
+
+  <wpt lat="53.455583" lon="-2.506744">
+    <time>2005-10-28T06:35:05Z</time>
+    <name>Akatarewa Stream</name>
+    <cmt>Akatarewa Stream</cmt>
+    <desc>Akatarewa Stream</desc>
+    <sym>Swimming Area</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v2 http://www.garmin.com/xmlschemas/GpxExtensions/v2/GpxExtensionsv2.xsd">
+        <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+
+  <wpt lat="53.455797" lon="-2.506332">
+    <time>2006-06-04T18:44:38Z</time>
+    <name>ALPINE HOL</name>
+    <cmt><![CDATA[ALPINE HOLIDAY APARTMENTS &amp; C]]></cmt>
+    <desc><![CDATA[ALPINE HOLIDAY APARTMENTS &amp; C]]></desc>
+    <sym>Campground</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v2 http://www.garmin.com/xmlschemas/GpxExtensions/v2/GpxExtensionsv2.xsd">
+        <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+
+  <wpt lat="53.45733" lon="-2.503267">
+    <ele>71.699997</ele>
+    <time>2006-05-20T22:21:07Z</time>
+    <name>ALPVIEWS</name>
+    <cmt>ALP VIEW</cmt>
+    <desc>ALP VIEW</desc>
+    <sym>Scenic Area</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v2 http://www.garmin.com/xmlschemas/GpxExtensions/v2/GpxExtensionsv2.xsd">
+        <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+
+  <wpt lat="53.457469" lon="-2.502305">
+    <time>2005-10-28T06:54:32Z</time>
+    <name>Amethyst Hot Springs</name>
+    <cmt>Amethyst Hot Springs</cmt>
+    <desc>Amethyst Hot Springs</desc>
+    <sym>Swimming Area</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v2 http://www.garmin.com/xmlschemas/GpxExtensions/v2/GpxExtensionsv2.xsd">
+        <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+
+  <wpt lat="53.457519" lon="-2.501071">
+    <ele>-0.100000</ele>
+    <time>2004-11-13T04:00:02Z</time>
+    <name>AUCKLAND</name>
+    <cmt>Auckland International Airport</cmt>
+    <desc>Auckland International Airport</desc>
+    <sym>Airport</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v2 http://www.garmin.com/xmlschemas/GpxExtensions/v2/GpxExtensionsv2.xsd">
+        <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+
+  <wpt lat="53.454714" lon="-2.508166">
+    <ele>-0.100000</ele>
+    <time>2004-11-13T04:00:02Z</time>
+    <name>BAYOFISLAN</name>
+    <cmt>Bay of Islands Airport</cmt>
+    <desc>Bay of Islands Airport</desc>
+    <sym>Airport</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v2 http://www.garmin.com/xmlschemas/GpxExtensions/v2/GpxExtensionsv2.xsd">
+        <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  
+  <wpt lat="53.457612" lon="-2.500259">
+    <time>2005-10-28T06:35:38Z</time>
+    <name>Paradise</name>
+    <cmt>Paradise</cmt>
+    <desc>Paradise</desc>
+    <sym>Swimming Area</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v2 http://www.garmin.com/xmlschemas/GpxExtensions/v2/GpxExtensionsv2.xsd">
+        <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+
+  <wpt lat="53.458202" lon="-2.498955">
+    <time>2005-10-28T06:17:51Z</time>
+    <name>Peach Tree Hot Springs</name>
+    <cmt>Peach Tree Hot Springs</cmt>
+    <desc>Peach Tree Hot Springs</desc>
+    <sym>Swimming Area</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v2 http://www.garmin.com/xmlschemas/GpxExtensions/v2/GpxExtensionsv2.xsd">
+        <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+
+</gpx>
+

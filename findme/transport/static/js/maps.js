@@ -3,37 +3,32 @@
 // user_id = data[1].user_id
 // name = data[2].name // the name of the coordinates is set to the username
 // address = data[3].address
-// id = data.[4].id
+// id = data[4].id
 // latitude = data.[5].latitude
 // longitude = data[6].longitude
 // srid = data[7].srid
 // map = data[8].map
 // GOOGLE_KEY = data[9].GOOGLE_KEY
 
-$(window).load(function() {
+$(window).load(
+
+function initialize(){
     var data = $.parseJSON(var_json);
+    var waypoints = $.parseJSON(var_waypoints);
+    var marker;
+    
+    //alert(waypoints.features[0].geometry.coordinates[0][1]);
+    //alert(waypoints.features[0].properties.name);
+    //alert(waypoints.features.length);
     
     var latitude = data[5].latitude;
     var longitude = data[6].longitude;
     var map_location = data[8].map
-    
-    var contentString = '<div>'+
-      data[2].name  + '\n' +
-      '</div><div>' +
-      'latitude : ' + latitude + '\n' +
-       '</div><div>' +
-      'longitude : ' + longitude + '\n' +
-      '</div>';
-    
     var coords = new google.maps.LatLng(latitude, longitude);
+    var bounds = new google.maps.LatLngBounds();
     
-    
-    var infowindow = new google.maps.InfoWindow({
-        content: contentString
-    });
-
     var mapOptions = {
-        zoom: 15,
+        zoom: 14,
         center: coords,
         mapTypeControl: false,
         mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -46,28 +41,48 @@ $(window).load(function() {
     ); 
     
     //place the initial marker
-    var marker = new google.maps.Marker({
+    marker = new google.maps.Marker({
         position: coords,
         map: map,
         title : data[2].name,
         animation: google.maps.Animation.DROP,
     }); // end marker
     
-    marker.addListener('click', function() {
-        infowindow.open(map, marker);
-    });
+    // Display multiple markers on a map
+    var infoWindow = new google.maps.InfoWindow();
     
         
+    for (var i = 0; i < waypoints.features.length; i++) { 
+        var lat = waypoints.features[i].geometry.coordinates[i][1];
+        var lng = waypoints.features[i].geometry.coordinates[i][0];
+        var name = waypoints.features[i].properties.name;
+        var pos = new google.maps.LatLng(lat, lng);
+        bounds.extend(pos);
+        marker = new google.maps.Marker({
+            position: pos,
+            title: name,
+            label: i,
+            map: map
+        }); 
+        
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(name);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+    }
 } // end function
 
 );
 
 $(document).ready(function() {
       var data = $.parseJSON(var_json); 
-      var key = 'key=' + data[9].GOOGLE_KEY;
+      var key = '&key=' + data[9].GOOGLE_KEY;
+      var call = '&callback=initialize';
       var script = document.createElement('script');
       script.type = 'text/javascript';
-      script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&' + key;
+      script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp' + key + call;
       document.body.appendChild(script);
     }
 );

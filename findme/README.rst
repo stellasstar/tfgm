@@ -36,3 +36,6 @@ local   all         all                               md5
 
 ./findme/scripts/builddb.sh
 ./findme/scripts/rebuild.sh
+
+6)  load in initial data
+python manage.py import

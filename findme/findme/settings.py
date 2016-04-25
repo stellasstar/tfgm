@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'gatekeeper',
     'findme',
     'transport',
+    'djgeojson',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -96,7 +97,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
@@ -175,8 +175,8 @@ EMAIL_USE_TLS = False
 EMAIL_PORT = 1025
 
 # this is in Manchester
-DEFAULT_LATITUDE = '53.458202'
-DEFAULT_LONGITUDE = ' -2.733088'
+DEFAULT_LATITUDE = '53.454998'
+DEFAULT_LONGITUDE = '-2.507687'
 
 GOOGLE_API_KEY = 'AIzaSyDxOaCs2l1WYJf4jhNX8AEbTLf2SwncgN4'
 
@@ -193,5 +193,3 @@ AVATAR_DEFAULT_WIDTH = 150
 AVATAR_DEFAULT_HEIGHT = 200
 
 handler404 = 'views.handler404'
-
-GOOGLE_API_KEY = 'AIzaSyDxOaCs2l1WYJf4jhNX8AEbTLf2SwncgN4'

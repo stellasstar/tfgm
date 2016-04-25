@@ -5,12 +5,15 @@ from django.views.generic import ListView
 from django.views.generic.base import TemplateView
 from django.shortcuts import get_object_or_404
 
-from django.http import HttpResponseNotFound
+from django.http import HttpResponseNotFound, HttpResponse, HttpResponseBadRequest
 from django.conf import settings
+from django.contrib.gis.geos import Point
+from djgeojson.serializers import Serializer as GeoJSONSerializer
 
 import googlemaps
 from transport.forms import WaypointForm
 from transport.models import Waypoint, Position
+from transport import mapUtils
 
 # import custom user model
 try:
@@ -20,31 +23,6 @@ except ImportError:  # django < 1.5
 else:
     User = get_user_model()
 
-
-def geocode_address(address):
-    gmap = googlemaps(settings.GOOGLE_API_KEY)
-    address = u'%s %s' % (self.address, self.city)
-    address = address.encode('utf-8')
-    try:
-        result = gmaps.geocode(address)
-        placemark = result['Placemark'][0]
-        lng, lat = placemark['Point']['coordinates'][0:2]  
-        latlon = (lat, lng)
-    except (URLError, GeocoderQueryError, ValueError):
-        return None
-    else:
-        return latlon
-
-def return_address(lat, lng):
-    latlng = (lat, lng)
-    gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
-    try:
-        reverse = gmap.reverse_geocode(latlng)
-        addy = reverse[0].get('formatted_address')
-        city = reverse[0].get('address_components')[3].get('long_name')
-        return addy, city
-    except:
-        pass
 
 class WaypointView(TemplateView):
 
@@ -87,14 +65,14 @@ class WaypointView(TemplateView):
         
         # get address for location
         if position_dict['address'] is None:
-            address, city = return_address(geometry.y, geometry.x)
+            address, city = mapUtils.return_address(geometry.y, geometry.x)
             position_dict['address'] = address
             position_dict['city'] = city
 
-        for key in position_dict.keys():
-            value = position_dict.get(key)
-            data.append({key: value})
+        for key, value in position_dict.iteritems():
+            data.append({ key : value })
 
+        # this is on purpose, so the json output is easier to read
         data.append({'latitude': geometry.y})
         data.append({'longitude': geometry.x})
         data.append({'srid': geometry.srid})
@@ -103,9 +81,13 @@ class WaypointView(TemplateView):
         data.append({'map': self.map_to_show})
         data.append({'GOOGLE_KEY': self.GOOGLE_KEY})
         context['map'] = self.map_to_show
+        
+        # get waypoint data
+        waypoints = mapUtils.find_waypoints(geometry.y, geometry.x)
 
         cls = simplejson.JSONEncoderForHTML
         context['json'] = simplejson.dumps(data, cls=cls)
+        context['waypoints'] = waypoints
         context['position'] = position_dict
         context['name'] = name
         context['user'] = user

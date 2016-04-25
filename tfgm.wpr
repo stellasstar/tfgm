@@ -5,23 +5,7 @@
 ##################################################################
 [project attributes]
 debug.launch-configs = (1,
-                        {'launch-fUNXX9ItHrRE17rA': ({},
-        {'buildcmd': ('project',
-                      ('',
-                       '')),
-         'env': ('project',
-                 []),
-         'name': u'Launch manage.py',
-         'pyexec': ('project',
-                    ''),
-         'pypath': ('project',
-                    ''),
-         'pyrunargs': ('project',
-                       '-u'),
-         'runargs': 'runserver 8000',
-         'rundir': ('project',
-                    '')}),
-                         'launch-gAEo8FGHv2UYvFhR': ({},
+                        {'launch-l1lbYDcCg7Syphrt': ({},
         {'buildcmd': ('project',
                       ('',
                        '')),
@@ -39,20 +23,13 @@ debug.launch-configs = (1,
                     '')})})
 proj.debug-sub-processes = True
 proj.directory-list = [{'dirloc': loc('.'),
-                        'excludes': [u'location'],
+                        'excludes': (),
                         'filter': '*',
                         'include_hidden': False,
                         'recursive': True,
                         'watch_for_changes': True}]
 proj.file-type = 'shared'
-proj.launch-config = {loc('mysite/manage.py'): ('custom',
-        ('',
-         'launch-fUNXX9ItHrRE17rA')),
-                      loc('tfgm/src/social-auth/example/manage.py'): ('custo'\
-        'm',
+proj.launch-config = {loc('findme/manage.py'): ('custom',
         (u'',
-         'launch-gAEo8FGHv2UYvFhR'))}
-proj.main-file = loc('tfgm/src/social-auth/example/manage.py')
-testing.test-framework = {loc('mysite/manage.py'): ':internal djangotest',
-                          loc('tfgm/src/social-auth/example/manage.py'): ':i'\
-        'nternal djangotest'}
+         'launch-l1lbYDcCg7Syphrt'))}
+proj.main-file = loc('findme/manage.py')
