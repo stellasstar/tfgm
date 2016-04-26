@@ -12,20 +12,20 @@
 
 
         {% if user.is_authenticated %}
-        
+
         <script>
                 var var_json = '{{ json_data|escapejs }}';
         </script>
 
         <table align="center" border="0" cellpadding="5" cellspacing="5">
         <tr><td colspan="2" align="center"><h1>Hello {{user.get_full_name}}</h1></td></tr>
-        
+
         <tr>
             <td colspan="2" align="center">
-           
-                <img class="img-circle" width="150" height="200" 
+
+                <img class="img-circle" width="150" height="200"
                                             src={{form.picture.value.url }}/>
-            
+
             </td>
         </tr>
         <tr><td colspan="2">&nbsp;</td></tr>
@@ -34,7 +34,7 @@
                         {% for error in field.errors %}
                           <li><a href="#id_{{ field.name }}" class="error">{{ error|escape }}</a></li>
                         {% endfor %}
-                  {% endif %} 
+                  {% endif %}
                   {% if form.non_field_errors %}
                     {{ form.non_field_errors }}
                   {% endif %}
@@ -46,10 +46,14 @@
                 {% endif %}
                 </tr>
             {% endfor %}
+            <tr><td>Address</td>
+            <td cellpadding='5'>
+            {% for line in address %}
+            {{ line }}<br>
+            {% endfor %}
+            </td></tr>
             <tr><td colspan="2">&nbsp;</td></tr>
             <tr><td colspan="2">&nbsp;</td></tr>
-
-                
             <tr><td colspan="2" align="center" id="wrapper"><i>
                 Click the allow button to let the browser show your map.
             </i></td></tr>

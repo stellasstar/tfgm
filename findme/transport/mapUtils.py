@@ -6,19 +6,18 @@ import googlemaps
 from transport.models import Waypoint
 
 
-def geocode_address(a, c):
+def return_latlng(a):
     gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
-    address = u'%s %s' % (a, c)
+    address = u'%s' % (a)
     address = address.encode('utf-8')
     try:
         result = gmap.geocode(address)
-        placemark = result['Placemark'][0]
-        lng, lat = placemark['Point']['coordinates'][0:2]
-        latlon = (lat, lng)
+        lat = result[0]['geometry']['location']['lat']
+        lng = result[0]['geometry']['location']['lng']
     except (urllib2.URLError, urllib2.HTTPError):
         return None
     else:
-        return latlon
+        return (lat, lng)
 
 
 def return_address(lat, lng):
