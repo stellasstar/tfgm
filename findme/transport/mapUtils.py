@@ -1,25 +1,25 @@
+import urllib2
 from django.conf import settings
-from django.contrib.gis.geos import Point
 from djgeojson.serializers import Serializer as GeoJSONSerializer
 
 import googlemaps
-from transport.forms import WaypointForm
-from transport.models import Waypoint, Position
+from transport.models import Waypoint
 
 
-def geocode_address(address):
-    googlemaps.Client(key=settings.GOOGLE_API_KEY)
-    address = u'%s %s' % (self.address, self.city)
+def geocode_address(a, c):
+    gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
+    address = u'%s %s' % (a, c)
     address = address.encode('utf-8')
     try:
-        result = gmaps.geocode(address)
+        result = gmap.geocode(address)
         placemark = result['Placemark'][0]
-        lng, lat = placemark['Point']['coordinates'][0:2]  
+        lng, lat = placemark['Point']['coordinates'][0:2]
         latlon = (lat, lng)
-    except (URLError, GeocoderQueryError, ValueError):
+    except (urllib2.URLError, urllib2.HTTPError):
         return None
     else:
         return latlon
+
 
 def return_address(lat, lng):
     latlng = (lat, lng)
@@ -35,12 +35,11 @@ def return_address(lat, lng):
 
 def find_waypoints(lat, lon):
     """
-    Given a given lat/long pair, return the unit(s) surrounding it.
+    Given a given lat/long pair, return the waypoint(s) surrounding it.
     """
-    
-    point = Point(float(lon), float(lat))
+
     waypoints = Waypoint.objects.order_by('name')
     geojson_data = GeoJSONSerializer().serialize(
-        waypoints, use_natural_keys=True) 
+        waypoints, use_natural_keys=True)
 
     return geojson_data
