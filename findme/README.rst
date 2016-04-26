@@ -34,8 +34,8 @@ local   all         all                               md5
 
 5)  Unfortunately the django management command zap_and_create_postgis_db does not work until a PostgreSQL database with postgis already exists. The role and password can be taken from settings.py, and the builddb.sh file can be edited with this information.  builddb.sh will install the initial database, and rebuild.sh will build the necessary tables.
 
-./findme/scripts/builddb.sh
+./findme/scripts/builddb.sh <br>
 ./findme/scripts/rebuild.sh
 
-6)  load in initial data
+6)  load in initial data <br>
 python manage.py import
