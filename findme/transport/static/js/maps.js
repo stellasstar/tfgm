@@ -1,10 +1,11 @@
 var data;
 var map;
 var map_location;
+var waypoints;
 
 $(document).ready(function() {
       data = $.parseJSON(var_json);
-      var key = '&key=' + data[9].GOOGLE_KEY;
+      var key = '&key=' + String(data.GOOGLE_KEY);
       var call = '&callback=makeMap';
       var script = document.createElement('script');
       script.type = 'text/javascript';
@@ -14,17 +15,40 @@ $(document).ready(function() {
     }
 );
 
-function makeMap() {
-    //alert("This is the second.");
+function searchAddress() {
+    //alert("This is the searchAddress.");
+    var defaultText = data.address;
+    var searchBox = document.getElementById("search_address");
+ 
+    //default text after load
+    searchBox.value = defaultText;
+ 
+    //on focus behaviour
+    searchBox.onfocus = function() {
+        if (this.value == defaultText) {//clear text field
+            this.value = '';
+        }
+    }
+ 
+    //on blur behaviour
+    searchBox.onblur = function() {
+        if (this.value == "") {//restore default text
+            this.value = defaultText;
+        }
+    }
+}
 
-    var latitude = data[5].latitude;
-    var longitude = data[6].longitude;
-    map_location = data[8].map;
+function makeMap() {
+    //alert("This is the makeMap.");
+
+    var latitude = data.latitude;
+    var longitude = data.longitude;
+    map_location = data.map;
 
     var coords = new google.maps.LatLng(latitude, longitude);
     //alert(coords);
     var bounds = new google.maps.LatLngBounds();
-    //alert(data[8].map);
+    //alert(data.map);
 
     var mapOptions = {
         zoom: 14,
@@ -40,7 +64,7 @@ function makeMap() {
     );
 
     var contentString = '<div>'+
-       data[2].name  + '\n' +
+       data.name  + '\n' +
        '</div><div>' +
      'latitude : ' + latitude + '\n' +
        '</div><div>' +
@@ -50,14 +74,14 @@ function makeMap() {
     var infowindow = new google.maps.InfoWindow({
         content: contentString
     });
-
+    
     //place the initial marker
     var marker = new google.maps.Marker({
         position: coords,
         map: map,
-        title: data[2].name,
+        title: data.name,
         animation: google.maps.Animation.DROP,
-        label: data[2].name[0]
+        label: data.name[0].toUpperCase()
     }); // end marker
 
     marker.addListener('click', function() {
@@ -71,8 +95,7 @@ function makeMarkers() {
     var newMap = map;
     var bounds = new google.maps.LatLngBounds();
     if (str.includes('canvas')) {
-        //alert("This is the third.");
-        var waypoints = $.parseJSON(var_waypoints);
+        alert("This is the makeMarkers.");
         var end = waypoints.features.length;
         // Display multiple markers on a map
         var infoWindow = new google.maps.InfoWindow();
@@ -83,6 +106,8 @@ function makeMarkers() {
             var pos = new google.maps.LatLng(lat, lng);
             //alert(pos);
             bounds.extend(pos);
+            
+            // create the marker
             var contentString = name  + '\n' +
                                 String(pos) + '\n';
             var waypoint = new google.maps.Marker({
@@ -103,6 +128,35 @@ function makeMarkers() {
     } // end if
 } // end makeMarkers
 
+function printTransport() {
+    //alert("this is printWaypoints")
+    var str = String(map_location);
+    if (str.includes('canvas')) {
+    
+        waypoints = $.parseJSON(var_waypoints);
+        var end = waypoints.features.length;
+        var links;
+        
+        if (parseInt(end) > 0) {
+            $("#wpitems").html("...Transport Links...\n");
+        } else {
+            $("#wpitems").html("Finding Transport Links... \n");
+        }
+        for (var i = 0; i < end; i++) {
+            var lat = waypoints.features[i].geometry.coordinates[0][1];
+            var lng = waypoints.features[i].geometry.coordinates[0][0];
+            var name = waypoints.features[i].properties.name;
+            var pos = new google.maps.LatLng(lat, lng);
+            $('#wpitems').append("<br>");
+            $('#wpitems').append(i + 1 + " ");
+            $('#wpitems').append(name + " ");
+            $('#wpitems').append(parseFloat(Math.round(lat * 100) / 100).toFixed(4));
+            $('#wpitems').append(" ");
+            $('#wpitems').append(parseFloat(Math.round(lng * 100) / 100).toFixed(4));
+        }
+    }
+}
+
 function addLoadEvent(func) {
   var oldonload = window.onload;
   if (typeof window.onload != 'function') {
@@ -116,5 +170,20 @@ function addLoadEvent(func) {
     }
   }
 }
+
+addLoadEvent(searchAddress);
+addLoadEvent(printTransport);
 addLoadEvent(makeMap);
 addLoadEvent(makeMarkers);
+
+// user_id = data.user_id
+// name = data.name 
+    // the name of the initial user coordinates is set to the username
+// address = data.address
+// id = data.id
+// latitude = data.latitude
+// longitude = data.longitude
+// srid = data.srid
+// map = data.map
+// GOOGLE_KEY = data.GOOGLE_KEY
+// address = data.address

@@ -37,7 +37,7 @@ class WaypointView(TemplateView):
         context = super(WaypointView, self).get_context_data(**kwargs)
         username = self.kwargs.get('username')
         position = self.kwargs.get('position')
-        data = []
+        data = {}
 
         if username:
             user = get_object_or_404(User, username=username)
@@ -56,26 +56,39 @@ class WaypointView(TemplateView):
         position_dict = position.values()[0]
         name = position_dict.get('name')
 
+        # geometry is a gis object.  need to pop out for easier import
+        # into data
         position_dict = position.values()[0]
         geometry = position_dict.pop('geometry')
 
         # get address for location
         if position_dict['address'] is None:
-            address, city = mapUtils.return_address(geometry.y, geometry.x)
+            (address, city) = mapUtils.get_address_from_latlng(geometry.y, 
+                                                               geometry.x)
             position_dict['address'] = address
             position_dict['city'] = city
 
-        for key, value in position_dict.iteritems():
-            data.append({key: value})
+        # need to fix this, but if there is an addresss but no coordinate info
+        if ((geometry is None) or(geometry.x is None) or (geometry.y is None)):
+            try:            
+                (lat, lng) = mapUtils.get_latlng_from_address(address)
+                point = "POINT(%s %s)" % (str(lng), str(lat))
+                geometry = geos.fromstr(point)
+            except:
+                point = "POINT(%s %s)" % (str(settings.DEFAULT_LONGITUDE), 
+                                          str(settings.DEFAULT_LATITUDE))
+                geometry = geos.fromstr(point)
 
-        # this is on purpose, so the json output is easier to read
-        data.append({'latitude': geometry.y})
-        data.append({'longitude': geometry.x})
-        data.append({'srid': geometry.srid})
-
+        #update data with user positional data
+        data.update(position_dict)
+        data['latitude'] = geometry.y
+        data['longitude'] = geometry.x
+        data['srid'] = geometry.srid
+        data['address'] = str(position_dict['address'])
+        
         # where you want the map to be
-        data.append({'map': self.map_to_show})
-        data.append({'GOOGLE_KEY': self.GOOGLE_KEY})
+        data['map'] = self.map_to_show
+        data['GOOGLE_KEY'] = self.GOOGLE_KEY
         context['map'] = self.map_to_show
 
         # get waypoint data

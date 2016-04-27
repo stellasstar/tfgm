@@ -54,3 +54,27 @@ def pil_to_django(image, format="JPEG"):
     fobject = StringIO.StringIO()
     image.save(fobject, format=format)
     return ContentFile(fobject.getvalue())
+
+
+def make_thumbnail(image, name, ext):
+    """
+    Create and save the thumbnail for the photo (simple resize with PIL).
+    """
+    try:
+        image = Image.open(User.thumbnail)
+        sett = (settings.AVATAR_DEFAULT_HEIGHT, settings.AVATAR_DEFAULT_WIDTH)
+        image.thumbnail(sett)
+    except IOError:
+        return False
+
+    thumb_buffer = StringIO.StringIO()
+
+    image.save(thumb_buffer, format=image.format)
+    thumb_name, thumb_extension = (name.lower(), ext.lower())
+    thumb = models.Avatar_User_Dir(thumb_name + '_thumb' + thumb_extension)
+
+    s3_thumb = default_storage.open(thumb, 'w')
+    s3_thumb.write(thumb_buffer.getvalue())
+    s3_thumb.close()
+
+    return True

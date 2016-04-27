@@ -32,30 +32,6 @@ else:
     User = get_user_model()
 
 
-def make_thumbnail(image, name, ext):
-    """
-    Create and save the thumbnail for the photo (simple resize with PIL).
-    """
-    try:
-        image = Image.open(User.thumbnail)
-        sett = (settings.AVATAR_DEFAULT_HEIGHT, settings.AVATAR_DEFAULT_WIDTH)
-        image.thumbnail(sett)
-    except IOError:
-        return False
-
-    thumb_buffer = StringIO.StringIO()
-
-    image.save(thumb_buffer, format=image.format)
-    thumb_name, thumb_extension = (name.lower(), ext.lower())
-    thumb = models.Avatar_User_Dir(thumb_name + '_thumb' + thumb_extension)
-
-    s3_thumb = default_storage.open(thumb, 'w')
-    s3_thumb.write(thumb_buffer.getvalue())
-    s3_thumb.close()
-
-    return True
-
-
 class UserRegistrationView(CreateView):
 
     form_class = forms.UserRegistrationForm
@@ -78,8 +54,8 @@ class UserRegistrationView(CreateView):
             try:
                 extension = utils.valid_url_extension(str.lower(path))
             except not extension:
-                    error = 'File was not a valid image (jpg, jpeg, png, gif)'
-                    form.non_field_errors(error)
+                error = 'File was not a valid image (jpg, jpeg, png, gif)'
+                form.non_field_errors(error)
 
             try:
                 pil_image = Image.open(url)
@@ -89,7 +65,7 @@ class UserRegistrationView(CreateView):
             #  saving this for later
 #            try:
 #                passed = False
-#                passed = make_thumbnail(pil_image, domain, path)
+#                passed = utils.make_thumbnail(pil_image, domain, path)
 #            except not passed:
 #                form.non_field_errors("Couldn't make thumbnail image")
 
@@ -173,7 +149,7 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
         context = super(UserProfileView, self).get_context_data(**kwargs)
         username = self.kwargs.get('username')
         position = self.kwargs.get('position')
-        data = []
+        data = {}
 
         if username:
             user = get_object_or_404(User, username=username)
@@ -193,34 +169,40 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
         form = forms.UserProfileForm(instance=user)
         form.initial['returnTo'] = return_to
 
+        # geometry is a gis object.  need to pop out for easier import
+        # into data
         position_dict = position.values()[0]
         geometry = position_dict.pop('geometry')
 
         # get address for location
         if position_dict['address'] is None:
-            (address, city) = mapUtils.return_address(geometry.y, geometry.x)
+            (address, city) = mapUtils.get_address_from_latlng(geometry.y, 
+                                                               geometry.x)
             position_dict['address'] = address
             position_dict['city'] = city
 
         # need to fix this, but if there is an addresss but no coordinate info
         if ((geometry is None) or(geometry.x is None) or (geometry.y is None)):
-            (lat, lng) = mapUtils.return_latlng(address)
-            point = "POINT(%s %s)" % (str(self.longitude), str(self.latitude))
-            geometry = geos.fromstr(point)
+            try:            
+                (lat, lng) = mapUtils.get_latlng_from_address(address)
+                point = "POINT(%s %s)" % (str(lng), str(lat))
+                geometry = geos.fromstr(point)
+            except:
+                point = "POINT(%s %s)" % (str(settings.DEFAULT_LONGITUDE), 
+                                          str(settings.DEFAULT_LATITUDE))
+                geometry = geos.fromstr(point)
 
-        for key in position_dict.keys():
-            value = position_dict.get(key)
-            data.append({key: value})
-
-        data.append({'latitude': geometry.y})
-        data.append({'longitude': geometry.x})
-        data.append({'srid': geometry.srid})
+        #update data with user positional data
+        data.update(position_dict)
+        data['latitude'] = geometry.y
+        data['longitude'] = geometry.x
+        data['srid'] = geometry.srid
 
         context['address'] = str(position_dict['address']).split(',')
 
         # where you want the map to be
-        data.append({'map': self.map_to_show})
-        data.append({'GOOGLE_KEY': self.GOOGLE_KEY})
+        data['map'] = self.map_to_show
+        data['GOOGLE_KEY'] = self.GOOGLE_KEY
         context['map'] = self.map_to_show
 
         cls = simplejson.JSONEncoderForHTML

@@ -6,7 +6,7 @@ import googlemaps
 from transport.models import Waypoint
 
 
-def return_latlng(a):
+def get_latlng_from_address(a):
     gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
     address = u'%s' % (a)
     address = address.encode('utf-8')
@@ -20,7 +20,7 @@ def return_latlng(a):
         return (lat, lng)
 
 
-def return_address(lat, lng):
+def get_address_from_latlng(lat, lng):
     latlng = (lat, lng)
     gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
     try:

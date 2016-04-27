@@ -16,8 +16,6 @@
             var var_waypoints = '{{waypoints|escapejs}}'
         </script>
 
-        {{position}}
-
         {% if user.is_authenticated %}
 
         <table align="center" border="0" cellpadding="5" cellspacing="5">
@@ -31,21 +29,25 @@
 
         {% endif %}
 
-        <form type="get" action="." style="margin: 0">
-            <input  id="search_box" type="text" name="search_box"
-                    style="width:400px; height:40px;"
-                    value={{position.address}} placeholder="Search..." >
-            <button id="search_submit" type="submit" >Address</button>
-        </form>
-        </td></tr>
-                    <tr><td colspan="2" align="center" id="wrapper"><i>
+            <form method="get" action="">
+                <input type="text" name="search_address" id="search_address" 
+                       value=""/>
+                <input type="submit" name="submit" value="Address" />
+            </form>
+            </td></tr>
+            <tr><td colspan="2">&nbsp;</td></tr>
+            <tr><td colspan="2" align="center" id="wrapper"><i>
                 Click the allow button to let the browser show your map.
             </i></td></tr>
              <tr>
-                <td colspan="2" align="center">
+                <td>
                 <div id={{map}}></div>
-                <div id="waypoints">Finding Waypoints...</div>
                 </td>
+                <td><table cellpadding="4" id="waypoints">
+                <tr><td>
+                    <div id="wpitems"></div>
+                    
+                </td></tr></table></td>
              </tr>
              <tr><td colspan="2">&nbsp;</td></tr>
              <tr><td colspan="2">&nbsp;</td></tr>
