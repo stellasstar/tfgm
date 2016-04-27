@@ -1,5 +1,6 @@
 Sample return address from googlemaps module using lat and lng
-
+reverse = gmap.reverse_geocode(latlng)
+reverse =
 {u'address_components': [{u'long_name': u'374',
                           u'short_name': u'374',
                           u'types': [u'street_number']},

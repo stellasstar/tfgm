@@ -1,16 +1,12 @@
-from urllib2 import URLError
 import simplejson
 
 from django.views.generic import ListView
 from django.views.generic.base import TemplateView
 from django.shortcuts import get_object_or_404
 
-from django.http import HttpResponseNotFound, HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponseNotFound
 from django.conf import settings
-from django.contrib.gis.geos import Point
-from djgeojson.serializers import Serializer as GeoJSONSerializer
 
-import googlemaps
 from transport.forms import WaypointForm
 from transport.models import Waypoint, Position
 from transport import mapUtils
@@ -62,7 +58,7 @@ class WaypointView(TemplateView):
 
         position_dict = position.values()[0]
         geometry = position_dict.pop('geometry')
-        
+
         # get address for location
         if position_dict['address'] is None:
             address, city = mapUtils.return_address(geometry.y, geometry.x)
@@ -70,7 +66,7 @@ class WaypointView(TemplateView):
             position_dict['city'] = city
 
         for key, value in position_dict.iteritems():
-            data.append({ key : value })
+            data.append({key: value})
 
         # this is on purpose, so the json output is easier to read
         data.append({'latitude': geometry.y})
@@ -81,7 +77,7 @@ class WaypointView(TemplateView):
         data.append({'map': self.map_to_show})
         data.append({'GOOGLE_KEY': self.GOOGLE_KEY})
         context['map'] = self.map_to_show
-        
+
         # get waypoint data
         waypoints = mapUtils.find_waypoints(geometry.y, geometry.x)
 

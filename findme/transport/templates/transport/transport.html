@@ -10,12 +10,12 @@
 
         {% csrf_token %}
 
-        
+
         <script>
             var var_json = '{{ json|escapejs }}';
             var var_waypoints = '{{waypoints|escapejs}}'
         </script>
-        
+
         {{position}}
 
         {% if user.is_authenticated %}
@@ -23,16 +23,16 @@
         <table align="center" border="0" cellpadding="5" cellspacing="5">
         <tr><td colspan="2" align="center"><h1>Hello {{user.get_full_name}}</h1></td></tr>
         <tr><td colspan="2" align="center">
-        
+
         {% else %}
         <table align="center" border="0" cellpadding="5" cellspacing="5">
         <tr><td colspan="2" align="center"><h1>Hello Any Mouse</h1></td></tr>
         <tr><td colspan="2" align="center">
-        
+
         {% endif %}
-        
+
         <form type="get" action="." style="margin: 0">
-            <input  id="search_box" type="text" name="search_box"  
+            <input  id="search_box" type="text" name="search_box"
                     style="width:400px; height:40px;"
                     value={{position.address}} placeholder="Search..." >
             <button id="search_submit" type="submit" >Address</button>
@@ -50,9 +50,7 @@
              <tr><td colspan="2">&nbsp;</td></tr>
              <tr><td colspan="2">&nbsp;</td></tr>
         </table>
-        
 
-{{waypoints}}
 
 {% endblock %}
 

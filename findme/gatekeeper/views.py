@@ -1,34 +1,25 @@
 from django.views.generic.base import TemplateView
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import (Http404, JsonResponse,
-                         HttpResponse, HttpResponseNotFound)
+from django.shortcuts import redirect, get_object_or_404
+from django.http import HttpResponseNotFound
 from django.contrib import messages
 from django.conf import settings
-from django.forms.models import model_to_dict
 
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
+from django.contrib.gis import geos
 
 # image processing
 from PIL import Image
 import StringIO
 from django.core.files.storage import default_storage
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.conf import settings
-
-import os
 import simplejson
-import json
 
-from django.core.files.base import ContentFile
 from django.views.generic.edit import FormView
 from django.core.urlresolvers import reverse
 from django.views.generic import CreateView, RedirectView, UpdateView
-from django.views.generic.edit import ModelFormMixin
 from gatekeeper import forms, utils, models
 from transport.models import Position
+from transport import mapUtils
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -205,6 +196,18 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
         position_dict = position.values()[0]
         geometry = position_dict.pop('geometry')
 
+        # get address for location
+        if position_dict['address'] is None:
+            (address, city) = mapUtils.return_address(geometry.y, geometry.x)
+            position_dict['address'] = address
+            position_dict['city'] = city
+
+        # need to fix this, but if there is an addresss but no coordinate info
+        if ((geometry is None) or(geometry.x is None) or (geometry.y is None)):
+            (lat, lng) = mapUtils.return_latlng(address)
+            point = "POINT(%s %s)" % (str(self.longitude), str(self.latitude))
+            geometry = geos.fromstr(point)
+
         for key in position_dict.keys():
             value = position_dict.get(key)
             data.append({key: value})
@@ -212,6 +215,8 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
         data.append({'latitude': geometry.y})
         data.append({'longitude': geometry.x})
         data.append({'srid': geometry.srid})
+
+        context['address'] = str(position_dict['address']).split(',')
 
         # where you want the map to be
         data.append({'map': self.map_to_show})
