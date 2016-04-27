@@ -8,16 +8,15 @@ from django.conf import settings
 
 from django.contrib.gis import geos
 
+import simplejson
+
 # image processing
 from PIL import Image
-import StringIO
-from django.core.files.storage import default_storage
-import simplejson
 
 from django.views.generic.edit import FormView
 from django.core.urlresolvers import reverse
 from django.views.generic import CreateView, RedirectView, UpdateView
-from gatekeeper import forms, utils, models
+from gatekeeper import forms, utils
 from transport.models import Position
 from transport import mapUtils
 
@@ -176,23 +175,23 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
 
         # get address for location
         if position_dict['address'] is None:
-            (address, city) = mapUtils.get_address_from_latlng(geometry.y, 
+            (address, city) = mapUtils.get_address_from_latlng(geometry.y,
                                                                geometry.x)
             position_dict['address'] = address
             position_dict['city'] = city
 
         # need to fix this, but if there is an addresss but no coordinate info
         if ((geometry is None) or(geometry.x is None) or (geometry.y is None)):
-            try:            
+            try:
                 (lat, lng) = mapUtils.get_latlng_from_address(address)
                 point = "POINT(%s %s)" % (str(lng), str(lat))
                 geometry = geos.fromstr(point)
             except:
-                point = "POINT(%s %s)" % (str(settings.DEFAULT_LONGITUDE), 
+                point = "POINT(%s %s)" % (str(settings.DEFAULT_LONGITUDE),
                                           str(settings.DEFAULT_LATITUDE))
                 geometry = geos.fromstr(point)
 
-        #update data with user positional data
+        # update data with user positional data
         data.update(position_dict)
         data['latitude'] = geometry.y
         data['longitude'] = geometry.x

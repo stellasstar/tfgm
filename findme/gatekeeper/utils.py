@@ -5,6 +5,19 @@ from urlparse import urlparse
 from django.core.files.base import ContentFile
 import httplib
 from django.conf import settings
+from gatekeeper import models
+
+# image processing
+from PIL import Image
+from django.core.files.storage import default_storage
+
+# import custom user model
+try:
+    from django.contrib.auth import get_user_model
+except ImportError:  # django < 1.5
+    from django.contrib.auth.models import User
+else:
+    User = get_user_model()
 
 
 def valid_image_size(image):
