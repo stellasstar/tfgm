@@ -1,6 +1,8 @@
 import urllib2
 from django.conf import settings
 from djgeojson.serializers import Serializer as GeoJSONSerializer
+from django.contrib.gis.geos import Point, GEOSGeometry, fromstr
+from django.contrib.gis.measure import D
 
 import googlemaps
 from transport.models import Waypoint
@@ -36,8 +38,12 @@ def find_waypoints(lat, lon):
     """
     Given a given lat/long pair, return the waypoint(s) surrounding it.
     """
-
-    waypoints = Waypoint.objects.order_by('name')
+    user_location = GEOSGeometry('POINT({0} {1})'.format(lon, lat), srid=4326)
+    area = (user_location, D(mi=0.5).km)
+    user_location.transform(3857)
+    user_location.poly = user_location.buffer(1 * 2172.344)
+    # return everything within 1km
+    waypoints = Waypoint.objects.filter(geom__within=user_location.poly)
     geojson_data = GeoJSONSerializer().serialize(
         waypoints, use_natural_keys=True)
 

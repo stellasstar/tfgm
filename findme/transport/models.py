@@ -17,7 +17,7 @@ except ImportError:
 
 
 class Poly(gis_models.Model):
-    geometry = gis_models.PolygonField()
+    area = gis_models.PolygonField()
     objects = gis_models.GeoManager()
 
 
@@ -72,34 +72,23 @@ class Position(gis_models.Model):
 # Waypoint --srid=4326 --mapping --multi
 
 class Waypoint(gis_models.Model):
-    ele = gis_models.FloatField(null=True, blank=True, default=None)
-    time = gis_models.DateTimeField(blank=True, default=timezone.now())
-    magvar = gis_models.FloatField(null=True, blank=True, default=None)
-    geoidheight = gis_models.FloatField(null=True, blank=True, default=None)
     name = gis_models.CharField(max_length=1024, blank=True)
-    cmt = gis_models.CharField(max_length=1024, blank=True)
-    desc = gis_models.CharField(max_length=1024, blank=True)
-    src = gis_models.CharField(max_length=1024, blank=True)
-    link1_href = gis_models.CharField(max_length=1024, blank=True)
-    link1_text = gis_models.CharField(max_length=1024, blank=True)
-    link1_type = gis_models.CharField(max_length=1024, blank=True)
-    link2_href = gis_models.CharField(max_length=1024, blank=True)
-    link2_text = gis_models.CharField(max_length=1024, blank=True)
-    link2_type = gis_models.CharField(max_length=1024, blank=True)
-    sym = gis_models.CharField(max_length=1024, blank=True)
-    type = gis_models.CharField(max_length=1024, blank=True)
-    fix = gis_models.CharField(max_length=1024, blank=True)
-    sat = gis_models.IntegerField(null=True, blank=True, default=None)
-    hdop = gis_models.FloatField(null=True, blank=True, default=None)
-    vdop = gis_models.FloatField(null=True, blank=True, default=None)
-    pdop = gis_models.FloatField(null=True, blank=True, default=None)
-    ageofdgpsdata = gis_models.FloatField(null=True, blank=True, default=None)
-    dgpsid = gis_models.IntegerField(null=True, blank=True, default=None)
-    gpxx_waypointextension = gis_models.CharField(max_length=1024, blank=True)
-    geom = gis_models.MultiPointField(geography=True,
+    description = gis_models.CharField(max_length=1024, blank=True)
+    timestamp = gis_models.DateTimeField(null=True, blank=True, default=timezone.now)
+    begin = gis_models.DateTimeField(null=True, blank=True, default=timezone.now)
+    end = gis_models.DateTimeField(null=True, blank=True, default=timezone.now)
+    altitudemode = gis_models.CharField(max_length=1024, blank=True)
+    tessellate = gis_models.IntegerField(null=True, blank=True, default=None)
+    extrude = gis_models.IntegerField(null=True, blank=True, default=None)
+    visibility = gis_models.IntegerField(null=True, blank=True, default=None)
+    draworder = gis_models.IntegerField(null=True, blank=True, default=None)
+    icon = gis_models.CharField(max_length=1024, blank=True)
+    geom = gis_models.GeometryField(geography=True,
                                      blank=True,
                                      null=True,
                                      srid=4326)
+    
+    objects = gis_models.GeoManager()
 
     class Meta:
         verbose_name = _('waypoint')
@@ -117,29 +106,17 @@ class Waypoint(gis_models.Model):
 
 # Auto-generated `LayerMapping` dictionary for Waypoint model
 waypoint_mapping = {
-    'ele' : 'ele',
-    'time' : 'time',
-    'magvar' : 'magvar',
-    'geoidheight' : 'geoidheight',
-    'name' : 'name',
-    'cmt' : 'cmt',
-    'desc' : 'desc',
-    'src' : 'src',
-    'link1_href' : 'link1_href',
-    'link1_text' : 'link1_text',
-    'link1_type' : 'link1_type',
-    'link2_href' : 'link2_href',
-    'link2_text' : 'link2_text',
-    'link2_type' : 'link2_type',
-    'sym' : 'sym',
-    'type' : 'type',
-    'fix' : 'fix',
-    'sat' : 'sat',
-    'hdop' : 'hdop',
-    'vdop' : 'vdop',
-    'pdop' : 'pdop',
-    'ageofdgpsdata' : 'ageofdgpsdata',
-    'dgpsid' : 'dgpsid',
-    'gpxx_waypointextension' : 'gpxx_WaypointExtension',
-    'geom' : 'MULTIPOINT',
+    'name' : 'Name',
+    'description' : 'description',
+    'timestamp' : 'timestamp',
+    'begin' : 'begin',
+    'end' : 'end',
+    'altitudemode' : 'altitudeMode',
+    'tessellate' : 'tessellate',
+    'extrude' : 'extrude',
+    'visibility' : 'visibility',
+    'draworder' : 'drawOrder',
+    'icon' : 'icon',
+    'geom' : 'UNKNOWN',
 }
+
