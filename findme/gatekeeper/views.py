@@ -2,7 +2,7 @@ from django.views.generic.base import TemplateView
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, get_object_or_404
-from django.http import HttpResponseNotFound
+from django.http import HttpResponseNotFound, HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.conf import settings
 
@@ -104,13 +104,25 @@ class LoginView(FormView):
     success_url = '/'
     template_name = 'registration/login.html'
     model = User
-    redirect_field_name = 'redirect_to'
+
+    def form_invalid(self, form):
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        user = authenticate(username=username, password=password)        
+        if user is None:
+            print "Invalid login details were provided"
+            print "We can't log the user in"
+            msg = 'Invalid login details supplied.'
+            messages.add_message(self.request, messages.ERROR, msg)
+        elif not user.is_active:
+            msg = 'Your account is disabled.'
+            messages.add_message(self.request, messages.ERROR, msg)
+        return super(LoginView, self).form_invalid(form)
 
     def form_valid(self, form):
         username = form.cleaned_data['username']
         password = form.cleaned_data['password']
         user = authenticate(username=username, password=password)
-
         if user is not None and user.is_active:
             login(self.request, user)
             return super(LoginView, self).form_valid(form)
@@ -118,11 +130,13 @@ class LoginView(FormView):
             return self.form_invalid(form)
 
 
-class LogOutView(RedirectView):
+class LogOutView(LoginRequiredMixin, RedirectView):
 
     url = '/'
 
     def get(self, request, *args, **kwargs):
+        msg = "You are logged out."
+        messages.success(self.request, msg)        
         logout(request)
         return super(LogOutView, self).get(request, *args, **kwargs)
 

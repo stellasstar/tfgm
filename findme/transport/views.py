@@ -92,7 +92,7 @@ class WaypointView(TemplateView):
         context['map'] = self.map_to_show
 
         # get waypoint data
-        waypoints = mapUtils.find_waypoints(geometry.y, geometry.x)
+        waypoints, user_location = mapUtils.find_waypoints(geometry.y, geometry.x)
 
         cls = simplejson.JSONEncoderForHTML
         context['json'] = simplejson.dumps(data, cls=cls)
@@ -100,6 +100,7 @@ class WaypointView(TemplateView):
         context['position'] = position_dict
         context['name'] = name
         context['user'] = user
+        context['user_location'] = user_location
 
         return context
 

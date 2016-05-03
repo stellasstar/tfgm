@@ -16,11 +16,6 @@ except ImportError:
     from django.contrib.auth.models import User
 
 
-class Poly(gis_models.Model):
-    area = gis_models.PolygonField()
-    objects = gis_models.GeoManager()
-
-
 class Position(gis_models.Model):
 
     # Relations
@@ -72,21 +67,27 @@ class Position(gis_models.Model):
 # Waypoint --srid=4326 --mapping --multi
 
 class Waypoint(gis_models.Model):
-    name = gis_models.CharField(max_length=1024, blank=True)
-    description = gis_models.CharField(max_length=1024, blank=True)
-    timestamp = gis_models.DateTimeField(null=True, blank=True, default=timezone.now)
-    begin = gis_models.DateTimeField(null=True, blank=True, default=timezone.now)
-    end = gis_models.DateTimeField(null=True, blank=True, default=timezone.now)
-    altitudemode = gis_models.CharField(max_length=1024, blank=True)
-    tessellate = gis_models.IntegerField(null=True, blank=True, default=None)
-    extrude = gis_models.IntegerField(null=True, blank=True, default=None)
-    visibility = gis_models.IntegerField(null=True, blank=True, default=None)
-    draworder = gis_models.IntegerField(null=True, blank=True, default=None)
-    icon = gis_models.CharField(max_length=1024, blank=True)
-    geom = gis_models.GeometryField(geography=True,
-                                     blank=True,
-                                     null=True,
-                                     srid=4326)
+    osm_id = gis_models.FloatField(null=True, blank=True)
+    public_tra = gis_models.CharField(max_length=254, null=True, blank=True)
+    name = gis_models.CharField(max_length=254, null=True, blank=True)
+    ref = gis_models.CharField(max_length=254, null=True, blank=True)
+    route_ref = gis_models.CharField(max_length=254, null=True, blank=True)
+    operator = gis_models.CharField(max_length=254, null=True, blank=True)
+    network = gis_models.CharField(max_length=254, null=True, blank=True)
+    train = gis_models.CharField(max_length=254, null=True, blank=True)
+    subway = gis_models.CharField(max_length=254, null=True, blank=True)
+    monorail = gis_models.CharField(max_length=254, null=True, blank=True)
+    tram = gis_models.CharField(max_length=254, null=True, blank=True)
+    bus = gis_models.CharField(max_length=254, null=True, blank=True)
+    trolleybus = gis_models.CharField(max_length=254, null=True, blank=True)
+    aerialway = gis_models.CharField(max_length=254, null=True, blank=True)
+    ferry = gis_models.CharField(max_length=254, null=True, blank=True)
+    shelter = gis_models.CharField(max_length=254, null=True, blank=True)
+    bench = gis_models.CharField(max_length=254, null=True, blank=True)
+    covered = gis_models.CharField(max_length=254, null=True, blank=True)
+    area = gis_models.CharField(max_length=254, null=True, blank=True)
+    z_order = gis_models.FloatField(null=True, blank=True)
+    geom = gis_models.MultiPointField(blank=True, null=True, srid=3857)
     
     objects = gis_models.GeoManager()
 
@@ -98,25 +99,142 @@ class Waypoint(gis_models.Model):
         return "Waypoint %s" % (self.name)
 
     def get_lat_long(self):
-        """Add an easy getter function, which returns the location coords in
-        latitude longitude order
-        """
         return (self.geom.coords[1], self.geom.coords[0])
+
+
+class Route(gis_models.Model):
+    osm_id = gis_models.FloatField(blank=True, null=True)
+    public_tra = gis_models.CharField(max_length=254, blank=True)
+    name = gis_models.CharField(max_length=254, blank=True)
+    ref = gis_models.CharField(max_length=254, blank=True)
+    route_ref = gis_models.CharField(max_length=254, blank=True)
+    operator = gis_models.CharField(max_length=254, blank=True)
+    network = gis_models.CharField(max_length=254, blank=True)
+    train = gis_models.CharField(max_length=254, blank=True)
+    subway = gis_models.CharField(max_length=254, blank=True)
+    monorail = gis_models.CharField(max_length=254, blank=True)
+    tram = gis_models.CharField(max_length=254, blank=True)
+    bus = gis_models.CharField(max_length=254, blank=True)
+    trolleybus = gis_models.CharField(max_length=254, blank=True)
+    aerialway = gis_models.CharField(max_length=254, blank=True)
+    ferry = gis_models.CharField(max_length=254, blank=True)
+    shelter = gis_models.CharField(max_length=254, blank=True)
+    bench = gis_models.CharField(max_length=254, blank=True)
+    covered = gis_models.CharField(max_length=254, blank=True)
+    area = gis_models.CharField(max_length=254, blank=True)
+    z_order = gis_models.FloatField(blank=True, null=True)
+    geom = gis_models.MultiLineStringField(srid=3857, blank=True, null=True)
+    
+    objects = gis_models.GeoManager()
+    
+    def __unicode__(self):
+        return "Route %s" % (self.name)    
+
+
+class Area(gis_models.Model):
+    osm_id = gis_models.FloatField(null=True, blank=True)
+    public_tra = gis_models.CharField(max_length=254, blank=True)
+    name = gis_models.CharField(max_length=254, blank=True)
+    ref = gis_models.CharField(max_length=254, blank=True)
+    route_ref = gis_models.CharField(max_length=254, blank=True)
+    operator = gis_models.CharField(max_length=254, blank=True)
+    network = gis_models.CharField(max_length=254, blank=True)
+    train = gis_models.CharField(max_length=254, blank=True)
+    subway = gis_models.CharField(max_length=254, blank=True)
+    monorail = gis_models.CharField(max_length=254, blank=True)
+    tram = gis_models.CharField(max_length=254, blank=True)
+    bus = gis_models.CharField(max_length=254, blank=True)
+    trolleybus = gis_models.CharField(max_length=254, blank=True)
+    aerialway = gis_models.CharField(max_length=254, blank=True)
+    ferry = gis_models.CharField(max_length=254, blank=True)
+    shelter = gis_models.CharField(max_length=254, blank=True)
+    bench = gis_models.CharField(max_length=254, blank=True)
+    covered = gis_models.CharField(max_length=254, blank=True)
+    area = gis_models.CharField(max_length=254, blank=True)
+    z_order = gis_models.FloatField(null=True, blank=True)
+    geom = gis_models.MultiPolygonField(srid=3857, blank=True, null=True)
+    
+    objects = gis_models.GeoManager()
+    
+    def __unicode__(self):
+        return "Area %s" % (self.name)    
 
 
 # Auto-generated `LayerMapping` dictionary for Waypoint model
 waypoint_mapping = {
-    'name' : 'Name',
-    'description' : 'description',
-    'timestamp' : 'timestamp',
-    'begin' : 'begin',
-    'end' : 'end',
-    'altitudemode' : 'altitudeMode',
-    'tessellate' : 'tessellate',
-    'extrude' : 'extrude',
-    'visibility' : 'visibility',
-    'draworder' : 'drawOrder',
-    'icon' : 'icon',
-    'geom' : 'UNKNOWN',
+    'osm_id' : 'OSM_ID',
+    'public_tra' : 'PUBLIC_TRA',
+    'name' : 'NAME',
+    'ref' : 'REF',
+    'route_ref' : 'ROUTE_REF',
+    'operator' : 'OPERATOR',
+    'network' : 'NETWORK',
+    'train' : 'TRAIN',
+    'subway' : 'SUBWAY',
+    'monorail' : 'MONORAIL',
+    'tram' : 'TRAM',
+    'bus' : 'BUS',
+    'trolleybus' : 'TROLLEYBUS',
+    'aerialway' : 'AERIALWAY',
+    'ferry' : 'FERRY',
+    'shelter' : 'SHELTER',
+    'bench' : 'BENCH',
+    'covered' : 'COVERED',
+    'area' : 'AREA',
+    'z_order' : 'Z_ORDER',
+    'geom' : 'MULTIPOINT25D',
 }
+
+# Auto-generated `LayerMapping` dictionary for Waypoints model
+route_mapping = {
+    'osm_id' : 'OSM_ID',
+    'public_tra' : 'PUBLIC_TRA',
+    'name' : 'NAME',
+    'ref' : 'REF',
+    'route_ref' : 'ROUTE_REF',
+    'operator' : 'OPERATOR',
+    'network' : 'NETWORK',
+    'train' : 'TRAIN',
+    'subway' : 'SUBWAY',
+    'monorail' : 'MONORAIL',
+    'tram' : 'TRAM',
+    'bus' : 'BUS',
+    'trolleybus' : 'TROLLEYBUS',
+    'aerialway' : 'AERIALWAY',
+    'ferry' : 'FERRY',
+    'shelter' : 'SHELTER',
+    'bench' : 'BENCH',
+    'covered' : 'COVERED',
+    'area' : 'AREA',
+    'z_order' : 'Z_ORDER',
+    'geom' : 'MULTILINESTRING25D',
+}
+
+
+# Auto-generated `LayerMapping` dictionary for Areas model
+area_mapping = {
+    'osm_id' : 'OSM_ID',
+    'public_tra' : 'PUBLIC_TRA',
+    'name' : 'NAME',
+    'ref' : 'REF',
+    'route_ref' : 'ROUTE_REF',
+    'operator' : 'OPERATOR',
+    'network' : 'NETWORK',
+    'train' : 'TRAIN',
+    'subway' : 'SUBWAY',
+    'monorail' : 'MONORAIL',
+    'tram' : 'TRAM',
+    'bus' : 'BUS',
+    'trolleybus' : 'TROLLEYBUS',
+    'aerialway' : 'AERIALWAY',
+    'ferry' : 'FERRY',
+    'shelter' : 'SHELTER',
+    'bench' : 'BENCH',
+    'covered' : 'COVERED',
+    'area' : 'AREA',
+    'z_order' : 'Z_ORDER',
+    'geom' : 'MULTIPOLYGON25D',
+}
+
+
 

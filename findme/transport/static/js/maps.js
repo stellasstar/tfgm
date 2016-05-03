@@ -3,7 +3,7 @@ var map;
 var map_location;
 var waypoints;
 
-$(document).ready(function() {
+function initGoogle() {
       data = $.parseJSON(var_json);
       var key = '&key=' + String(data.GOOGLE_KEY);
       var call = '&callback=makeMap';
@@ -12,8 +12,12 @@ $(document).ready(function() {
       script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp'
           + key + call;
       document.body.appendChild(script);
-    }
-);
+      
+      var str = String(data.map);
+      if (str.includes('canvas')) {
+        waypoints = $.parseJSON(var_waypoints);
+      }
+}
 
 function searchAddress() {
     //alert("This is the searchAddress.");
@@ -91,11 +95,10 @@ function makeMap() {
 }
 
 function makeMarkers() {
-    var str = String(map_location);
     var newMap = map;
     var bounds = new google.maps.LatLngBounds();
-    if (str.includes('canvas')) {
-        alert("This is the makeMarkers.");
+    if (map_location.includes('canvas')) {
+        //alert("This is the makeMarkers.");
         var end = waypoints.features.length;
         // Display multiple markers on a map
         var infoWindow = new google.maps.InfoWindow();
@@ -130,14 +133,11 @@ function makeMarkers() {
 
 function printTransport() {
     //alert("this is printWaypoints")
-    var str = String(map_location);
-    if (str.includes('canvas')) {
-    
-        waypoints = $.parseJSON(var_waypoints);
+    if (map_location.includes('canvas')) {
+        //alert("This is the printTransport.");
         var end = waypoints.features.length;
         var links;
-        
-        if (parseInt(end) > 0) {
+        if (end > 0) {
             $("#wpitems").html("...Transport Links...\n");
         } else {
             $("#wpitems").html("Finding Transport Links... \n");
@@ -150,31 +150,23 @@ function printTransport() {
             $('#wpitems').append("<br>");
             $('#wpitems').append(i + 1 + " ");
             $('#wpitems').append(name + " ");
-            $('#wpitems').append(parseFloat(Math.round(lat * 100) / 100).toFixed(4));
+            $('#wpitems').append(lat.toFixed(6));
             $('#wpitems').append(" ");
-            $('#wpitems').append(parseFloat(Math.round(lng * 100) / 100).toFixed(4));
+            $('#wpitems').append(lng.toFixed(6));
         }
     }
 }
 
-function addLoadEvent(func) {
-  var oldonload = window.onload;
-  if (typeof window.onload != 'function') {
-    window.onload = func;
-  } else {
-    window.onload = function() {
-      if (oldonload) {
-        oldonload();
-      }
-      func();
-    }
-  }
+function googleMapsLoaded() {
+  printTransport();
+  makeMap();
+  makeMarkers();
 }
 
-addLoadEvent(searchAddress);
-addLoadEvent(printTransport);
-addLoadEvent(makeMap);
-addLoadEvent(makeMarkers);
+$(document).ready(initGoogle);
+$(document).ready(searchAddress);
+
+window.onload = googleMapsLoaded;
 
 // user_id = data.user_id
 // name = data.name 
