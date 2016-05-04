@@ -6,7 +6,7 @@
 {% block content %}
 
      {% if user.is_authenticated %}
-    <h1>Thank you for sending us an email {{user.get_full_name}}}!</h1>
+    <h1>Thank you for sending us an email {{user.get_full_name}}!</h1>
     {% else %}
     <h1>Thank you for sending us an email</h1> 
     {% endif %}
