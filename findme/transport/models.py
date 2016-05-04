@@ -6,7 +6,6 @@ from django.contrib.gis import geos
 from django.db import models
 from django.conf import settings
 import googlemaps
-from django.utils import timezone
 
 # import custom user model
 try:
@@ -39,19 +38,21 @@ class Position(gis_models.Model):
     def __str__(self):
         return '%s %s %s' % (self.name, self.geometry.x, self.geometry.y)
 
+# need to fix save method
     def save(self, **kwargs):
         if self.address and not self.geometry:
-            gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
+            # gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
             try:
-                result = gmaps.geocode(address)
-                placemark = result['Placemark'][0]
-                self.longitude, self.latitude = placemark['Point']['coordinates'][0:2]  
-                point = "POINT(%s %s)" % (str(self.longitude), str(self.latitude))
-                self.geometry = geos.fromstr(point)                
-            except (URLError, GeocoderQueryError, ValueError):
+                # self.longitude, self.latitude =
+                # placemark['Point']['coordinates'][0:2]
+                point = "POINT(%s %s)" % (str(self.longitude),
+                                          str(self.latitude))
+                self.geometry = geos.fromstr(point)
+            except (URLError, ValueError):
                 pass
             else:
-                point = "POINT(%s %s)" % (str(self.longitude), str(self.latitude))
+                point = "POINT(%s %s)" % (str(self.longitude),
+                                          str(self.latitude))
                 self.geometry = geos.fromstr(point)
         super(Position, self).save()
 
@@ -88,7 +89,8 @@ class Waypoint(gis_models.Model):
     area = gis_models.CharField(max_length=254, null=True, blank=True)
     z_order = gis_models.FloatField(null=True, blank=True)
     geom = gis_models.MultiPointField(blank=True, null=True, srid=3857)
-    
+    indicator = gis_models.CharField(max_length=254, null=True, blank=True)
+
     objects = gis_models.GeoManager()
 
     class Meta:
@@ -124,11 +126,11 @@ class Route(gis_models.Model):
     area = gis_models.CharField(max_length=254, blank=True)
     z_order = gis_models.FloatField(blank=True, null=True)
     geom = gis_models.MultiLineStringField(srid=3857, blank=True, null=True)
-    
+
     objects = gis_models.GeoManager()
-    
+
     def __unicode__(self):
-        return "Route %s" % (self.name)    
+        return "Route %s" % (self.name)
 
 
 class Area(gis_models.Model):
@@ -153,88 +155,85 @@ class Area(gis_models.Model):
     area = gis_models.CharField(max_length=254, blank=True)
     z_order = gis_models.FloatField(null=True, blank=True)
     geom = gis_models.MultiPolygonField(srid=3857, blank=True, null=True)
-    
+
     objects = gis_models.GeoManager()
-    
+
     def __unicode__(self):
-        return "Area %s" % (self.name)    
+        return "Area %s" % (self.name)
 
 
 # Auto-generated `LayerMapping` dictionary for Waypoint model
 waypoint_mapping = {
-    'osm_id' : 'OSM_ID',
-    'public_tra' : 'PUBLIC_TRA',
-    'name' : 'NAME',
-    'ref' : 'REF',
-    'route_ref' : 'ROUTE_REF',
-    'operator' : 'OPERATOR',
-    'network' : 'NETWORK',
-    'train' : 'TRAIN',
-    'subway' : 'SUBWAY',
-    'monorail' : 'MONORAIL',
-    'tram' : 'TRAM',
-    'bus' : 'BUS',
-    'trolleybus' : 'TROLLEYBUS',
-    'aerialway' : 'AERIALWAY',
-    'ferry' : 'FERRY',
-    'shelter' : 'SHELTER',
-    'bench' : 'BENCH',
-    'covered' : 'COVERED',
-    'area' : 'AREA',
-    'z_order' : 'Z_ORDER',
-    'geom' : 'MULTIPOINT25D',
+    'osm_id': 'OSM_ID',
+    'public_tra': 'PUBLIC_TRA',
+    'name': 'NAME',
+    'ref': 'REF',
+    'route_ref': 'ROUTE_REF',
+    'operator': 'OPERATOR',
+    'network': 'NETWORK',
+    'train': 'TRAIN',
+    'subway': 'SUBWAY',
+    'monorail': 'MONORAIL',
+    'tram': 'TRAM',
+    'bus': 'BUS',
+    'trolleybus': 'TROLLEYBUS',
+    'aerialway': 'AERIALWAY',
+    'ferry': 'FERRY',
+    'shelter': 'SHELTER',
+    'bench': 'BENCH',
+    'covered': 'COVERED',
+    'area': 'AREA',
+    'z_order': 'Z_ORDER',
+    'geom': 'MULTIPOINT25D',
 }
 
 # Auto-generated `LayerMapping` dictionary for Waypoints model
 route_mapping = {
-    'osm_id' : 'OSM_ID',
-    'public_tra' : 'PUBLIC_TRA',
-    'name' : 'NAME',
-    'ref' : 'REF',
-    'route_ref' : 'ROUTE_REF',
-    'operator' : 'OPERATOR',
-    'network' : 'NETWORK',
-    'train' : 'TRAIN',
-    'subway' : 'SUBWAY',
-    'monorail' : 'MONORAIL',
-    'tram' : 'TRAM',
-    'bus' : 'BUS',
-    'trolleybus' : 'TROLLEYBUS',
-    'aerialway' : 'AERIALWAY',
-    'ferry' : 'FERRY',
-    'shelter' : 'SHELTER',
-    'bench' : 'BENCH',
-    'covered' : 'COVERED',
-    'area' : 'AREA',
-    'z_order' : 'Z_ORDER',
-    'geom' : 'MULTILINESTRING25D',
+    'osm_id': 'OSM_ID',
+    'public_tra': 'PUBLIC_TRA',
+    'name': 'NAME',
+    'ref': 'REF',
+    'route_ref': 'ROUTE_REF',
+    'operator': 'OPERATOR',
+    'network': 'NETWORK',
+    'train': 'TRAIN',
+    'subway': 'SUBWAY',
+    'monorail': 'MONORAIL',
+    'tram': 'TRAM',
+    'bus': 'BUS',
+    'trolleybus': 'TROLLEYBUS',
+    'aerialway': 'AERIALWAY',
+    'ferry': 'FERRY',
+    'shelter': 'SHELTER',
+    'bench': 'BENCH',
+    'covered': 'COVERED',
+    'area': 'AREA',
+    'z_order': 'Z_ORDER',
+    'geom': 'MULTILINESTRING25D',
 }
 
 
 # Auto-generated `LayerMapping` dictionary for Areas model
 area_mapping = {
-    'osm_id' : 'OSM_ID',
-    'public_tra' : 'PUBLIC_TRA',
-    'name' : 'NAME',
-    'ref' : 'REF',
-    'route_ref' : 'ROUTE_REF',
-    'operator' : 'OPERATOR',
-    'network' : 'NETWORK',
-    'train' : 'TRAIN',
-    'subway' : 'SUBWAY',
-    'monorail' : 'MONORAIL',
-    'tram' : 'TRAM',
-    'bus' : 'BUS',
-    'trolleybus' : 'TROLLEYBUS',
-    'aerialway' : 'AERIALWAY',
-    'ferry' : 'FERRY',
-    'shelter' : 'SHELTER',
-    'bench' : 'BENCH',
-    'covered' : 'COVERED',
-    'area' : 'AREA',
-    'z_order' : 'Z_ORDER',
-    'geom' : 'MULTIPOLYGON25D',
+    'osm_id': 'OSM_ID',
+    'public_tra': 'PUBLIC_TRA',
+    'name': 'NAME',
+    'ref': 'REF',
+    'route_ref': 'ROUTE_REF',
+    'operator': 'OPERATOR',
+    'network': 'NETWORK',
+    'train': 'TRAIN',
+    'subway': 'SUBWAY',
+    'monorail': 'MONORAIL',
+    'tram': 'TRAM',
+    'bus': 'BUS',
+    'trolleybus': 'TROLLEYBUS',
+    'aerialway': 'AERIALWAY',
+    'ferry': 'FERRY',
+    'shelter': 'SHELTER',
+    'bench': 'BENCH',
+    'covered': 'COVERED',
+    'area': 'AREA',
+    'z_order': 'Z_ORDER',
+    'geom': 'MULTIPOLYGON25D',
 }
-
-
-

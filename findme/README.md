@@ -36,4 +36,4 @@ Ensure that there is a line in /etc/postgresql/9.3/main/pg_hba.conf that allows 
 
 ## load in initial data into the database
 - python manage.py import
-
+- python manage.py importTfgmCSV

@@ -14,9 +14,9 @@ from transport.models import (Waypoint, waypoint_mapping,
 
 class Command(BaseCommand):
     help = 'Loads geospatial data from app data directory'
-    route = 'static/data/weogeo_j166421/data/public_transport/public_transport_line.shp'
-    wp = 'static/data/weogeo_j166421/data/public_transport/public_transport_point.shp'
-    poly = 'static/data/weogeo_j166421/data/public_transport/public_transport_polygon_polygon.shp'
+    route = 'static/data/weogeo/data/public_transport_line.shp'
+    wp = 'static/data/weogeo/data/public_transport_point.shp'
+    poly = 'static/data/weogeo/data/public_transport_polygon_polygon.shp'
    
     def handle(self, *args, **options):
         route_file = os.path.abspath(os.path.join(os.path.join(os.path.dirname(findme.__file__), self.route)))
