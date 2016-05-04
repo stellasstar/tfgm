@@ -13,8 +13,7 @@ function initGoogle() {
           + key + call;
       document.body.appendChild(script);
       
-      var str = String(data.map);
-      if (str.includes('canvas')) {
+      if (data.map.includes('canvas')) {
         waypoints = $.parseJSON(var_waypoints);
       }
 }
@@ -133,29 +132,41 @@ function makeMarkers() {
 
 function printTransport() {
     //alert("this is printWaypoints")
+
     if (map_location.includes('canvas')) {
         //alert("This is the printTransport.");
         var end = waypoints.features.length;
-        var links;
         if (end > 0) {
-            $("#wpitems").html("...Transport Links...\n");
+            $(".wp_header").html("...Transport Links...\n");
         } else {
-            $("#wpitems").html("Finding Transport Links... \n");
+            $(".wp_header").html("Finding Transport Links... \n");
         }
+        var ways= $('.wpitems');
         for (var i = 0; i < end; i++) {
             var lat = waypoints.features[i].geometry.coordinates[0][1];
             var lng = waypoints.features[i].geometry.coordinates[0][0];
             var name = waypoints.features[i].properties.name;
             var pos = new google.maps.LatLng(lat, lng);
-            $('#wpitems').append("<br>");
-            $('#wpitems').append(i + 1 + " ");
-            $('#wpitems').append(name + " ");
-            $('#wpitems').append(lat.toFixed(6));
-            $('#wpitems').append(" ");
-            $('#wpitems').append(lng.toFixed(6));
+            var content = '<div class="expandContent">' +
+                          '<a href="#" class="glyphicon glyphicon-triangle-right"></a>' + 
+                            (i+1) + "&nbsp;&nbsp;" +
+                            name + "&nbsp;&nbsp;" +
+                            lat.toFixed(6) + "&nbsp;&nbsp;" +
+                            lng.toFixed(6) +
+                            '</div>';
+            var show = '<div class="showMe">' + 
+                            "This is hidden"
+                            '</div>';
+            ways.append(content);
+            ways.append(show);
         }
+        $('.expandContent').click(function() {
+            $(this).next('.showMe').slideToggle('slow');
+        });
     }
 }
+
+
 
 function googleMapsLoaded() {
   printTransport();

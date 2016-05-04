@@ -15,12 +15,14 @@ dir="rtl"{% endif %}>
 {% block extrastyle %}
 <link rel="stylesheet" type="text/css" href={% static 'bootstrap/css/bootstrap.css'%} />
 <link rel="stylesheet" type="text/css" href={% static 'css/utils.css'%} />
-<link rel="stylesheet" type="text/css" href={% static 'css/maps.css'%} />
 <script type="text/javascript" src={% static 'bootstrap/js/jquery-1.11.3.js'%} /></script>
 <script type="text/javascript" src={% static 'bootstrap/js/bootstrap.js'%} /></script>
 <script type="text/javascript" src={% static 'bootstrap/js/dropdown.js'%} /></script>
 <script type="text/javascript" src={% static 'bootstrap/js/show.js'%} /></script>
 <script type="text/javascript" src="{% static "js/utils.js" %}"></script>
+
+<!-- transport maps -->
+<link rel="stylesheet" type="text/css" href={% static 'css/maps.css'%} />
 <script type="text/javascript" src="{% static "js/maps.js" %}"></script>
 {% endblock %}
 
