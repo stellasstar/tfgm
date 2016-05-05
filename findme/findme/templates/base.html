@@ -61,8 +61,8 @@ dir="rtl"{% endif %}>
       <li role="presentation"><a href="/contact/">Contact</a></li>
       {% if user.is_authenticated %}
         <button id="button" type="button" class="btn btn-success" 
-          data-toggle="collapse" data-target="#profile">
-          <span class="glyphicon glyphicon-fire"></span> {{user.username}}
+          data-toggle="collapse" data-target="#profile" style="margin-top: 8px;">
+          {{user.username}} &#8711;
         </button>
         <ul id="profile" class="dropdown-menu">
         <li><a href="/gatekeeper/logout/">Logout</a></li>
@@ -71,8 +71,8 @@ dir="rtl"{% endif %}>
         </ul>
       {% else %}
         <button id="button" type="button" class="btn btn-danger" 
-          data-toggle="collapse" data-target="#profile">
-          <span class="glyphicon glyphicon-fire"></span> Any Mouse
+          data-toggle="collapse" data-target="#profile" style="margin-top: 8px;">
+          Any Mouse &#8711;
         </button>
         <ul id="profile" class="dropdown-menu">
           <li><a href="/gatekeeper/register">Register</a></li>

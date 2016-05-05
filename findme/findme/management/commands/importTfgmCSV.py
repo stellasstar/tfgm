@@ -48,12 +48,23 @@ class Command(BaseCommand):
     help = 'Loads Tfgm geospatial data from app data directory'
     wp = 'static/data/TfGMStoppingPoints.csv'
     
+    # using 2 different coordinate transformation systems for better accuracy
+    # 27700 corresponds to the British National Grid coordinate system
+    # 4326 corresponds to the U.S. Department of Defense, and is the 
+    #     standard used by the Global Positioning System (GPS)
+    # 3857 corresponds to Web Mercator and is the standard for Web
+    #     mapping applications
+    # bng is the British National Grid
+    # web_transform is transforming to web standards
+    
     def handle(self, *args, **options):
-        wp_file = os.path.abspath(os.path.join(os.path.join(os.path.dirname(findme.__file__), self.wp)))        
+        wp_file = os.path.abspath(os.path.join(os.path.join(
+                      os.path.dirname(findme.__file__), self.wp)))        
         f = open(wp_file, 'r');
-        #user_location = fromstr('POINT(%s %s)' % (lon, lat), srid=4326)
-        bng = CoordTransform(SpatialReference("27700"), SpatialReference("4326"))
-        ct = CoordTransform(SpatialReference("4326"), SpatialReference("3857"))        
+        bng = CoordTransform(SpatialReference("27700"), 
+                             SpatialReference("4326"))
+        web_transform = CoordTransform(SpatialReference("4326"), 
+                        SpatialReference("3857"))        
         for line in f:
             words = line.split(",");
             w = Waypoint.objects.create()
@@ -61,7 +72,7 @@ class Command(BaseCommand):
             northing = words[3]
             location = fromstr('POINT(%s %s)' % (easting, northing), srid=27700)
             location.transform(bng)
-            location.transform(ct)
+            location.transform(web_transform)
             w.geom = MultiPoint(location)
             w.bus = 'yes'
             w.name = words[4].strip('"')

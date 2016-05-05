@@ -1,11 +1,17 @@
 import urllib2
 from django.conf import settings
+from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models import Aggregate, FloatField
+from django.db.models.sql.aggregates import Aggregate as SQLAggregate
+
 from djgeojson.serializers import Serializer as GeoJSONSerializer
-from django.contrib.gis.geos import fromstr
+from django.contrib.gis.geos import fromstr, GEOSGeometry
 from django.contrib.gis.measure import D
 from django.contrib.gis.gdal import SpatialReference, CoordTransform
 
-import googlemaps
+from django.contrib.gis.db.models.functions import Distance
+
+import googlemaps, json
 from transport.models import Waypoint
 
 # Specify the original srid of your data
@@ -45,16 +51,16 @@ def find_waypoints(lat, lon):
     user_location = fromstr('POINT(%s %s)' % (lon, lat), srid=4326)
     ct = CoordTransform(SpatialReference("4326"), SpatialReference("3857"))
     user_location.transform(ct)
-    radius = 2
-    area = (user_location, D(km=0.5))
+    radius = 350
+    area = (user_location, D(km=0.35))
     # create a polygon object
-    # circle = user_location.buffer(radius)
+    circle = user_location.buffer(radius)
 
     # return everything within area
     waypoints = Waypoint.objects.filter(geom__distance_lte=area)
     # trying to annotate distance
     waypoints.distance(user_location).order_by('distance')
+        
     geojson_data = GeoJSONSerializer().serialize(
         waypoints, use_natural_keys=True)
-
     return geojson_data, user_location

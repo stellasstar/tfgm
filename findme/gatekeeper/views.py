@@ -153,6 +153,16 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
     redirect_field_name = 'redirect_to'
     map_to_show = 'defaultPositionMap'
     GOOGLE_KEY = settings.GOOGLE_API_KEY
+    
+    def get_object(self):
+        user = User.objects.get(pk=self.kwargs.get('pk'))
+        try:
+            url = user.picture.url
+        except ValueError:
+            p = settings.AVATAR_URL.strip('/') + '/' + settings.DEFAULT_AVATAR
+            user.picture = p
+            user.save()
+        return user  # or request.POST    
 
     def get_context_data(self, **kwargs):
         """
@@ -238,4 +248,21 @@ class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
             'pk': self.kwargs.get('pk')})
 
     def get_object(self):
-        return User.objects.get(pk=self.kwargs.get('pk'))  # or request.POST
+        user = User.objects.get(pk=self.kwargs.get('pk'))
+        try:
+            url = user.picture.url
+        except ValueError:
+            p = settings.AVATAR_URL.strip('/') + '/' + settings.DEFAULT_AVATAR
+            user.picture = p
+            user.save()
+        return user  # or request.POST
+    
+    def get_context_data(self, **kwargs):
+        context = super(UserProfileUpdateView, self).get_context_data(**kwargs)
+        user = User.objects.get(pk=self.kwargs.get('pk'))
+        position = Position.objects.filter(user=user)
+        last = position.last()
+        (address, city) = mapUtils.get_address_from_latlng(last.geometry.y, last.geometry.x)
+        context['address'] = str(address).split(',')
+        return context
+        

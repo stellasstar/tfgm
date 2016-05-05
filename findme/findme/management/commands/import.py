@@ -14,6 +14,8 @@ from transport.models import (Waypoint, waypoint_mapping,
 
 class Command(BaseCommand):
     help = 'Loads geospatial data from app data directory'
+    
+    # each file is importing a different set of data
     route = 'static/data/weogeo/data/public_transport_line.shp'
     wp = 'static/data/weogeo/data/public_transport_point.shp'
     poly = 'static/data/weogeo/data/public_transport_polygon_polygon.shp'
@@ -23,6 +25,16 @@ class Command(BaseCommand):
         wp_file = os.path.abspath(os.path.join(os.path.join(os.path.dirname(findme.__file__), self.wp)))
         poly_file = os.path.abspath(os.path.join(os.path.join(os.path.dirname(findme.__file__), self.poly)))
 
+        # each LayerMapping object is mapping the data files to its
+        # respective model using the *_mapping object
+        # usage:  LayerMapping(model, file, file to model mapping
+        # transform is False, using the default coordinate system
+        # iso-8859-1 specifies the default ASCII character set
+        # using the latin alphabet in North America, Western Europe, 
+        # and Latin America, the Caribbean, Canada, Africa
+        # more info about iso is at
+        # http://www.w3schools.com/charsets/ref_html_8859.asp
+        
         lm1 = LayerMapping(Waypoint, wp_file, waypoint_mapping,
             transform=False, encoding='iso-8859-1')
         lm1.save(strict=True, verbose=True)

@@ -6,14 +6,59 @@
 {% block body_id %}account{% endblock %}
 
 {% block content %}
+{% if user.is_authenticated %}
+<table align="center" border="0" cellpadding="5" cellspacing="5">
+<tr><td colspan="5" align="center">
+        <h1>Hello {{user.get_full_name}}</h1>
+</td></tr>
+<tr>
+<td colspan="2">
+                {% csrf_token %}
+                {% load crispy_forms_tags %}
+                {% crispy form %}
+         </td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>
+                <table align="center" border="0" cellpadding="5" cellspacing="5">
+        <tr>
+            <td colspan="2" align="center">
 
-        {% if user.is_authenticated %}
-        <h1>Hello {{user.get_full_name}}.</h1>
+                <img class="img-circle" width="150" height="200"
+                                            src={{form.picture.value.url }}/>
+            </td>
+        </tr>
+        <tr><td colspan="2">&nbsp;</td></tr>
+            {% for field in form %}
+                    {% if field.errors %}
+                        {% for error in field.errors %}
+                          <li><a href="#id_{{ field.name }}" class="error">{{ error|escape }}</a></li>
+                        {% endfor %}
+                  {% endif %}
+                  {% if form.non_field_errors %}
+                    {{ form.non_field_errors }}
+                  {% endif %}
+                <tr>
+                {% if field.label == "Picture" %}
+                {% else %}
+                    <td {white-space: nowrap;}>{{ field.label }}&nbsp</td>
+                    <td {white-space: nowrap;}>{{ field.value }}</td>
+                {% endif %}
+                </tr>
+            {% endfor %}
+            <tr><td>Address</td>
+            <td cellpadding='5'>
+            {% for line in address %}
+            {{ line }}<br>
+            {% endfor %}
+            </td></tr>
+            <tr><td colspan="2">&nbsp;</td></tr>
+            <tr><td colspan="2">&nbsp;</td></tr>
 
-        {% csrf_token %}
-        {% load crispy_forms_tags %}
-        {% crispy form %}
-        {% endif %}
-
+             <tr><td colspan="2">&nbsp;</td></tr>
+             <tr><td colspan="2">&nbsp;</td></tr>
+        </table>
+        </td>
+</tr>
+{% endif %}
 
 {% endblock %}

@@ -7,10 +7,11 @@ function initGoogle() {
       data = $.parseJSON(var_json);
       var key = '&key=' + String(data.GOOGLE_KEY);
       var call = '&callback=makeMap';
+      var geom = '&libraries=geometry';
       var script = document.createElement('script');
       script.type = 'text/javascript';
       script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp'
-          + key + call;
+          + key + call + geom;
       document.body.appendChild(script);
       
       if (data.map.includes('canvas')) {
@@ -81,6 +82,7 @@ function makeMap() {
     //place the initial marker
     var marker = new google.maps.Marker({
         position: coords,
+        shadow:'https://chart.googleapis.com/chart?chst=d_map_pin_shadow',
         map: map,
         title: data.name,
         animation: google.maps.Animation.DROP,
@@ -112,11 +114,14 @@ function makeMarkers() {
             // create the marker
             var contentString = name  + '\n' +
                                 String(pos) + '\n';
+            var pin_options ='d_map_pin_letter&chld='+(i + 1)+'|FFFFFF|000000'
+            var pin = 'https://chart.googleapis.com/chart?chst=' + pin_options;
             var waypoint = new google.maps.Marker({
                 position: pos,
                 title: contentString,
-                label: String(i + 1),
-                map: newMap
+                map: newMap,
+                icon: pin,
+                shadow:'https://chart.googleapis.com/chart?chst=d_map_pin_shadow'
             });
             google.maps.event.addListener(waypoint, 'mouseover',
             (function(waypoint, i) {
@@ -143,19 +148,24 @@ function printTransport() {
         }
         var ways= $('.wpitems');
         for (var i = 0; i < end; i++) {
+            var usr_lat = data.latitude;
+            var usr_lng = data.longitude;
             var lat = waypoints.features[i].geometry.coordinates[0][1];
             var lng = waypoints.features[i].geometry.coordinates[0][0];
             var name = waypoints.features[i].properties.name;
+            var usr_pos = new google.maps.LatLng(usr_lat, usr_lng);
             var pos = new google.maps.LatLng(lat, lng);
+            var distance = google.maps.geometry.spherical.computeDistanceBetween(pos, usr_pos); 
             var content = '<div class="expandContent">' +
                           '<a href="#" class="glyphicon glyphicon-triangle-right"></a>' + 
                             (i+1) + "&nbsp;&nbsp;" +
                             name + "&nbsp;&nbsp;" +
-                            lat.toFixed(6) + "&nbsp;&nbsp;" +
-                            lng.toFixed(6) +
+                            distance.toFixed(1) +"&nbsp;m&nbsp;&nbsp;" +
                             '</div>';
             var show = '<div class="showMe">' + 
-                            "This is hidden"
+                            "latitude: &nbsp;&nbsp;" + lat.toFixed(6) + "\n" +
+                            "longitude: &nbsp;&nbsp;" +lng.toFixed(6) + "\n" +
+                            "Comments" +
                             '</div>';
             ways.append(content);
             ways.append(show);
