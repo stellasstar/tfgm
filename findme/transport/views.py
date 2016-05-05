@@ -19,7 +19,7 @@ except ImportError:  # django < 1.5
 else:
     User = get_user_model()
 
-
+# not getting waypoints for search_addres
 class WaypointView(TemplateView):
 
     model = Waypoint
@@ -60,9 +60,10 @@ class WaypointView(TemplateView):
         # into data
         position_dict = position.values()[0]
         geometry = position_dict.pop('geometry')
+        address = position_dict.pop('address')
 
         # get address for location
-        if position_dict['address'] is None:
+        if address is None:
             (address, city) = mapUtils.get_address_from_latlng(geometry.y, 
                                                                geometry.x)
             position_dict['address'] = address
@@ -79,12 +80,25 @@ class WaypointView(TemplateView):
                                           str(settings.DEFAULT_LATITUDE))
                 geometry = geos.fromstr(point)
 
+        if self.request.GET:
+            default_address = address.decode('utf-8').lower()
+            get_search = self.request.GET.get("search_address")
+            search_address = get_search.decode('utf-8').lower()
+            if not search_address in default_address: 
+                (lat, lng, addy) = mapUtils.get_latlng_from_address(search_address)
+                position_dict['address'] = addy
+                data['latitude'] = lat
+                data['longitude'] = lng
+                # default srid used by googlemaps module
+                data['srid'] = 4326
+            else:
+                data['latitude'] = geometry.y
+                data['longitude'] = geometry.x
+                data['srid'] = geometry.srid
+                data['address'] = address
+
         #update data with user positional data
-        data.update(position_dict)
-        data['latitude'] = geometry.y
-        data['longitude'] = geometry.x
-        data['srid'] = geometry.srid
-        data['address'] = str(position_dict['address'])
+        data.update(position_dict)        
         
         # where you want the map to be
         data['map'] = self.map_to_show

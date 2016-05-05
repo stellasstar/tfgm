@@ -49,7 +49,6 @@ INSTALLED_APPS = (
     'gatekeeper',
     'findme',
     'transport',
-    'djgeojson',
 )
 
 MIDDLEWARE_CLASSES = (

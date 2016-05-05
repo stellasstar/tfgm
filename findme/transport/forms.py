@@ -2,11 +2,6 @@ from django import forms
 from transport.models import Position, Waypoint
 
 
-class AddressForm(forms.Form):
-    address = forms.CharField()
-    model = Position
-
-
 class WaypointForm(forms.ModelForm):
     """Form for creating the data that is part of the Waypoint model"""
 

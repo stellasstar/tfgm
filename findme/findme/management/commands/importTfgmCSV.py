@@ -11,8 +11,6 @@ from django.contrib.gis.gdal import SpatialReference, CoordTransform
 from django.contrib.gis.geos import (Point, GEOSGeometry, MultiPoint, 
                                      fromstr, LineString)
 
-from djgeojson.serializers import Serializer as GeoJSONSerializer
-
 from transport.models import Waypoint
 
 #waypoint_mapping = {
@@ -40,9 +38,9 @@ from transport.models import Waypoint
 #}
 
 # AtcoCode,,Easting,Northing,CommonName,Indicator,Bearing,Street,Landmark,NptgLocalityCode,,,StopType,BusStopType,TimingStatus,Status,RevisionNumber,Notes,LocalityCentre,NaptanCode,ShortCommonName,ModificationDate
-#['"1800AMIC001"', '""', '376969', '387893', '"Altrincham Interchange"', '"Nr Train Station"', '"NA"', '"STAMFORD NE
-#W RD"', '"Altrincham Interchange"', '"E0028261"', '""', '""', '"BCS"', '"MKD"', '"TIP"', '"ACT"', '17', '"STOP BB R
-#EMOVED FROM AMIC"', '"Y"', '"MANADADG"', '"Interchange"', '"2014-12-18"\r\n']
+# ['"1800AMIC001"', '""', '376969', '387893', '"Altrincham Interchange"', '"Nr Train Station"', '"NA"', '"STAMFORD NE
+# W RD"', '"Altrincham Interchange"', '"E0028261"', '""', '""', '"BCS"', '"MKD"', '"TIP"', '"ACT"', '17', '"STOP BB R
+# EMOVED FROM AMIC"', '"Y"', '"MANADADG"', '"Interchange"', '"2014-12-18"\r\n']
 
 class Command(BaseCommand):
     help = 'Loads Tfgm geospatial data from app data directory'

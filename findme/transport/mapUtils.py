@@ -1,10 +1,7 @@
 import urllib2
 from django.conf import settings
-from django.core.serializers.json import DjangoJSONEncoder
-from django.db.models import Aggregate, FloatField
-from django.db.models.sql.aggregates import Aggregate as SQLAggregate
 
-from djgeojson.serializers import Serializer as GeoJSONSerializer
+from django.core.serializers import serialize as GeoJSONSerializer
 from django.contrib.gis.geos import fromstr, GEOSGeometry
 from django.contrib.gis.measure import D
 from django.contrib.gis.gdal import SpatialReference, CoordTransform
@@ -26,10 +23,11 @@ def get_latlng_from_address(a):
         result = gmap.geocode(address)
         lat = result[0]['geometry']['location']['lat']
         lng = result[0]['geometry']['location']['lng']
+        addy = result[0]['formatted_address']
     except (urllib2.URLError, urllib2.HTTPError):
         return None
     else:
-        return (lat, lng)
+        return (lat, lng, addy)
 
 
 def get_address_from_latlng(lat, lng):
@@ -61,6 +59,6 @@ def find_waypoints(lat, lon):
     # trying to annotate distance
     waypoints.distance(user_location).order_by('distance')
         
-    geojson_data = GeoJSONSerializer().serialize(
-        waypoints, use_natural_keys=True)
+    geojson_data = GeoJSONSerializer('geojson',
+        waypoints, geometry_field='geom')
     return geojson_data, user_location
