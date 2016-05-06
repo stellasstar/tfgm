@@ -136,7 +136,7 @@ class LogOutView(LoginRequiredMixin, RedirectView):
 
     def get(self, request, *args, **kwargs):
         msg = "You are logged out."
-        messages.success(self.request, msg)        
+        messages.success(self.request, msg)
         logout(request)
         return super(LogOutView, self).get(request, *args, **kwargs)
 

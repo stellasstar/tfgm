@@ -3,8 +3,10 @@ import simplejson
 from django.views.generic import ListView
 from django.views.generic.base import TemplateView
 from django.shortcuts import get_object_or_404
-
 from django.http import HttpResponseNotFound
+
+from django.contrib.gis import geos
+from django.contrib import messages
 from django.conf import settings
 
 from transport.forms import WaypointForm
@@ -19,7 +21,8 @@ except ImportError:  # django < 1.5
 else:
     User = get_user_model()
 
-# not getting waypoints for search_addres
+# not getting waypoints for search_address
+# need to implement session stuff for persistance
 class WaypointView(TemplateView):
 
     model = Waypoint
@@ -36,31 +39,28 @@ class WaypointView(TemplateView):
         """
         context = super(WaypointView, self).get_context_data(**kwargs)
         username = self.kwargs.get('username')
-        position = self.kwargs.get('position')
         data = {}
 
         if username:
             user = get_object_or_404(User, username=username)
         elif self.request.user.is_authenticated():
             user = self.request.user
+            searched = self.request.session.get('searched', None)
+            if searched is None or searched is False:
+                position = Position.objects.filter(user=user).last()
+                self.request.session['searched'] = False
+            else:
+                position = Position.objects.filter(user=user).last()
         else:
-            raise HttpResponseNotFound
-            # Case where user gets to this view
-            # anonymously for non-existent user
-
-        if user.is_authenticated():
-            position = Position.objects.filter(user=user)
-        else:
-            raise HttpResponseNotFound
-
-        position_dict = position.values()[0]
-        name = position_dict.get('name')
-
+            user = User
+        context['user'] = user
+        
         # geometry is a gis object.  need to pop out for easier import
         # into data
         position_dict = position.values()[0]
         geometry = position_dict.pop('geometry')
         address = position_dict.pop('address')
+        name = position_dict.get('name')        
 
         # get address for location
         if address is None:
@@ -73,32 +73,41 @@ class WaypointView(TemplateView):
         if ((geometry is None) or(geometry.x is None) or (geometry.y is None)):
             try:            
                 (lat, lng) = mapUtils.get_latlng_from_address(address)
-                point = "POINT(%s %s)" % (str(lng), str(lat))
-                geometry = geos.fromstr(point)
+                geometry = geos.fromstr("POINT(%s %s)" % (
+                                            str(lng), str(lat)))
             except:
                 point = "POINT(%s %s)" % (str(settings.DEFAULT_LONGITUDE), 
                                           str(settings.DEFAULT_LATITUDE))
                 geometry = geos.fromstr(point)
 
+        # searching for the information in the address search bar
         if self.request.GET:
+            self.request.session['searched'] = True
             default_address = address.decode('utf-8').lower()
             get_search = self.request.GET.get("search_address")
             search_address = get_search.decode('utf-8').lower()
             if not search_address in default_address: 
-                (lat, lng, addy) = mapUtils.get_latlng_from_address(search_address)
-                position_dict['address'] = addy
-                data['latitude'] = lat
-                data['longitude'] = lng
-                # default srid used by googlemaps module
-                data['srid'] = 4326
-            else:
-                data['latitude'] = geometry.y
-                data['longitude'] = geometry.x
-                data['srid'] = geometry.srid
-                data['address'] = address
+                try:
+                    (lat, lng, address, city) = mapUtils.get_latlng_from_address(
+                                                search_address)
+                    position_dict['address'] = address
+                    geometry = geos.fromstr("POINT(%s %s)" % (
+                                            str(lng), str(lat)))
+                    position.geometry = geometry
+                    position.address = address
+                    position.city = city
+                    self.request.session['position'] = position
+                except Exception as e:
+                    exc = "Exception: " + str(e)
+                    msg = "Can't find search address. " + search_address
+                    messages.error(self.request, msg)
+                    messages.add_message(self.request, messages.ERROR, exc)
 
         #update data with user positional data
-        data.update(position_dict)        
+        data.update(position_dict)
+        data['latitude'] = geometry.y
+        data['longitude'] = geometry.x
+        data['srid'] = geometry.srid        
         
         # where you want the map to be
         data['map'] = self.map_to_show
@@ -113,7 +122,6 @@ class WaypointView(TemplateView):
         context['waypoints'] = waypoints
         context['position'] = position_dict
         context['name'] = name
-        context['user'] = user
         context['user_location'] = user_location
 
         return context

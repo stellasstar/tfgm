@@ -24,10 +24,11 @@ def get_latlng_from_address(a):
         lat = result[0]['geometry']['location']['lat']
         lng = result[0]['geometry']['location']['lng']
         addy = result[0]['formatted_address']
+        city = result[0]['address_components'][4]['long_name']
     except (urllib2.URLError, urllib2.HTTPError):
         return None
     else:
-        return (lat, lng, addy)
+        return (lat, lng, addy, city)
 
 
 def get_address_from_latlng(lat, lng):

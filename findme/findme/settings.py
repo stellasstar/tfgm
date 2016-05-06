@@ -143,6 +143,8 @@ TEMPLATES = [
     },
 ]
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 LOGIN_REDIRECT_URL = '/'
 
 # URL of the login page.

@@ -35,6 +35,15 @@
                 <input type="submit" name="submit" value="Address" />
             </form>
             </td></tr>
+            <tr><td colspan="2" align="center">
+                 {% if messages %}
+        <div class="text-danger"><b>
+            {% for message in messages %}
+                    <p>{{ message }}</p>
+            {% endfor %}
+        </b></div>
+     {% endif %}
+            </td></tr>
             <tr><td colspan="2">&nbsp;</td></tr>
             <tr><td colspan="2" align="center" id="wrapper"><i>
                 Click the allow button to let the browser show your map.

@@ -142,7 +142,7 @@ function printTransport() {
         //alert("This is the printTransport.");
         var end = waypoints.features.length;
         if (end > 0) {
-            $(".wp_header").html("...Transport Links...\n");
+            $(".wp_header").html("...Transport Links...(in meters)\n");
         } else {
             $(".wp_header").html("Finding Transport Links... \n");
         }
