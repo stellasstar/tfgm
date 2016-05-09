@@ -156,20 +156,26 @@ function printTransport() {
             var usr_pos = new google.maps.LatLng(usr_lat, usr_lng);
             var pos = new google.maps.LatLng(lat, lng);
             var distance = google.maps.geometry.spherical.computeDistanceBetween(pos, usr_pos); 
-            var content = '<div class="expandContent">' +
-                          '<a href="#" class="glyphicon glyphicon-triangle-right"></a>' + 
-                            (i+1) + "&nbsp;&nbsp;" +
-                            name + "&nbsp;&nbsp;" +
-                            distance.toFixed(1) +"&nbsp;m&nbsp;&nbsp;" +
-                            '</div>';
-            var show = '<div class="showMe">' + 
-                            "latitude: &nbsp;&nbsp;" + lat.toFixed(6) + "\n" +
-                            "longitude: &nbsp;&nbsp;" +lng.toFixed(6) + "\n" +
-                            "Comments" +
-                            '</div>';
+            
+            var content = $("<div>");
+            content.addClass("expandContent");
+            var a = $('<a href="#">');
+            a.addClass("glyphicon glyphicon-triangle-right");
+            content.append(a);
+            content.append((i+1) + "&nbsp;&nbsp;");
+            content.append(name + "&nbsp;&nbsp;");
+            content.append(distance.toFixed(1) +"&nbsp;m&nbsp;&nbsp;");
+            //alert($(content).html());
+            
+            var show = $("<div>");
+            show.addClass('showMe');
+            show.append("latitude: &nbsp;&nbsp;" + lat.toFixed(6) + "\n");
+            show.append("longitude: &nbsp;&nbsp;" +lng.toFixed(6) + "\n");
+            show.append("Comments"); 
             ways.append(content);
             ways.append(show);
         }
+        // jquery to create peek a boo code, where showMe hides when not needed
         $('.expandContent').click(function() {
             $(this).next('.showMe').slideToggle('slow');
         });

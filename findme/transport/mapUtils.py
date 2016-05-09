@@ -11,10 +11,6 @@ from django.contrib.gis.db.models.functions import Distance
 import googlemaps, json
 from transport.models import Waypoint
 
-# Specify the original srid of your data
-orig_srid = 4326
-
-
 def get_latlng_from_address(a):
     gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
     address = u'%s' % (a)
@@ -47,8 +43,11 @@ def find_waypoints(lat, lon):
     """
     Given a given lat/long pair, return the waypoint(s) surrounding it.
     """
-    user_location = fromstr('POINT(%s %s)' % (lon, lat), srid=4326)
-    ct = CoordTransform(SpatialReference("4326"), SpatialReference("3857"))
+    user_location = fromstr('POINT(%s %s)' % (lon, lat),
+                            srid=settings.US_DOD_GPS)
+    ct = CoordTransform(
+            SpatialReference(settings.US_DOD_GPS),
+            SpatialReference(settings.WEB_MERCATOR_STANDARD))
     user_location.transform(ct)
     radius = 350
     area = (user_location, D(km=0.35))

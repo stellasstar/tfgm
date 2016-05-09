@@ -18,51 +18,69 @@
 
         {% if user.is_authenticated %}
 
-        <table align="center" border="0" cellpadding="5" cellspacing="5">
-        <tr><td colspan="2" align="center"><h1>Hello {{user.get_full_name}}</h1></td></tr>
-        <tr><td colspan="2" align="center">
+        <div class="container" align="center">
+        <div class="row">
+
+        <div class="col-xs-12"><h1>Hello {{user.get_full_name}}</h1></div>
 
         {% else %}
-        <table align="center" border="0" cellpadding="5" cellspacing="5">
-        <tr><td colspan="2" align="center"><h1>Hello Any Mouse</h1></td></tr>
-        <tr><td colspan="2" align="center">
+
+        <div class="container" align="center">
+        <div class="row">
+
+        <div class="col-xs-12"><h1>Any Mouse</h1></div>
 
         {% endif %}
-
-            <form method="get" action="">
-                <input type="text" name="search_address" id="search_address" 
-                       value=""/>
-                <input type="submit" name="submit" value="Address" />
-            </form>
-            </td></tr>
-            <tr><td colspan="2" align="center">
-                 {% if messages %}
-        <div class="text-danger"><b>
-            {% for message in messages %}
-                    <p>{{ message }}</p>
-            {% endfor %}
-        </b></div>
-     {% endif %}
-            </td></tr>
-            <tr><td colspan="2">&nbsp;</td></tr>
-            <tr><td colspan="2" align="center" id="wrapper"><i>
-                Click the allow button to let the browser show your map.
-            </i></td></tr>
-             <tr>
-                <td>
-                <div id={{map}}></div>
-                </td>
-                <td><table cellpadding="4" id="waypoints">
-                <tr><td>
+        
+        <div class="col-xs-12"> 
+        
+        <form method="get" action="">
+          <div class="col-lg-offset-3 col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <button type="submit">
+                        <span class="glyphicon glyphicon-home"></span>
+                    </button>
+                </span>
+              <input type="text" class="form-control" name="search_address" 
+                     id="search_address" value=""/>
+                <span class="input-group-addon">
+                    <button type="submit">
+                    <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </span>
+             </div>
+          </div>
+        </form> 
+        <br> <br>
+            {% if messages %}
+            <div class="text-danger" ><b>
+                {% for message in messages %}
+                        <p align="center">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+            </b></div>
+        </div>
+        <div class="col-xs-12">
+          <i>
+              Click the allow button to let the browser show your map.
+          </i>
+          <div>&nbsp;</div>
+        </div>
+        <div class="col-xs-12" align="center">
+            <div class="col-xs-6" id={{map}}></div>
+            <div class="col-xs-4 waypoints"> 
                 <div class="wp_header" align="center">Finding Transport Links...</div>
-                <div class="wpitems"></div>
-                
-             </td></tr></table></td>
-             </tr>
-             <tr><td colspan="2">&nbsp;</td></tr>
-             <tr><td colspan="2">&nbsp;</td></tr>
-        </table>
-{{waypoints}}
+                <div class="wpitems" align="left"></div>
+            </div>
+        </div>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+        <div class="col-xs-12">
+        <!-- {{waypoints}} -->
+        </div>
+  </div> <!-- row -->
+</div> <!-- container -->
 {% endblock %}
 
 

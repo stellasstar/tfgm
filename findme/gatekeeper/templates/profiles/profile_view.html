@@ -17,56 +17,50 @@
                 var var_json = '{{ json_data|escapejs }}';
         </script>
 
-        <table align="center" border="0" cellpadding="5" cellspacing="5">
-        <tr><td colspan="2" align="center"><h1>Hello {{user.get_full_name}}</h1></td></tr>
+<div class="container" align="center">
+<div class="row">
 
-        <tr>
-            <td colspan="2" align="center">
+  <div class="col-xs-12"> <h1>Hello {{user.get_full_name}}</h1></div>
+  <div class="col-xs-12"><img class="img-circle" width="150" height="200"
+                 src={{form.picture.value.url }}/> </div>
+   
+    <div class="col-xs-12"> <!-- form -->
+        {% for field in form %}
+              {% if field.errors %}
+                  {% for error in field.errors %}
+                    <li><a href="#id_{{ field.name }}" class="error">{{ error|escape }}</a></li>
+                  {% endfor %}
+            {% endif %}
+            {% if form.non_field_errors %}
+              {{ form.non_field_errors }}
+            {% endif %}
+          {% if field.label == "Picture" %}
+          {% else %}
+              <div class="col-xs-6" align="right">{{ field.label }}</div>
+              <div class="col-xs-6" align="left">{{ field.value }}&nbsp;</div>
+          {% endif %}
+      {% endfor %}
+        <div class="col-xs-4 col-sm-6" align="right">
+              Address </div>
+        <div class="col-xs-4 col-sm-6">
+           <address align="left">
+                  {% for line in address %}
+                  {{ line }}<br>
+                  {% endfor %}
+            </address>
+        </div>
+      </div> <!-- form -->
+      
+        <div class="col-xs-12">
+          <i>
+              Click the allow button to let the browser show your map.
+          </i>
+          <div>&nbsp;</div>
+        </div>
+        <div id={{map}}></div>
+  </div> <!-- row -->
+</div> <!-- container -->
 
-                <img class="img-circle" width="150" height="200"
-                                            src={{form.picture.value.url }}/>
-
-            </td>
-        </tr>
-        <tr><td colspan="2">&nbsp;</td></tr>
-            {% for field in form %}
-                    {% if field.errors %}
-                        {% for error in field.errors %}
-                          <li><a href="#id_{{ field.name }}" class="error">{{ error|escape }}</a></li>
-                        {% endfor %}
-                  {% endif %}
-                  {% if form.non_field_errors %}
-                    {{ form.non_field_errors }}
-                  {% endif %}
-                <tr>
-                {% if field.label == "Picture" %}
-                {% else %}
-                    <td {white-space: nowrap;}>{{ field.label }}&nbsp</td>
-                    <td {white-space: nowrap;}>{{ field.value }}</td>
-                {% endif %}
-                </tr>
-            {% endfor %}
-            <tr><td>Address</td>
-            <td cellpadding='5'>
-            {% for line in address %}
-            {{ line }}<br>
-            {% endfor %}
-            </td></tr>
-            <tr><td colspan="2">&nbsp;</td></tr>
-            <tr><td colspan="2">&nbsp;</td></tr>
-            <tr><td colspan="2" align="center" id="wrapper"><i>
-                Click the allow button to let the browser show your map.
-            </i></td></tr>
-             <tr>
-                <td colspan="2" align="center">
-                <div id={{map}}>
-                </div>
-                </td>
-             </tr>
-             <tr><td colspan="2">&nbsp;</td></tr>
-             <tr><td colspan="2">&nbsp;</td></tr>
-        </table>
-
-        {% endif %}
+{% endif %}
 {% endblock %}
 

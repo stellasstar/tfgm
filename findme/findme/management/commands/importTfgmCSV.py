@@ -57,18 +57,21 @@ class Command(BaseCommand):
     
     def handle(self, *args, **options):
         wp_file = os.path.abspath(os.path.join(os.path.join(
-                      os.path.dirname(findme.__file__), self.wp)))        
+                      os.path.dirname(findme.__file__), self.wp)))
         f = open(wp_file, 'r');
-        bng = CoordTransform(SpatialReference("27700"), 
-                             SpatialReference("4326"))
-        web_transform = CoordTransform(SpatialReference("4326"), 
-                        SpatialReference("3857"))        
+        bng = CoordTransform(
+                SpatialReference(settings.BRITISH_NATIONAL_GRID),
+                SpatialReference(settings.US_DOD_GPS))
+        web_transform = CoordTransform(
+                            SpatialReference(settings.US_DOD_GPS),
+                            SpatialReference(settings.WEB_MERCATOR_STANDARD))
         for line in f:
             words = line.split(",");
             w = Waypoint.objects.create()
             easting = words[2]
             northing = words[3]
-            location = fromstr('POINT(%s %s)' % (easting, northing), srid=27700)
+            location = fromstr('POINT(%s %s)' % (easting, northing),
+                               srid=settings.BRITISH_NATIONAL_GRID)
             location.transform(bng)
             location.transform(web_transform)
             w.geom = MultiPoint(location)

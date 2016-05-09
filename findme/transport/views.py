@@ -21,8 +21,8 @@ except ImportError:  # django < 1.5
 else:
     User = get_user_model()
 
-# not getting waypoints for search_address
-# need to implement session stuff for persistance
+
+# home button in search address is not working
 class WaypointView(TemplateView):
 
     model = Waypoint
@@ -31,8 +31,52 @@ class WaypointView(TemplateView):
     form_class = WaypointForm
     map_to_show = 'map_canvas'
     GOOGLE_KEY = settings.GOOGLE_API_KEY
+    
+    def get_inital_user_data(self):
+
+        data = {}
+        position = Position.objects.filter(user=self.request.user).last()
+        
+        geometry = position.geometry
+
+        # get address for location
+        if position.address is None:
+            (address, city) = mapUtils.get_address_from_latlng(geometry.y,
+                                                               geometry.x)
+            data['address'] = address
+            data['city'] = city
+        else:
+            data['address'] = position.address
+            data['city'] = position.city
+
+        # need to fix this, but if there is an addresss but no coordinate info
+        if ((geometry is None) or(geometry.x is None) or (geometry.y is None)):
+            try:            
+                (lat, lng) = mapUtils.get_latlng_from_address(address)
+                data['latitude'] = lat
+                data['longitude'] = lng
+            except:
+                msg = "Can't find coordinates, setting to default"
+                messages.error(self.request, msg)
+                data['latitude'] = settings.DEFAULT_LONGITUDE
+                data['longitude'] = settings.DEFAULT_LATITUDE
+        else:
+            data['latitude'] = geometry.y
+            data['longitude'] = geometry.x
+
+        data['srid'] = geometry.srid
+        data['name'] = position.name
+
+        # where you want the map to be
+        data['map'] = self.map_to_show
+        data['GOOGLE_KEY'] = self.GOOGLE_KEY
+        
+        # populate the initial session data
+        self.request.session['data'] = data
+        return data
 
     def get_context_data(self, **kwargs):
+
         """
         Load up the default data to
         show in the display form.
@@ -47,82 +91,45 @@ class WaypointView(TemplateView):
             user = self.request.user
             searched = self.request.session.get('searched', None)
             if searched is None or searched is False:
-                position = Position.objects.filter(user=user).last()
-                self.request.session['searched'] = False
+                data = self.get_inital_user_data()
             else:
-                position = Position.objects.filter(user=user).last()
+                data = self.request.session.get('data')
         else:
             user = User
         context['user'] = user
-        
-        # geometry is a gis object.  need to pop out for easier import
-        # into data
-        position_dict = position.values()[0]
-        geometry = position_dict.pop('geometry')
-        address = position_dict.pop('address')
-        name = position_dict.get('name')        
-
-        # get address for location
-        if address is None:
-            (address, city) = mapUtils.get_address_from_latlng(geometry.y, 
-                                                               geometry.x)
-            position_dict['address'] = address
-            position_dict['city'] = city
-
-        # need to fix this, but if there is an addresss but no coordinate info
-        if ((geometry is None) or(geometry.x is None) or (geometry.y is None)):
-            try:            
-                (lat, lng) = mapUtils.get_latlng_from_address(address)
-                geometry = geos.fromstr("POINT(%s %s)" % (
-                                            str(lng), str(lat)))
-            except:
-                point = "POINT(%s %s)" % (str(settings.DEFAULT_LONGITUDE), 
-                                          str(settings.DEFAULT_LATITUDE))
-                geometry = geos.fromstr(point)
 
         # searching for the information in the address search bar
+        # home button in search address is not working
         if self.request.GET:
             self.request.session['searched'] = True
-            default_address = address.decode('utf-8').lower()
+            default_address = data['address'].decode('utf-8').lower()
             get_search = self.request.GET.get("search_address")
             search_address = get_search.decode('utf-8').lower()
             if not search_address in default_address: 
                 try:
                     (lat, lng, address, city) = mapUtils.get_latlng_from_address(
                                                 search_address)
-                    position_dict['address'] = address
-                    geometry = geos.fromstr("POINT(%s %s)" % (
-                                            str(lng), str(lat)))
-                    position.geometry = geometry
-                    position.address = address
-                    position.city = city
-                    self.request.session['position'] = position
+                    data['latitude'] = lat
+                    data['longitude'] = lng
+                    data['address'] = address
+                    data['city'] = city
+                    self.request.session['data'] = data
                 except Exception as e:
                     exc = "Exception: " + str(e)
                     msg = "Can't find search address. " + search_address
                     messages.error(self.request, msg)
                     messages.add_message(self.request, messages.ERROR, exc)
+                    data = self.request.session['data']
 
-        #update data with user positional data
-        data.update(position_dict)
-        data['latitude'] = geometry.y
-        data['longitude'] = geometry.x
-        data['srid'] = geometry.srid        
-        
-        # where you want the map to be
-        data['map'] = self.map_to_show
-        data['GOOGLE_KEY'] = self.GOOGLE_KEY
         context['map'] = self.map_to_show
 
         # get waypoint data
-        waypoints, user_location = mapUtils.find_waypoints(geometry.y, geometry.x)
+        waypoints, user_location = mapUtils.find_waypoints(data['latitude'],
+                                                           data['longitude'])
 
         cls = simplejson.JSONEncoderForHTML
         context['json'] = simplejson.dumps(data, cls=cls)
         context['waypoints'] = waypoints
-        context['position'] = position_dict
-        context['name'] = name
-        context['user_location'] = user_location
 
         return context
 

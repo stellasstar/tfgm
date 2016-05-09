@@ -8,7 +8,7 @@ from django.conf import settings
 
 from django.contrib.gis import geos
 
-import simplejson
+import simplejson, logging
 
 # image processing
 from PIL import Image
@@ -110,11 +110,12 @@ class LoginView(FormView):
         password = form.cleaned_data['password']
         user = authenticate(username=username, password=password)        
         if user is None:
-            print "Invalid login details were provided"
-            print "We can't log the user in"
+            logging.warning("Invalid login details were provided")
+            logging.warning("We can't log the user in")
             msg = 'Invalid login details supplied.'
             messages.add_message(self.request, messages.ERROR, msg)
         elif not user.is_active:
+            logging.warning("Disabled login details were provided")
             msg = 'Your account is disabled.'
             messages.add_message(self.request, messages.ERROR, msg)
         return super(LoginView, self).form_invalid(form)

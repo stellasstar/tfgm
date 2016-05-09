@@ -65,7 +65,7 @@ class Position(gis_models.Model):
 
 # This is an auto-generated Django model module created by ogrinspect.
 # python manage.py ogrinspect findme/static/data/waypoints-new-zealand.gpx \
-# Waypoint --srid=4326 --mapping --multi
+# Waypoint --srid=3857 --mapping --multi
 
 class Waypoint(gis_models.Model):
     osm_id = gis_models.FloatField(null=True, blank=True)
@@ -88,7 +88,8 @@ class Waypoint(gis_models.Model):
     covered = gis_models.CharField(max_length=254, null=True, blank=True)
     area = gis_models.CharField(max_length=254, null=True, blank=True)
     z_order = gis_models.FloatField(null=True, blank=True)
-    geom = gis_models.MultiPointField(blank=True, null=True, srid=3857)
+    geom = gis_models.MultiPointField(blank=True, null=True, 
+                                      srid=settings.WEB_MERCATOR_STANDARD)
     indicator = gis_models.CharField(max_length=254, null=True, blank=True)
 
     objects = gis_models.GeoManager()

@@ -1,6 +1,5 @@
 #map_canvas {
         height: 400px;
-        width: 600px;
         margin-top: 30px;
         margin-right: 30px;
         margin-bottom: 30px;
@@ -20,15 +19,27 @@
         box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
 }
 
-#search_address {
-        width:100%;
-        max-width:500px; 
-        height:40px;
+.stylish-input-group .input-group-addon{
+    border:0;
+    height:40px;
+    background: white !important;
+}
+.stylish-input-group #search_address{
+    border:0;
+    background:transparent;
+}
+.stylish-input-group #home_address{
+    border:0;
+    background:transparent;
+    width:0px; 
+    height:40px;
+}
+.stylish-input-group button{
+    border:0;
+    background:transparent;
 }
 
-#waypoints {
-        width:100%;
-        max-width: 300px; 
+.waypoints {
         max-height: 400px; 
         margin-top: 30px;
         margin-right: 30px;

@@ -7,58 +7,50 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<table align="center" border="0" cellpadding="5" cellspacing="5">
-<tr><td colspan="5" align="center">
-        <h1>Hello {{user.get_full_name}}</h1>
-</td></tr>
-<tr>
-<td colspan="2">
-                {% csrf_token %}
-                {% load crispy_forms_tags %}
-                {% crispy form %}
-         </td>
-        <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-        <td>
-                <table align="center" border="0" cellpadding="5" cellspacing="5">
-        <tr>
-            <td colspan="2" align="center">
-
-                <img class="img-circle" width="150" height="200"
-                                            src={{form.picture.value.url }}/>
-            </td>
-        </tr>
-        <tr><td colspan="2">&nbsp;</td></tr>
-            {% for field in form %}
-                    {% if field.errors %}
-                        {% for error in field.errors %}
-                          <li><a href="#id_{{ field.name }}" class="error">{{ error|escape }}</a></li>
-                        {% endfor %}
-                  {% endif %}
-                  {% if form.non_field_errors %}
-                    {{ form.non_field_errors }}
-                  {% endif %}
-                <tr>
-                {% if field.label == "Picture" %}
-                {% else %}
-                    <td {white-space: nowrap;}>{{ field.label }}&nbsp</td>
-                    <td {white-space: nowrap;}>{{ field.value }}</td>
-                {% endif %}
-                </tr>
-            {% endfor %}
-            <tr><td>Address</td>
-            <td cellpadding='5'>
+<div class="container" align="center">
+<div class="row" align="center">
+  <div class="col-sm-9" align="center">
+    <h1>Hello {{user.get_full_name}}</h1>
+    <div class="row">
+      <div class="col-xs-4 col-sm-4" align="left">
+            {% load crispy_forms_tags %}
+            {% crispy form %}
+      </div>
+      <div class="col-xs-4 col-sm-4">
+      <p align="center">
+        <img class="img-circle" width="150" height="200"
+                 src={{form.picture.value.url }}/> 
+      </p>
+        {% for field in form %}
+              {% if field.errors %}
+                  {% for error in field.errors %}
+                    <li><a href="#id_{{ field.name }}" class="error">{{ error|escape }}</a></li>
+                  {% endfor %}
+            {% endif %}
+            {% if form.non_field_errors %}
+              {{ form.non_field_errors }}
+            {% endif %}
+          {% if field.label == "Picture" %}
+          {% else %}
+              <div class="col-xs-4 col-sm-6" align="left">{{ field.label }}</div>
+              <div class="col-xs-4 col-sm-6" align="left">{{ field.value }}&nbsp;</div>
+          {% endif %}
+      {% endfor %}
+      <div class="col-xs-4 col-sm-6" align="left">
+       Address </div>
+       <div class="col-xs-4 col-sm-6">
+     <address align="left">
             {% for line in address %}
             {{ line }}<br>
             {% endfor %}
-            </td></tr>
-            <tr><td colspan="2">&nbsp;</td></tr>
-            <tr><td colspan="2">&nbsp;</td></tr>
+      </address>
+      </div>
+      </div>
+    </div>
+  </div> <!-- row -->
+</div> <!-- container -->
 
-             <tr><td colspan="2">&nbsp;</td></tr>
-             <tr><td colspan="2">&nbsp;</td></tr>
-        </table>
-        </td>
-</tr>
+
 {% endif %}
 
 {% endblock %}
