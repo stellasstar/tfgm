@@ -1,26 +1,27 @@
-from django.views.generic.base import TemplateView
+import logging
+
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect, get_object_or_404
-from django.http import HttpResponseNotFound, HttpResponse, HttpResponseRedirect
-from django.contrib import messages
-from django.conf import settings
-
 from django.contrib.gis import geos
-
-import simplejson, logging
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseNotFound
+from django.shortcuts import redirect, get_object_or_404
+from django.views.generic import CreateView, RedirectView, UpdateView
+from django.views.generic.base import TemplateView
+from django.views.generic.edit import FormView
 
 # image processing
 from PIL import Image
 
-from django.views.generic.edit import FormView
-from django.core.urlresolvers import reverse
-from django.views.generic import CreateView, RedirectView, UpdateView
+import simplejson
+
 from gatekeeper import forms, utils
 from transport.models import Position
 from transport import mapUtils
 
-from django.contrib.auth import authenticate, login, logout
 
 # import custom user model
 try:
@@ -108,7 +109,7 @@ class LoginView(FormView):
     def form_invalid(self, form):
         username = form.cleaned_data['username']
         password = form.cleaned_data['password']
-        user = authenticate(username=username, password=password)        
+        user = authenticate(username=username, password=password)
         if user is None:
             logging.warning("Invalid login details were provided")
             logging.warning("We can't log the user in")
@@ -154,16 +155,16 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
     redirect_field_name = 'redirect_to'
     map_to_show = 'defaultPositionMap'
     GOOGLE_KEY = settings.GOOGLE_API_KEY
-    
+
     def get_object(self):
         user = User.objects.get(pk=self.kwargs.get('pk'))
         try:
-            url = user.picture.url
+            user.picture.url
         except ValueError:
             p = settings.AVATAR_URL.strip('/') + '/' + settings.DEFAULT_AVATAR
             user.picture = p
             user.save()
-        return user  # or request.POST    
+        return user  # or request.POST
 
     def get_context_data(self, **kwargs):
         """
@@ -208,8 +209,8 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
         # need to fix this, but if there is an addresss but no coordinate info
         if ((geometry is None) or(geometry.x is None) or (geometry.y is None)):
             try:
-                (lat, lng) = mapUtils.get_latlng_from_address(address)
-                point = "POINT(%s %s)" % (str(lng), str(lat))
+                results = mapUtils.get_latlng_from_address(address)
+                point = "POINT(%s %s)" % (str(results[1]), str(results[0]))
                 geometry = geos.fromstr(point)
             except:
                 point = "POINT(%s %s)" % (str(settings.DEFAULT_LONGITUDE),
@@ -251,19 +252,19 @@ class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
     def get_object(self):
         user = User.objects.get(pk=self.kwargs.get('pk'))
         try:
-            url = user.picture.url
+            user.picture.url
         except ValueError:
             p = settings.AVATAR_URL.strip('/') + '/' + settings.DEFAULT_AVATAR
             user.picture = p
             user.save()
         return user  # or request.POST
-    
+
     def get_context_data(self, **kwargs):
         context = super(UserProfileUpdateView, self).get_context_data(**kwargs)
         user = User.objects.get(pk=self.kwargs.get('pk'))
-        position = Position.objects.filter(user=user)
-        last = position.last()
-        (address, city) = mapUtils.get_address_from_latlng(last.geometry.y, last.geometry.x)
+        position = Position.objects.filter(user=user).last()
+        lat = position.geometry.y
+        lng = position.geometry.x
+        (address, city) = mapUtils.get_address_from_latlng(lat, lng)
         context['address'] = str(address).split(',')
         return context
-        

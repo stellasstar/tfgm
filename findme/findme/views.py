@@ -1,12 +1,13 @@
-from findme.forms import ContactForm
-from django.views.generic.base import TemplateView
+
 from django.conf import settings
 from django.core.mail import send_mail
-from django.views.generic import FormView
 from django.http import HttpResponseNotFound
-
+from django.views.generic.base import TemplateView
+from django.views.generic import FormView
 from django.template import Context
 from django.template.loader import get_template, TemplateDoesNotExist
+
+from findme.forms import ContactForm
 
 
 def handler404(request, template_name='404.html'):

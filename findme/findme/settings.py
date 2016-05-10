@@ -195,7 +195,7 @@ handler404 = 'views.handler404'
 
 # using 2 different coordinate transformation systems for better accuracy
 # 27700 corresponds to the British National Grid coordinate system
-# 4326 corresponds to the U.S. Department of Defense, and is the 
+# 4326 corresponds to the U.S. Department of Defense, and is the
 #     standard used by the Global Positioning System (GPS)
 # 3857 corresponds to Web Mercator and is the standard for Web
 #     mapping applications

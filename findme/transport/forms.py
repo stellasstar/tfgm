@@ -1,5 +1,5 @@
 from django import forms
-from transport.models import Position, Waypoint
+from transport.models import Waypoint
 
 
 class WaypointForm(forms.ModelForm):

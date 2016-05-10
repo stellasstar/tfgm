@@ -1,12 +1,12 @@
 from django.test import TestCase, SimpleTestCase
 from django.test.client import RequestFactory
 
+from pip.req import parse_requirements
+import pkg_resources
+
 from findme import urls
 
 from .views import handler404
-
-from pip.req import parse_requirements
-import pkg_resources
 
 
 class TestErrorPages(TestCase):
@@ -20,7 +20,10 @@ class TestErrorPages(TestCase):
         self.assertIn('404 Not Found!!', unicode(response))
 
 
-#from 10 self service
+# from 10 self service need to fix for this
+# look into this
+# http://stackoverflow.com/questions/1646468/
+# how-to-run-django-unit-tests-on-production-database/1648881#1648881
 class TestRequirements(SimpleTestCase):
 
     ignore = set((
@@ -40,7 +43,8 @@ class TestRequirements(SimpleTestCase):
         #   dependencies - for example, if we removed django-redis we might
         #   want to remove redis
 
-        requirements = parse_requirements('requirements.txt', session=self.requests.Session())
+        requirements = parse_requirements('requirements.txt',
+                                          session=self.requests.Session())
         packages_a = set(p.name for p in requirements) - self.ignore
 
         setup_py = pkg_resources.require('ten-self-service[test,docs]')
@@ -63,14 +67,8 @@ class TestRequirements(SimpleTestCase):
         self.assertEqual(packages_a - packages_b, set())
 
 
-class TestManage(TestCase):
-
-    def test_main(self):
-        manage.main(["--help"])
-
-
-class TestCase(test.TestCase):
+class TestCase(TestCase):
 
     @classmethod
     def flush_cache(cls):
-        cache.clear()
+        cls.cache.clear()

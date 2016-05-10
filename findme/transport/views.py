@@ -3,9 +3,7 @@ import simplejson
 from django.views.generic import ListView
 from django.views.generic.base import TemplateView
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponseNotFound
 
-from django.contrib.gis import geos
 from django.contrib import messages
 from django.conf import settings
 
@@ -31,12 +29,12 @@ class WaypointView(TemplateView):
     form_class = WaypointForm
     map_to_show = 'map_canvas'
     GOOGLE_KEY = settings.GOOGLE_API_KEY
-    
+
     def get_inital_user_data(self):
 
         data = {}
         position = Position.objects.filter(user=self.request.user).last()
-        
+
         geometry = position.geometry
 
         # get address for location
@@ -51,10 +49,12 @@ class WaypointView(TemplateView):
 
         # need to fix this, but if there is an addresss but no coordinate info
         if ((geometry is None) or(geometry.x is None) or (geometry.y is None)):
-            try:            
-                (lat, lng) = mapUtils.get_latlng_from_address(address)
-                data['latitude'] = lat
-                data['longitude'] = lng
+            try:
+                results = mapUtils.get_latlng_from_address(data['address'])
+                data['latitude'] = results[0]
+                data['longitude'] = results[1]
+                data['address'] = results[2]
+                data['city'] = results[3]
             except:
                 msg = "Can't find coordinates, setting to default"
                 messages.error(self.request, msg)
@@ -70,7 +70,7 @@ class WaypointView(TemplateView):
         # where you want the map to be
         data['map'] = self.map_to_show
         data['GOOGLE_KEY'] = self.GOOGLE_KEY
-        
+
         # populate the initial session data
         self.request.session['data'] = data
         return data
@@ -105,14 +105,13 @@ class WaypointView(TemplateView):
             default_address = data['address'].decode('utf-8').lower()
             get_search = self.request.GET.get("search_address")
             search_address = get_search.decode('utf-8').lower()
-            if not search_address in default_address: 
+            if search_address not in default_address:
                 try:
-                    (lat, lng, address, city) = mapUtils.get_latlng_from_address(
-                                                search_address)
-                    data['latitude'] = lat
-                    data['longitude'] = lng
-                    data['address'] = address
-                    data['city'] = city
+                    results = mapUtils.get_latlng_from_address(search_address)
+                    data['latitude'] = results[0]
+                    data['longitude'] = results[1]
+                    data['address'] = results[2]
+                    data['city'] = results[3]
                     self.request.session['data'] = data
                 except Exception as e:
                     exc = "Exception: " + str(e)

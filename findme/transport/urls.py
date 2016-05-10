@@ -1,7 +1,6 @@
 from django.conf.urls import url
 
 from django.contrib import admin
-from django.views.generic.base import TemplateView
 from transport.views import WaypointView
 
 

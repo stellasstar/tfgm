@@ -1,5 +1,7 @@
-from rest_framework import serializers
+
 from django.contrib.auth import update_session_auth_hash, authenticate
+
+from rest_framework import serializers
 
 from gatekeeper import forms
 

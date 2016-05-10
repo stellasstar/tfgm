@@ -2,14 +2,13 @@ import urllib2
 from django.conf import settings
 
 from django.core.serializers import serialize as GeoJSONSerializer
-from django.contrib.gis.geos import fromstr, GEOSGeometry
+from django.contrib.gis.geos import fromstr
 from django.contrib.gis.measure import D
 from django.contrib.gis.gdal import SpatialReference, CoordTransform
 
-from django.contrib.gis.db.models.functions import Distance
-
-import googlemaps, json
+import googlemaps
 from transport.models import Waypoint
+
 
 def get_latlng_from_address(a):
     gmap = googlemaps.Client(key=settings.GOOGLE_API_KEY)
@@ -24,7 +23,7 @@ def get_latlng_from_address(a):
     except (urllib2.URLError, urllib2.HTTPError):
         return None
     else:
-        return (lat, lng, addy, city)
+        return [lat, lng, addy, city]
 
 
 def get_address_from_latlng(lat, lng):
@@ -49,16 +48,13 @@ def find_waypoints(lat, lon):
             SpatialReference(settings.US_DOD_GPS),
             SpatialReference(settings.WEB_MERCATOR_STANDARD))
     user_location.transform(ct)
-    radius = 350
     area = (user_location, D(km=0.35))
-    # create a polygon object
-    circle = user_location.buffer(radius)
 
     # return everything within area
     waypoints = Waypoint.objects.filter(geom__distance_lte=area)
     # trying to annotate distance
     waypoints.distance(user_location).order_by('distance')
-        
+
     geojson_data = GeoJSONSerializer('geojson',
-        waypoints, geometry_field='geom')
+                                     waypoints, geometry_field='geom')
     return geojson_data, user_location

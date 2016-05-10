@@ -1,27 +1,17 @@
 
-# mport from Django
-from django.db import models
-from django.contrib.gis.db import models as geomodels
-from django.contrib.gis.geos import Point
-from django.contrib.auth.models import *
-from django.utils.translation import ugettext_lazy as _
-from django.core import validators
-from django.utils import timezone
-from django.core.urlresolvers import reverse
-from django.conf import settings
-from django.utils.deconstruct import deconstructible
-from django.contrib.staticfiles.templatetags.staticfiles import static
-from django.contrib.gis.db import models as gis_models
-from transport.models import Position
-
 import os
 import string
 
-try:
-    from django.contrib.auth import get_user_model
-    User = settings.AUTH_USER_MODEL
-except ImportError:
-    from django.contrib.auth.models import User
+# mport from Django
+from django.conf import settings
+from django.contrib.auth.models import PermissionsMixin
+from django.contrib.gis.db import models as geomodels
+from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
+from django.core.urlresolvers import reverse
+from django.db import models
+from django.utils import timezone
+from django.utils.deconstruct import deconstructible
+from django.utils.translation import ugettext_lazy as _
 
 
 @deconstructible
@@ -29,13 +19,11 @@ class Avatar_User_Dir(object):
 
     # media = settings.MEDIA_ROOT
     av = settings.AVATAR_URL.strip('/')
-    url = ''
 
     def __call__(self, instance, filename):
         joined = os.path.join(self.av,
                               str(instance.username),
                               (filename).decode('utf-8').lower())
-        url = joined
         return joined
 
 avatar_user_dir = Avatar_User_Dir()

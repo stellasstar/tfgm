@@ -9,16 +9,12 @@ else:
 
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.gis.geos import fromstr
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
-from django.contrib.gis.geos import Point, GEOSException, GEOSGeometry, fromstr
-from django.conf import settings
-from django.forms.models import inlineformset_factory
-
-from imagekit.models import ProcessedImageField
 
 from transport.models import Position
-import httplib
 
 
 class LoginForm(AuthenticationForm):
