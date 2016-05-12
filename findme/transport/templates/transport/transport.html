@@ -75,9 +75,27 @@
             </div>
         </div>
         <div>&nbsp;</div>
-        <div>&nbsp;</div>
+
+        <hr>
+
+        <div class="col-xs-12" align="center">
+        
+        {% for comment in waypoints.features.properties.comments.all %}
+            <div class="comment">
+                <div class="date">{{ comment.created_date }}</div>
+                <strong>{{ comment.author }}</strong>
+                <p>{{ comment.text|linebreaks }}</p>
+            </div>
+        {% empty %}
+            <p>No comments here yet :(</p>
+        {% endfor %}
+        {% if pk > 0 %}
+            {{pk}}
+            {% }
+        {% endif %}
+        </div>
         <div class="col-xs-12">
-        <!-- {{waypoints}} -->
+        <!-- {{waypoints}}-->
         </div>
   </div> <!-- row -->
 </div> <!-- container -->

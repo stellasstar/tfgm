@@ -1,12 +1,13 @@
 import urllib2
 from django.conf import settings
 
-from django.core.serializers import serialize as GeoJSONSerializer
 from django.contrib.gis.geos import fromstr
 from django.contrib.gis.measure import D
 from django.contrib.gis.gdal import SpatialReference, CoordTransform
 
 import googlemaps
+from djgeojson.serializers import Serializer as GeoJSONSerializer
+
 from transport.models import Waypoint
 
 
@@ -55,6 +56,6 @@ def find_waypoints(lat, lon):
     # trying to annotate distance
     waypoints.distance(user_location).order_by('distance')
 
-    geojson_data = GeoJSONSerializer('geojson',
-                                     waypoints, geometry_field='geom')
+    geojson_data = GeoJSONSerializer().serialize(
+                      waypoints, use_natural_keys=True)
     return geojson_data, user_location

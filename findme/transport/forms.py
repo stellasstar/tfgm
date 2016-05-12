@@ -1,5 +1,5 @@
 from django import forms
-from transport.models import Waypoint
+from transport.models import Waypoint, Comment
 
 
 class WaypointForm(forms.ModelForm):
@@ -22,3 +22,10 @@ class WaypointUpdateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(WaypointUpdateForm, self).__init__(*args, **kwargs)
+
+
+class CommentForm(forms.ModelForm):
+
+    class Meta:
+        model = Comment
+        fields = ('author', 'text',)

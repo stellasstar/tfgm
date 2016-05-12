@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.gis',
+    'djgeojson',
     'imagekit',
     'crispy_forms',
     'floppyforms',
@@ -181,7 +182,7 @@ EMAIL_PORT = 1025
 
 # this is in Manchester
 DEFAULT_LATITUDE = '53.485900'
-DEFAULT_LONGITUDE = '-2.232000'
+DEFAULT_LONGITUDE = '-2.247591'
 
 GOOGLE_KEY_FILE = os.path.abspath(BASE_DIR + '/keys/google.txt')
 f = open(GOOGLE_KEY_FILE, 'r')
@@ -214,3 +215,7 @@ handler404 = 'views.handler404'
 US_DOD_GPS = 4326
 BRITISH_NATIONAL_GRID = 27700
 WEB_MERCATOR_STANDARD = 3857
+
+SERIALIZATION_MODULES = {
+    'geojson' : 'djgeojson.serializers'
+}

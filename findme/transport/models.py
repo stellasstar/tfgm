@@ -5,6 +5,7 @@ from django.contrib.gis.db import models as gis_models
 from django.contrib.gis import geos
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 
 # import custom user model
 try:
@@ -160,6 +161,24 @@ class Area(gis_models.Model):
 
     def __unicode__(self):
         return "Area %s" % (self.name)
+
+
+class Comment(models.Model):
+    post = models.ForeignKey('transport.Waypoint', 
+                             related_name='comments',
+                             null=True,
+                             blank=True)
+    author = models.CharField(max_length=200, null=True, blank=True)
+    text = models.TextField(null=True, blank=True)
+    created_date = models.DateTimeField(default=timezone.now)
+    approved_comment = models.BooleanField(default=False)
+
+    def approve(self):
+        self.approved_comment = True
+        self.save()
+
+    def __str__(self):
+        return self.text
 
 
 # Auto-generated `LayerMapping` dictionary for Waypoint model

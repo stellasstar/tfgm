@@ -85,7 +85,7 @@ class Command(BaseCommand):
             w.area = words[9].strip('"')
             w.route_ref = words[9].strip('"')
             w.z_order = '0.0'
-            print w
+            print w.id, w.name
             w.save()
 
         f.close()

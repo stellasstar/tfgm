@@ -7,8 +7,8 @@ from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.conf import settings
 
-from transport.forms import WaypointForm
-from transport.models import Waypoint, Position
+from transport.forms import WaypointForm, CommentForm
+from transport.models import Waypoint, Position, Comment
 from transport import mapUtils
 
 # import custom user model
@@ -29,6 +29,10 @@ class WaypointView(TemplateView):
     form_class = WaypointForm
     map_to_show = 'map_canvas'
     GOOGLE_KEY = settings.GOOGLE_API_KEY
+
+    def get_comments(self, pk):
+        post = get_object_or_404(Waypoint, pk=pk)
+        return post
 
     def get_inital_user_data(self):
 
@@ -84,6 +88,8 @@ class WaypointView(TemplateView):
         context = super(WaypointView, self).get_context_data(**kwargs)
         username = self.kwargs.get('username')
         data = {}
+        pk = 0
+        comments = []
 
         if username:
             user = get_object_or_404(User, username=username)
@@ -100,7 +106,7 @@ class WaypointView(TemplateView):
 
         # searching for the information in the address search bar
         # home button in search address is not working
-        if self.request.GET:
+        if self.request.GET.get("search_address"):
             self.request.session['searched'] = True
             default_address = data['address'].decode('utf-8').lower()
             get_search = self.request.GET.get("search_address")
@@ -119,6 +125,10 @@ class WaypointView(TemplateView):
                     messages.error(self.request, msg)
                     messages.add_message(self.request, messages.ERROR, exc)
                     data = self.request.session['data']
+                    
+        if self.request.GET.get("pk"):
+            pk = self.request.GET.get("pk")
+            comments = self.get_comments(pk)
 
         context['map'] = self.map_to_show
 
@@ -129,6 +139,8 @@ class WaypointView(TemplateView):
         cls = simplejson.JSONEncoderForHTML
         context['json'] = simplejson.dumps(data, cls=cls)
         context['waypoints'] = waypoints
+        context['pk'] = pk
+        context['comments'] = comments
 
         return context
 
@@ -136,3 +148,32 @@ class WaypointView(TemplateView):
 class PositionView(ListView):
 
     model = Position
+
+
+class CommentView(TemplateView):
+
+    model = Comment
+    template_name = 'transport/comments.html'
+    success_url = "/transport/"
+    form_class = CommentForm
+    
+    def get_success_url(self):
+        return reverse('transport', kwargs={
+            'pk': self.kwargs.get('pk')})
+
+    def get_context_data(self, **kwargs):
+        if self.request.GET:
+            pk = self.request.GET.get("pk")
+            
+    def add_comment_to_post(request, pk):
+        post = get_object_or_404(Waypoint, pk=pk)
+        if request.method == "POST":
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.post = post
+                comment.save()
+                return redirect(reverse('transport'))
+        else:
+            form = CommentForm()
+        return render(request, 'transport/add_comment_to_post.html', {'form': form})
