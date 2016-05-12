@@ -18,7 +18,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'gwn*hqfaxbsrn6mmhzj5$&tndxn(^9q_27pw2*nmbxuw#(_3(!'
+SECRET_KEY_FILE = os.path.abspath(BASE_DIR + '/keys/secretkey.txt')
+with open(SECRET_KEY_FILE) as f:
+    SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -161,8 +163,12 @@ AUTH_USER_MODEL = 'gatekeeper.UserProfile'
 #     'django.contrib.auth.backends.ModelBackend',
 # )
 
-RECAPTCHA_PUBLIC_KEY = '6LcVu9ESAAAAANVWwbM5-PLuLES94GQ2bIYmSNTG'
-RECAPTCHA_PRIVATE_KEY = '6LcVu9ESAAAAAGxz7aEIACWRa3CVnXN3mFd-cajP'
+
+RECAPTCHA_KEY_FILE = os.path.abspath(BASE_DIR + '/keys/recaptcha.txt')
+f = open(RECAPTCHA_KEY_FILE, 'r')
+lines = f.read().split()
+RECAPTCHA_PUBLIC_KEY = lines[0].strip()
+RECAPTCHA_PRIVATE_KEY = lines[1].strip()
 
 LIST_OF_EMAIL_RECIPIENTS = 'stella.silverstein@isotoma.com'
 
@@ -177,7 +183,10 @@ EMAIL_PORT = 1025
 DEFAULT_LATITUDE = '53.485900'
 DEFAULT_LONGITUDE = '-2.232000'
 
-GOOGLE_API_KEY = 'AIzaSyDxOaCs2l1WYJf4jhNX8AEbTLf2SwncgN4'
+GOOGLE_KEY_FILE = os.path.abspath(BASE_DIR + '/keys/google.txt')
+f = open(GOOGLE_KEY_FILE, 'r')
+lines = f.read().split()
+GOOGLE_API_KEY = lines[0].strip()
 
 VALID_IMAGE_EXTENSIONS = [
     ".jpg",
