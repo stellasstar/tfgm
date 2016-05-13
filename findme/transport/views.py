@@ -1,11 +1,14 @@
 import simplejson
 
-from django.views.generic import ListView
-from django.views.generic.base import TemplateView
-from django.shortcuts import get_object_or_404
 
 from django.contrib import messages
 from django.conf import settings
+from django.core.urlresolvers import reverse
+from django.http import QueryDict
+
+from django.views.generic import ListView, CreateView
+
+from django.views.generic.base import TemplateView
 
 from transport.forms import WaypointForm, CommentForm
 from transport.models import Waypoint, Position, Comment
@@ -31,8 +34,10 @@ class WaypointView(TemplateView):
     GOOGLE_KEY = settings.GOOGLE_API_KEY
 
     def get_comments(self, pk):
-        post = get_object_or_404(Waypoint, pk=pk)
-        return post
+        waypoint = Waypoint.objects.get(pk=pk)
+        comments = Comment.objects.filter(
+                   post=waypoint).order_by('created_date')
+        return (waypoint, comments)
 
     def get_inital_user_data(self):
 
@@ -90,6 +95,8 @@ class WaypointView(TemplateView):
         data = {}
         pk = 0
         comments = []
+        waypoint = []
+        location = 0
 
         if username:
             user = get_object_or_404(User, username=username)
@@ -126,11 +133,16 @@ class WaypointView(TemplateView):
                     messages.add_message(self.request, messages.ERROR, exc)
                     data = self.request.session['data']
                     
-        if self.request.GET.get("pk"):
-            pk = self.request.GET.get("pk")
-            comments = self.get_comments(pk)
-
-        context['map'] = self.map_to_show
+        if self.request.GET.get('pk'):
+            get_dict = self.request.GET
+            pk = str(get_dict['pk'])
+            location = str(get_dict['location'])
+            (waypoint, comments) = self.get_comments(pk)
+            # for comments about individual waypoints
+            context['pk'] = pk
+            context['comments'] = comments
+            context['waypoint'] = waypoint
+            context['location'] = location
 
         # get waypoint data
         waypoints, user_location = mapUtils.find_waypoints(data['latitude'],
@@ -139,8 +151,7 @@ class WaypointView(TemplateView):
         cls = simplejson.JSONEncoderForHTML
         context['json'] = simplejson.dumps(data, cls=cls)
         context['waypoints'] = waypoints
-        context['pk'] = pk
-        context['comments'] = comments
+        context['map'] = self.map_to_show
 
         return context
 
@@ -150,30 +161,23 @@ class PositionView(ListView):
     model = Position
 
 
-class CommentView(TemplateView):
+class AddComments(CreateView):
 
     model = Comment
-    template_name = 'transport/comments.html'
-    success_url = "/transport/"
     form_class = CommentForm
-    
+    template_name = 'transport/comments.html'
+
     def get_success_url(self):
-        return reverse('transport', kwargs={
+        return reverse('comments', kwargs={
             'pk': self.kwargs.get('pk')})
 
     def get_context_data(self, **kwargs):
-        if self.request.GET:
-            pk = self.request.GET.get("pk")
-            
-    def add_comment_to_post(request, pk):
-        post = get_object_or_404(Waypoint, pk=pk)
-        if request.method == "POST":
-            form = CommentForm(request.POST)
-            if form.is_valid():
-                comment = form.save(commit=False)
-                comment.post = post
-                comment.save()
-                return redirect(reverse('transport'))
-        else:
-            form = CommentForm()
-        return render(request, 'transport/add_comment_to_post.html', {'form': form})
+        context = super(AddComments, self).get_context_data(**kwargs)
+        pk = str(self.kwargs.get('pk'))
+        waypoint = Waypoint.objects.get(pk=pk)
+        comments = Comment.objects.filter(post=waypoint).order_by('created_date')
+        context['comments'] = comments
+        context['pk'] = pk
+        return context
+    
+    

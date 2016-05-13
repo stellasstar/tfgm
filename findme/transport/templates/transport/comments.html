@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load staticfiles%}
+
+{% block title %}Comments For Transportation Links{% endblock %}
+{% block head %}Comments For Transportation Links{% endblock %}
+
+{% block content %}
+
+        <div class="col-xs-12" align="left">
+        {% for comment in comments %}
+            <div class="comment">
+                <div class="date">{{ comment.created_date }}</div>
+                <strong>{{ comment.author }}</strong>
+                <p>{{ comment.text|linebreaks }}</p>
+            </div>
+        {% empty %}
+            <p>No comments here yet :(</p>
+        {% endfor %}
+
+    <div class="row">
+      <div class="col-xs-4 col-sm-4" align="left">
+            <h3>New Comment</h3>
+    <form method="POST" class="post-form">
+    <input type="hidden" name="pk" value="{{pk}}"/>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn">Add Comment</button>
+    </form>
+      </div>
+    </div>
+    
+{% endblock %}

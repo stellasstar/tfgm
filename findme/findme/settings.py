@@ -18,9 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY_FILE = os.path.abspath(BASE_DIR + '/keys/secretkey.txt')
-with open(SECRET_KEY_FILE) as f:
-    SECRET_KEY = f.read().strip()
+SECRET_KEY = 'gwn*hqfaxbsrn6mmhzj5$&tndxn(^9q_27pw2*nmbxuw#(_3(!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -44,7 +42,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.gis',
-    'djgeojson',
     'imagekit',
     'crispy_forms',
     'floppyforms',
@@ -164,12 +161,8 @@ AUTH_USER_MODEL = 'gatekeeper.UserProfile'
 #     'django.contrib.auth.backends.ModelBackend',
 # )
 
-
-RECAPTCHA_KEY_FILE = os.path.abspath(BASE_DIR + '/keys/recaptcha.txt')
-f = open(RECAPTCHA_KEY_FILE, 'r')
-lines = f.read().split()
-RECAPTCHA_PUBLIC_KEY = lines[0].strip()
-RECAPTCHA_PRIVATE_KEY = lines[1].strip()
+RECAPTCHA_PUBLIC_KEY = '6LcVu9ESAAAAANVWwbM5-PLuLES94GQ2bIYmSNTG'
+RECAPTCHA_PRIVATE_KEY = '6LcVu9ESAAAAAGxz7aEIACWRa3CVnXN3mFd-cajP'
 
 LIST_OF_EMAIL_RECIPIENTS = 'stella.silverstein@isotoma.com'
 
@@ -182,12 +175,9 @@ EMAIL_PORT = 1025
 
 # this is in Manchester
 DEFAULT_LATITUDE = '53.485900'
-DEFAULT_LONGITUDE = '-2.247591'
+DEFAULT_LONGITUDE = '-2.232000'
 
-GOOGLE_KEY_FILE = os.path.abspath(BASE_DIR + '/keys/google.txt')
-f = open(GOOGLE_KEY_FILE, 'r')
-lines = f.read().split()
-GOOGLE_API_KEY = lines[0].strip()
+GOOGLE_API_KEY = 'AIzaSyDxOaCs2l1WYJf4jhNX8AEbTLf2SwncgN4'
 
 VALID_IMAGE_EXTENSIONS = [
     ".jpg",
@@ -215,7 +205,3 @@ handler404 = 'views.handler404'
 US_DOD_GPS = 4326
 BRITISH_NATIONAL_GRID = 27700
 WEB_MERCATOR_STANDARD = 3857
-
-SERIALIZATION_MODULES = {
-    'geojson' : 'djgeojson.serializers'
-}
