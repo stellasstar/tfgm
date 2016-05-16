@@ -10,7 +10,9 @@ urlpatterns = [
 
         # Transportation
         url(r'^$', WaypointView.as_view(), name='transport'),
-        url(r'^pk=(?P<pk>\d+)$', AddComments.as_view(), name='comments'),
-        url(r'^pk=(?P<pk>\d+)/comment/$', AddComments.as_view(), name='add_comments'),
+        url(r'^(?P<waypoint_id>\d+)$', WaypointView.as_view(), 
+            name='transport-comments'),
+        url(r'^(?P<waypoint_id>\d+)/comments$', AddComments.as_view(), 
+            name='add-comments'),
         
 ]

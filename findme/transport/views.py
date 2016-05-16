@@ -93,10 +93,8 @@ class WaypointView(TemplateView):
         context = super(WaypointView, self).get_context_data(**kwargs)
         username = self.kwargs.get('username')
         data = {}
-        pk = 0
         comments = []
         waypoint = []
-        location = 0
 
         if username:
             user = get_object_or_404(User, username=username)
@@ -114,6 +112,12 @@ class WaypointView(TemplateView):
         # searching for the information in the address search bar
         # home button in search address is not working
         if self.request.GET.get("search_address"):
+            # remove old waypoint information
+            kwargs.pop('waypoint_id')
+            context.pop('waypoint_id')
+            context.pop('comments')
+
+            # get new area waypoint data
             self.request.session['searched'] = True
             default_address = data['address'].decode('utf-8').lower()
             get_search = self.request.GET.get("search_address")
@@ -132,17 +136,14 @@ class WaypointView(TemplateView):
                     messages.error(self.request, msg)
                     messages.add_message(self.request, messages.ERROR, exc)
                     data = self.request.session['data']
-                    
-        if self.request.GET.get('pk'):
-            get_dict = self.request.GET
-            pk = str(get_dict['pk'])
-            location = str(get_dict['location'])
-            (waypoint, comments) = self.get_comments(pk)
-            # for comments about individual waypoints
-            context['pk'] = pk
-            context['comments'] = comments
-            context['waypoint'] = waypoint
-            context['location'] = location
+
+        waypoint_id = str(self.kwargs.get('waypoint_id'))
+        location_id = self.request.GET.get('location_id')
+        context['location_id'] = location_id
+        (waypoint, comments) = self.get_comments(waypoint_id)
+        # for comments about individual waypoints
+        context['comments'] = comments
+        context['waypoint'] = waypoint
 
         # get waypoint data
         waypoints, user_location = mapUtils.find_waypoints(data['latitude'],
@@ -168,16 +169,17 @@ class AddComments(CreateView):
     template_name = 'transport/comments.html'
 
     def get_success_url(self):
-        return reverse('comments', kwargs={
-            'pk': self.kwargs.get('pk')})
+        return reverse('add-comments', kwargs={
+            'waypoint_id': self.kwargs.get('waypoint_id')})
 
     def get_context_data(self, **kwargs):
         context = super(AddComments, self).get_context_data(**kwargs)
-        pk = str(self.kwargs.get('pk'))
-        waypoint = Waypoint.objects.get(pk=pk)
+        waypoint_id = str(self.kwargs.get('waypoint_id'))
+        waypoint = Waypoint.objects.get(pk=waypoint_id)
         comments = Comment.objects.filter(post=waypoint).order_by('created_date')
         context['comments'] = comments
-        context['pk'] = pk
+        context['waypoint_id'] = waypoint_id
+        context['waypoint'] = waypoint
         return context
     
     

@@ -193,7 +193,9 @@ AVATAR_DEFAULT_HEIGHT = 200
 
 handler404 = 'views.handler404'
 
-# using 2 different coordinate transformation systems for better accuracy
+# when transforming from british nation grid to web mercator standard
+# use 2 different coordinate transformation systems for better accuracy
+# 27700 -> 4326 -> 3857
 # 27700 corresponds to the British National Grid coordinate system
 # 4326 corresponds to the U.S. Department of Defense, and is the
 #     standard used by the Global Positioning System (GPS)

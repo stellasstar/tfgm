@@ -58,8 +58,8 @@ class CommentForm(forms.ModelForm):
     def save(self, *args, **kwargs):
         author = str(self.cleaned_data['author'])
         text = str(self.cleaned_data['text'])
-        pk = str(self.data.getlist('pk')[0])
-        waypoint = Waypoint.objects.get(pk=pk)
+        waypoint_id = str(self.data.get('waypoint_id'))
+        waypoint = Waypoint.objects.get(pk=waypoint_id)
         new_comment = Comment(
                           post = waypoint,
                           author = author,

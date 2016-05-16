@@ -174,7 +174,7 @@ function printTransport() {
             show.append("latitude: &nbsp;&nbsp;" + lat.toFixed(6) + "\n");
             show.append("longitude: &nbsp;&nbsp;" +lng.toFixed(6) + "\n");
             var b = $('<a>');
-            b.attr("href", "?pk=" + id + "&location=" + (i+1))
+            b.attr("href", id + "?location_id=" + (i+1))
             b.append("Comments: &nbsp;&nbsp;" + comments.length);
             show.append(b);
 
