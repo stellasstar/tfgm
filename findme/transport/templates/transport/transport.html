@@ -30,9 +30,9 @@
         <div class="col-xs-12"><h1>Any Mouse</h1></div>
 
         {% endif %}
-        
-        <div class="col-xs-12"> 
-        
+
+        <div class="col-xs-12">
+
         <form method="get" action="">
           <div class="col-lg-offset-3 col-lg-6">
             <div class="input-group">
@@ -41,7 +41,7 @@
                         <span class="glyphicon glyphicon-home"></span>
                     </button>
                 </span>
-              <input type="text" class="form-control" name="search_address" 
+              <input type="text" class="form-control" name="search_address"
                      id="search_address" value=""/>
                 <span class="input-group-addon">
                     <button type="submit">
@@ -50,7 +50,7 @@
                 </span>
              </div>
           </div>
-        </form> 
+        </form>
         <br> <br>
             {% if messages %}
             <div class="text-danger" ><b>
@@ -68,7 +68,7 @@
         </div>
         <div class="col-xs-12" align="center">
             <div class="col-xs-6" id={{map}}></div>
-            <div class="col-xs-4 waypoints"> 
+            <div class="col-xs-4 waypoints">
                 <div class="wp_header" align="center">Finding Transport Links...</div>
                 <div class="wpitems" align="left"></div>
             </div>
@@ -104,7 +104,7 @@
         {% endfor %}
         {% if waypoint_id %}
             <div class="comment">
-            <a class="btn btn-default" 
+            <a class="btn btn-default"
                     href="{% url 'add-comments' waypoint_id=waypoint_id %}">
                     Add comment
                 </a>
@@ -114,7 +114,7 @@
         <div class="col-xs-12">&nbsp;</div>
         <div class="col-xs-12">&nbsp;</div>
         <div class="col-xs-12">
-           
+
            <!--{{waypoints}}-->
         </div>
   </div> <!-- row -->

@@ -4,10 +4,9 @@ import simplejson
 from django.contrib import messages
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.http import QueryDict
-
+from  django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, CreateView
-
 from django.views.generic.base import TemplateView
 
 from transport.forms import WaypointForm, CommentForm
@@ -34,10 +33,14 @@ class WaypointView(TemplateView):
     GOOGLE_KEY = settings.GOOGLE_API_KEY
 
     def get_comments(self, pk):
-        waypoint = Waypoint.objects.get(pk=pk)
-        comments = Comment.objects.filter(
-                   post=waypoint).order_by('created_date')
-        return (waypoint, comments)
+
+        try:
+            waypoint = Waypoint.objects.get(pk=pk)
+            comments = Comment.objects.filter(
+                       post=waypoint).order_by('created_date')
+            return (waypoint, comments)
+        except:
+            pass
 
     def get_inital_user_data(self):
 
@@ -113,9 +116,10 @@ class WaypointView(TemplateView):
         # home button in search address is not working
         if self.request.GET.get("search_address"):
             # remove old waypoint information
-            kwargs.pop('waypoint_id')
-            context.pop('waypoint_id')
-            context.pop('comments')
+            self.kwargs['waypoint_id'] = None
+            kwargs['waypoint_id'] = None
+            context['waypoint_id'] = None
+            context['comments'] = []
 
             # get new area waypoint data
             self.request.session['searched'] = True
@@ -137,24 +141,38 @@ class WaypointView(TemplateView):
                     messages.add_message(self.request, messages.ERROR, exc)
                     data = self.request.session['data']
 
-        waypoint_id = str(self.kwargs.get('waypoint_id'))
-        location_id = self.request.GET.get('location_id')
-        context['location_id'] = location_id
-        (waypoint, comments) = self.get_comments(waypoint_id)
-        # for comments about individual waypoints
-        context['comments'] = comments
-        context['waypoint'] = waypoint
-
         # get waypoint data
         waypoints, user_location = mapUtils.find_waypoints(data['latitude'],
                                                            data['longitude'])
-
         cls = simplejson.JSONEncoderForHTML
         context['json'] = simplejson.dumps(data, cls=cls)
         context['waypoints'] = waypoints
         context['map'] = self.map_to_show
 
-        return context
+        waypoint_id = self.kwargs.get('waypoint_id')
+        location_id = self.request.GET.get('location_id')
+        if (waypoint_id is None):
+            return context
+        else:
+            (waypoint, comments) = self.get_comments(waypoint_id)
+            # for comments about individual waypoints
+            context['comments'] = comments
+            context['waypoint'] = waypoint
+            context['location_id'] = location_id
+            return context
+
+# can't get redirect to work correctly
+    # def get(self, request, *args, **kwargs):
+        # context = self.get_context_data(**kwargs)
+        # waypoint_id = 'waypoint_id' in context
+        #  if waypoint_id:
+            #return HttpResponseRedirect(
+                # reverse('tranport-comments',
+                        # args=context))
+        # else:
+            # return HttpResponseRedirect(
+                # reverse('tranport',
+                        # args=context))
 
 
 class PositionView(ListView):
@@ -176,10 +194,9 @@ class AddComments(CreateView):
         context = super(AddComments, self).get_context_data(**kwargs)
         waypoint_id = str(self.kwargs.get('waypoint_id'))
         waypoint = Waypoint.objects.get(pk=waypoint_id)
-        comments = Comment.objects.filter(post=waypoint).order_by('created_date')
+        comments = Comment.objects.filter(
+            post=waypoint).order_by('created_date')
         context['comments'] = comments
         context['waypoint_id'] = waypoint_id
         context['waypoint'] = waypoint
         return context
-    
-    
