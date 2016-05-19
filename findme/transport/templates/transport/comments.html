@@ -20,8 +20,8 @@
         {% for comment in comments %}
             <div class="comment">
                 <div class="date">{{ comment.created_date }}</div>
-                <strong>{{ comment.author }}</strong>
-                <p>{{ comment.text|linebreaks }}</p>
+                <strong>{{ comment.author.username }}</strong>
+                <p>{{ comment.comment|linebreaks }}</p>
             </div>
         {% empty %}
             <p>No comments here yet :(</p>
@@ -30,6 +30,7 @@
     <div class="comment">
       <div class="col-xs-4 col-sm-4" align="left">
             <h3>New Comment</h3>
+    <b>Author:  {{user.username}}</b>
     <form method="POST" class="post-form">
     <input type="hidden" name="waypoint_id" value="{{waypoint.id}}"/>
         {% csrf_token %}
@@ -38,7 +39,7 @@
     </form>
         <a class="btn btn-default" 
            href="{% url 'transport-comments' waypoint_id=waypoint.id %}">
-           Back to Tranport Map
+           Show Comments On Tranport Map
         </a>
       </div>
     </div>

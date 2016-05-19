@@ -1,9 +1,19 @@
 from django import forms
 
+from django.conf import settings
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
 
+from transport.mixin import ReadOnlyFieldsMixin
 from transport.models import Waypoint, Comment
+
+# import custom user model
+try:
+    from django.contrib.auth import get_user_model
+except ImportError:  # django < 1.5
+    from django.contrib.auth.models import User
+else:
+    User = get_user_model()
 
 
 class WaypointForm(forms.ModelForm):
@@ -29,12 +39,10 @@ class WaypointUpdateForm(forms.ModelForm):
 
 
 class CommentForm(forms.ModelForm):
-    
+
     class Meta:
         model = Comment
-        fields = ['author',
-                  'text',
-                 ]
+        fields = ['comment']
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
@@ -43,27 +51,27 @@ class CommentForm(forms.ModelForm):
                                      css_class='btn-primary'))
         super(CommentForm, self).__init__(*args, **kwargs)
 
-    def get_comments(self, pk):
-        waypoint = Waypoint.objects.get(pk=pk)
+    def get_comments(self, waypoint_id):
+        waypoint = Waypoint.objects.get(pk=waypoint_id)
         comments = Comment.objects.filter(post=waypoint)
         return (waypoint, comments)
         
     def get_context_data(self, **kwargs):
-        pk = self.request.GET.get['pk']
-        (waypoint, comments) = self.get_comments(pk=pk)
+        waypoint_id = kwargs['waypoint_id']
+        (waypoint, comments) = self.get_comments(pk=waypoint_id)
         context['comments'] = comments
-        context['pk'] = pk
+        context['waypoint_id'] = waypoint_id
         return context
     
     def save(self, *args, **kwargs):
-        author = str(self.cleaned_data['author'])
-        text = str(self.cleaned_data['text'])
+        user = self.initial['author']
+        comment = str(self.cleaned_data['comment'])
         waypoint_id = str(self.data.get('waypoint_id'))
         waypoint = Waypoint.objects.get(pk=waypoint_id)
         new_comment = Comment(
-                          post = waypoint,
-                          author = author,
-                          text = text,
+                          waypoint = waypoint,
+                          author = user,
+                          comment = comment,
                           approved_comment = True
                       )
         new_comment.save()

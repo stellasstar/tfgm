@@ -1,7 +1,8 @@
-import os
+import os, sys
+from django.core.handlers.wsgi import WSGIHandler
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "googlemaps.settings")
+os.environ['DJANGO_SETTINGS_MODULE'] = 'findme.settings'
 application = get_wsgi_application()
 
 """ WSGI config for googlemaps project.

@@ -1,19 +1,21 @@
 from urllib2 import URLError
 
+import django
 from django.utils.translation import gettext as _
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import fields
 from django.contrib.gis.db import models as gis_models
 from django.contrib.gis import geos
+from django.contrib.sites.models import Site
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
 
-# import custom user model
 try:
-    # from django.contrib.auth import get_user_model
+    from django.contrib.auth import get_user_model
     User = settings.AUTH_USER_MODEL
 except ImportError:
     from django.contrib.auth.models import User
-
 
 class Position(gis_models.Model):
 
@@ -91,7 +93,10 @@ class Waypoint(gis_models.Model):
     geom = gis_models.MultiPointField(blank=True, null=True,
                                       srid=settings.WEB_MERCATOR_STANDARD)
     indicator = gis_models.CharField(max_length=254, null=True, blank=True)
-
+    comments = models.ForeignKey('transport.Comment', 
+                             related_name='comments_wp',
+                             null=True,
+                             blank=True)
     objects = gis_models.GeoManager()
 
     class Meta:
@@ -162,14 +167,14 @@ class Area(gis_models.Model):
     def __unicode__(self):
         return "Area %s" % (self.name)
 
-
 class Comment(models.Model):
-    post = models.ForeignKey('transport.Waypoint', 
-                             related_name='comments',
+    waypoint = models.ForeignKey('transport.Waypoint', 
+                             related_name='wp_comments',
                              null=True,
                              blank=True)
-    author = models.CharField(max_length=200, null=True, blank=True)
-    text = models.TextField(null=True, blank=True)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             related_name='author')
+    comment = models.TextField(null=True, blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     approved_comment = models.BooleanField(default=False)
 
@@ -178,8 +183,7 @@ class Comment(models.Model):
         self.save()
 
     def __str__(self):
-        return self.text
-
+        return self.comment
 
 # Auto-generated `LayerMapping` dictionary for Waypoint model
 waypoint_mapping = {

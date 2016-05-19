@@ -42,12 +42,13 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.gis',
+    'django.contrib.sites',
     'imagekit',
     'crispy_forms',
     'floppyforms',
     'captcha',
-    'gatekeeper',
     'findme',
+    'gatekeeper',
     'transport',
 )
 
@@ -126,7 +127,6 @@ TEMPLATES = [
         ],
         'APP_DIRS': True,
         'OPTIONS': {
-            'debug': DEBUG,
             'context_processors': [
                 # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
                 # list if you haven't customized them:

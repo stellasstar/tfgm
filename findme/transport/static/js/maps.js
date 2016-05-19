@@ -154,7 +154,10 @@ function printTransport() {
             var lng = waypoints.features[i].geometry.coordinates[0][0];
             var name = waypoints.features[i].properties.name;
             var id = waypoints.features[i].id;
-            var comments = waypoints.features[i].properties.comments;
+            var comments = waypoints.features[i].properties.wp_comments;
+            if (comments == null) {
+                comments = []
+            }
             var usr_pos = new google.maps.LatLng(usr_lat, usr_lng);
             var pos = new google.maps.LatLng(lat, lng);
             var distance = google.maps.geometry.spherical.computeDistanceBetween(pos, usr_pos); 

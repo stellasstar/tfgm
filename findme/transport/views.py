@@ -3,13 +3,15 @@ import simplejson
 
 from django.contrib import messages
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse
-from  django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
 from django.views.generic import ListView, CreateView
 from django.views.generic.base import TemplateView
 
 from transport.forms import WaypointForm, CommentForm
+from transport.mixin import ReadOnlyFieldsMixin
 from transport.models import Waypoint, Position, Comment
 from transport import mapUtils
 
@@ -37,7 +39,7 @@ class WaypointView(TemplateView):
         try:
             waypoint = Waypoint.objects.get(pk=pk)
             comments = Comment.objects.filter(
-                       post=waypoint).order_by('created_date')
+                       waypoint=waypoint).order_by('created_date')
             return (waypoint, comments)
         except:
             pass
@@ -138,7 +140,7 @@ class WaypointView(TemplateView):
                     exc = "Exception: " + str(e)
                     msg = "Can't find search address. " + search_address
                     messages.error(self.request, msg)
-                    messages.add_message(self.request, messages.ERROR, exc)
+                    # messages.add_message(self.request, messages.ERROR, exc)
                     data = self.request.session['data']
 
         # get waypoint data
@@ -180,22 +182,30 @@ class PositionView(ListView):
     model = Position
 
 
-class AddComments(CreateView):
+class AddComments(LoginRequiredMixin, CreateView):
 
     model = Comment
     form_class = CommentForm
     template_name = 'transport/comments.html'
+
+    def get_initial(self):
+        initial = super(AddComments, self).get_initial()
+        initial = initial.copy()
+        initial['author_id'] = self.request.user.pk
+        initial['author'] = self.request.user
+        return initial
 
     def get_success_url(self):
         return reverse('add-comments', kwargs={
             'waypoint_id': self.kwargs.get('waypoint_id')})
 
     def get_context_data(self, **kwargs):
+        kwargs['user'] = self.request.user
         context = super(AddComments, self).get_context_data(**kwargs)
         waypoint_id = str(self.kwargs.get('waypoint_id'))
         waypoint = Waypoint.objects.get(pk=waypoint_id)
         comments = Comment.objects.filter(
-            post=waypoint).order_by('created_date')
+            waypoint=waypoint).order_by('created_date')
         context['comments'] = comments
         context['waypoint_id'] = waypoint_id
         context['waypoint'] = waypoint
