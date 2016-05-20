@@ -30,10 +30,10 @@ class Command(BaseCommand):
         user = User.objects.get(username = 'testCommenter')
         for way in ways:
             comment = Comment.objects.create(author = user)
-            comment.comment = lines[randint(0,2)]
+            comment.comment = lines[randint(0,len(lines))]
             comment.waypoint = way
             comment.approved_comment = True
             #way.comments.create(comment)
             comment.save()
             #way.save()
-            print str(way.id), way
+            print str(way.id) + " comment " + str(way.name)
