@@ -1,8 +1,10 @@
 from django import forms
-
 from django.conf import settings
+
+from captcha.fields import ReCaptchaField
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
+from crispy_forms.layout import Layout, Fieldset, Submit
+from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
 
 from transport.mixin import ReadOnlyFieldsMixin
 from transport.models import Waypoint, Comment
@@ -46,9 +48,15 @@ class CommentForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
-        self.helper.add_input(Submit('submit',
-                                     'Add Comment',
-                                     css_class='btn-primary'))
+        self.helper.layout = Layout(
+            FormActions(
+                Submit('submit', 'Add', 
+                       css_class="btn-default"),
+                Submit('edit', 'Edit', 
+                       css_class="btn-default"),
+                Submit('cancel', 'Cancel', 
+                       css_class="btn-default"),),
+        )
         super(CommentForm, self).__init__(*args, **kwargs)
 
     def get_comments(self, waypoint_id):
@@ -74,4 +82,10 @@ class CommentForm(forms.ModelForm):
                           comment = comment,
                           approved_comment = True
                       )
-        new_comment.save()
+        if not self.comment:
+            msg = "There was no comment to save."
+            messages.error(self.request, msg)
+            return
+        else:
+            new_comment.save()
+            super(CommentFrom, self).save()

@@ -1,9 +1,10 @@
 import simplejson
 
-
 from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.gis.geos import fromstr
+from django.contrib.gis.gdal import SpatialReference, CoordTransform
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -24,7 +25,8 @@ else:
     User = get_user_model()
 
 
-# home button in search address is not working
+# need to fix this view
+# maybe put search into it's own view
 class WaypointView(TemplateView):
 
     model = Waypoint
@@ -115,7 +117,6 @@ class WaypointView(TemplateView):
         context['user'] = user
 
         # searching for the information in the address search bar
-        # home button in search address is not working
         if self.request.GET.get("search_address"):
             # remove old waypoint information
             self.kwargs['waypoint_id'] = None
@@ -138,7 +139,7 @@ class WaypointView(TemplateView):
                     self.request.session['data'] = data
                 except Exception as e:
                     exc = "Exception: " + str(e)
-                    msg = "Can't find search address. " + search_address
+                    msg = "Can't find search address: " + search_address
                     messages.error(self.request, msg)
                     # messages.add_message(self.request, messages.ERROR, exc)
                     data = self.request.session['data']
@@ -187,6 +188,7 @@ class AddComments(LoginRequiredMixin, CreateView):
     model = Comment
     form_class = CommentForm
     template_name = 'transport/comments.html'
+    map_to_show = 'defaultPositionMap'
 
     def get_initial(self):
         initial = super(AddComments, self).get_initial()
@@ -200,6 +202,11 @@ class AddComments(LoginRequiredMixin, CreateView):
             'waypoint_id': self.kwargs.get('waypoint_id')})
 
     def get_context_data(self, **kwargs):
+        data = {}
+        ct = CoordTransform(
+            SpatialReference(settings.WEB_MERCATOR_STANDARD),
+            SpatialReference(settings.US_DOD_GPS)
+            )
         kwargs['user'] = self.request.user
         context = super(AddComments, self).get_context_data(**kwargs)
         waypoint_id = str(self.kwargs.get('waypoint_id'))
@@ -209,4 +216,19 @@ class AddComments(LoginRequiredMixin, CreateView):
         context['comments'] = comments
         context['waypoint_id'] = waypoint_id
         context['waypoint'] = waypoint
+        context['map'] = self.map_to_show
+        
+        location = fromstr('POINT(%s %s)' % (
+                   waypoint.geom[0].x, waypoint.geom[0].y),
+                   srid=settings.WEB_MERCATOR_STANDARD)
+        location.transform(ct)
+        data['latitude'] = location.y
+        data['longitude'] = location.x
+        data['srid'] = waypoint.geom.srid
+        data['name'] = waypoint.name
+        data['map'] = self.map_to_show
+        data['GOOGLE_KEY'] = settings.GOOGLE_API_KEY
+
+        cls = simplejson.JSONEncoderForHTML
+        context['json'] = simplejson.dumps(data, cls=cls)
         return context

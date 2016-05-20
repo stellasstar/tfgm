@@ -171,7 +171,7 @@ class Comment(models.Model):
     waypoint = models.ForeignKey('transport.Waypoint', 
                              related_name='wp_comments',
                              null=True,
-                             blank=True)
+                             blank=True,)
     author = models.ForeignKey(settings.AUTH_USER_MODEL,
                              related_name='author')
     comment = models.TextField(null=True, blank=True)
@@ -184,6 +184,7 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.comment
+    
 
 # Auto-generated `LayerMapping` dictionary for Waypoint model
 waypoint_mapping = {

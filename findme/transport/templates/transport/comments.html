@@ -6,42 +6,71 @@
 
 {% block content %}
 
+            <script>
+                var var_json = '{{ json|escapejs }}';
+            </script>
+<div class="container">
         <div class="col-xs-12" align="center"><h1>{{waypoint.name}}</h1></div>
-        <div class="col-xs-12" align="left">
-            <div class="col-xs-6" align="right">Shelter:</div>
-            <div class="col-xs-6" align="left">{{ waypoint.shelter }}&nbsp;</div>
-            <div class="col-xs-6" align="right">Bench:</div>
-            <div class="col-xs-6" align="left">{{ waypoint.bench }}&nbsp;</div>
-            <div class="col-xs-6" align="right">Covered:</div>
-            <div class="col-xs-6" align="left">{{ waypoint.covered }}&nbsp;</div>
+        <div class="col-xs-12" align="left"></div>
+
+    <div class="col-xs-12" align="left">
+        
+        
+        <div class="col-xs-6" align="left">
+            <div id={{map}}></div>
+            <p style="clear: both;">&nbsp;</p>
+            <div class="comment"> 
+            <h3>New Comment</h3>
+            <b>Author:  {{user.username}}</b>
+            <form method="POST" class="post-form">
+            <input type="hidden" name="waypoint_id" value="{{waypoint.id}}"/>
+                {% csrf_token %}
+                {{ form.as_p}}
+                <button type="submit" class="save btn btn-default">Add</button>
+                <button type="edit" class="edit btn btn-default">Edit</button>
+                <button type="cancel" class="cancel btn btn-default">Cancel</button>
+            </form>
+                <a class="btn btn-default" 
+                   href="{% url 'transport-comments' waypoint_id=waypoint.id %}">
+                   Show Comments On Tranport Map
+                </a>
+                {% if messages %}
+            <div class="text-danger" ><b>
+                {% for message in messages %}
+                        <p align="center">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+            </b></div>
+            </div>
         </div>
         
-        <div class="col-xs-12 comment" align="left">
-        {% for comment in comments %}
+        <div class="col-xs-6" align="left">
             <div class="comment">
-                <div class="date">{{ comment.created_date }}</div>
-                <strong>{{ comment.author.username }}</strong>
-                <p>{{ comment.comment|linebreaks }}</p>
+            <div class="col-xs-3" align="right">Bus:</div>
+            <div class="col-xs-3" align="left">{{ waypoint.bus }}&nbsp;<br></div>
+            <div class="col-xs-3" align="right">Shelter:</div>
+            <div class="col-xs-3" align="left">{{ waypoint.shelter }}&nbsp;<br></div>
+            <div class="col-xs-3" align="right">Bench:</div>
+            <div class="col-xs-3" align="left">{{ waypoint.bench }}&nbsp;<br></div>
+            <div class="col-xs-3" align="right">Covered:</div>
+            <div class="col-xs-3" align="left">{{ waypoint.covered }}&nbsp;<br></div>
+            <p>&nbsp;</p>
             </div>
-        {% empty %}
-            <p>No comments here yet :(</p>
-        {% endfor %}
+            <div class="comment">
+                <h3>Comments</h3>
+                {% for comment in comments %}
+                    <div class="comment">
+                        <strong>{{ comment.author.username }} &nbsp; &nbsp;</strong>
+                        {{ comment.created_date }}
+                        <p>{{ comment.comment|linebreaks }}</p>
+                    </div>
+                {% empty %}
+                        <p>No comments here yet :(</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div><!--END comments-->
+</div>
 
-    <div class="comment">
-      <div class="col-xs-4 col-sm-4" align="left">
-            <h3>New Comment</h3>
-    <b>Author:  {{user.username}}</b>
-    <form method="POST" class="post-form">
-    <input type="hidden" name="waypoint_id" value="{{waypoint.id}}"/>
-        {% csrf_token %}
-        {{ form.as_p}}
-        <button type="submit" class="save btn btn-default">Add Comment</button>
-    </form>
-        <a class="btn btn-default" 
-           href="{% url 'transport-comments' waypoint_id=waypoint.id %}">
-           Show Comments On Tranport Map
-        </a>
-      </div>
-    </div>
-    
+<!-- {{json}} -->
 {% endblock %}
