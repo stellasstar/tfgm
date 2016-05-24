@@ -102,7 +102,7 @@
         {% for comment in comments %}
             <div class="comment">
                 <strong>{{ comment.author.username }}</strong>
-                <div class="date">{{ comment.created_date }}</div>
+                <div class="date">{{ comment.created_date|date:"SHORT_DATETIME_FORMAT" }}</div>
                 <p>{{ comment.comment|linebreaks }}</p>
             </div>
         {% empty %}

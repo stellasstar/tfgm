@@ -80,7 +80,7 @@
 section {
   float: left;
   margin: 0 5% 0% 10%;
-  width: 30%;
+  width: 35%;
 #  background-color: red;
 }
 aside {
@@ -90,4 +90,7 @@ aside {
 #  background-color: green;
 }
 
+.bold {
+    font-weight: bold
+}
 
