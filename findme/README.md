@@ -35,11 +35,16 @@ Ensure that there is a line in /etc/postgresql/9.3/main/pg_hba.conf that allows 
 - ./findme/scripts/rebuild.sh
 
 ## load in initial data into the database, the script will run in the following order
-## load bus stops
-## load test Users
-## load test Comments, ran 2x
 
-./findme/scripts/importData.sh
+- load bus stops
 
-## now go and grab a cup of tea, the import script takes about 5 minutes to run
-## its quite a bit of data
+- load test Users
+
+- load test Comments, ran 2x
+
+
+    $ ./findme/scripts/importData.sh
+
+now go and grab a cup of tea, the import script takes about 5 minutes to run
+its quite a bit of data
+
