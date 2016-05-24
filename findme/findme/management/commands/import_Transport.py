@@ -1,9 +1,9 @@
 import os
-import findme
 
 from django.core.management.base import BaseCommand
 from django.contrib.gis.utils import LayerMapping
 
+import findme
 from transport.models import (Waypoint, waypoint_mapping,
                               Route, route_mapping,
                               Area, area_mapping)

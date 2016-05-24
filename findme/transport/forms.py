@@ -1,5 +1,6 @@
 from django import forms
 from django.conf import settings
+from django.contrib import messages
 
 from captcha.fields import ReCaptchaField
 from crispy_forms.helper import FormHelper
@@ -28,15 +29,40 @@ class WaypointForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(WaypointForm, self).__init__(*args, **kwargs)
 
-
-class WaypointUpdateForm(forms.ModelForm):
-    """Form for editing the data that is part of the Waypoint model"""
+class WaypointAddForm(forms.ModelForm):
+    """Form for creating the data that is part of the Waypoint model"""
 
     class Meta():
         model = Waypoint
         fields = []
 
     def __init__(self, *args, **kwargs):
+        super(WaypointForm, self).__init__(*args, **kwargs)
+
+
+class WaypointUpdateForm(forms.ModelForm):
+    """Form for editing the data that is part of the Waypoint model"""
+
+    steps = forms.ChoiceField(choices=[(x, x) for x in range(1, 350)])
+    cofee = forms.ChoiceField(choices=[(x, x) for x in range(1, 350)])
+    ramp = forms.BooleanField(required=False,initial=False,label='ramp')
+    lift = forms.BooleanField(required=False,initial=False,label='lift')
+    level_access = forms.BooleanField(required=False,
+                                      initial=False,label='level_access')
+    audio_assistance = forms.BooleanField(required=False,
+                                          initial=False,label='audio_assistance')
+    audio_talking_description = forms.BooleanField(required=False,
+                                                   initial=False,label='audio_talking_description')
+
+    class Meta():
+        model = Waypoint
+        fields = []
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('submit',
+                                     'Update',
+                                     css_class='btn-primary'))
         super(WaypointUpdateForm, self).__init__(*args, **kwargs)
 
 
@@ -61,7 +87,7 @@ class CommentForm(forms.ModelForm):
 
     def get_comments(self, waypoint_id):
         waypoint = Waypoint.objects.get(pk=waypoint_id)
-        comments = Comment.objects.filter(post=waypoint)
+        comments = waypoint.wp_comments.all()
         return (waypoint, comments)
         
     def get_context_data(self, **kwargs):
@@ -71,21 +97,15 @@ class CommentForm(forms.ModelForm):
         context['waypoint_id'] = waypoint_id
         return context
     
-    def save(self, *args, **kwargs):
+    def save(self, commit=True, *args, **kwargs):
         user = self.initial['author']
-        comment = str(self.cleaned_data['comment'])
+        comment = self.cleaned_data['comment']
         waypoint_id = str(self.data.get('waypoint_id'))
         waypoint = Waypoint.objects.get(pk=waypoint_id)
-        new_comment = Comment(
-                          waypoint = waypoint,
-                          author = user,
-                          comment = comment,
-                          approved_comment = True
-                      )
-        if not self.comment:
-            msg = "There was no comment to save."
-            messages.error(self.request, msg)
-            return
-        else:
-            new_comment.save()
-            super(CommentFrom, self).save()
+        new_comment = super(CommentForm, self).save(commit=False)
+        new_comment.waypoint = waypoint
+        new_comment.author = user
+        new_comment.comment = comment
+        new_comment.approved_comment = True
+        new_comment.save()
+        return new_comment

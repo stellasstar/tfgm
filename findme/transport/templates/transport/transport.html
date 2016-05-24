@@ -86,12 +86,15 @@
                 {% endif %}
             <h3>{{waypoint.name}}</h3></div>
             <div class="col-xs-12" align="left">
+                <div class="col-xs-6" align="right">Bus:</div>
+                <div class="col-xs-6" align="left">{{ waypoint.bus }}&nbsp;<br></div>
                 <div class="col-xs-6" align="right">Shelter:</div>
-                <div class="col-xs-6" align="left">{{ waypoint.shelter }}&nbsp;</div>
+                <div class="col-xs-6" align="left">{{ waypoint.shelter }}&nbsp;<br></div>
                 <div class="col-xs-6" align="right">Bench:</div>
-                <div class="col-xs-6" align="left">{{ waypoint.bench }}&nbsp;</div>
+                <div class="col-xs-6" align="left">{{ waypoint.bench }}&nbsp;<br></div>
                 <div class="col-xs-6" align="right">Covered:</div>
-                <div class="col-xs-6" align="left">{{ waypoint.covered }}&nbsp;</div>
+                <div class="col-xs-6" align="left">{{ waypoint.covered }}&nbsp;<br></div>
+                <p>&nbsp;</p>
             </div>
         {% endif %}
         <div class="col-xs-12 comment" align="left">
@@ -108,7 +111,7 @@
         {% if waypoint_id %}
             <div class="comment">
             <a class="btn btn-default"
-                href="{% url 'add-comments' waypoint_id=waypoint_id %}">
+                href="{% url 'comments' waypoint_id=waypoint_id %}">
                 Add comment
             </a>
             </div>
@@ -118,7 +121,7 @@
         <div class="col-xs-12">&nbsp;</div>
         <div class="col-xs-12">
 
-           {{waypoints}}
+           <!-- {{waypoints}} -->
         </div>
   </div> <!-- row -->
 </div> <!-- container -->

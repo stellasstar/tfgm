@@ -9,23 +9,31 @@
             <script>
                 var var_json = '{{ json|escapejs }}';
             </script>
-<div class="container">
+<div class="group col-xs-12 container">
         <div class="col-xs-12" align="center"><h1>{{waypoint.name}}</h1></div>
         <div class="col-xs-12" align="left"></div>
-
-    <div class="col-xs-12" align="left">
-        
-        
+  <section>
         <div class="col-xs-6" align="left">
             <div id={{map}}></div>
-            <p style="clear: both;">&nbsp;</p>
+            <p style="clear: left;">&nbsp;</p>
             <div class="comment"> 
             <h3>New Comment</h3>
-            <b>Author:  {{user.username}}</b>
+            <b>Author:  {{user}}</b>
             <form method="POST" class="post-form">
             <input type="hidden" name="waypoint_id" value="{{waypoint.id}}"/>
                 {% csrf_token %}
-                {{ form.as_p}}
+            
+                {% for field in form %}
+                    {{ field.label_tag }} {{ field }} {{ field.errors }}
+                {% endfor %}
+                
+                {% if messages %}
+                {% for message in messages %}
+                  <div class="alert {% if message.tags %} alert-{{ message.tags }}{% endif %}">{{ message|safe }}</div>
+                {% endfor %}
+                {% endif %}
+                
+                
                 <button type="submit" class="save btn btn-default">Add</button>
                 <button type="edit" class="edit btn btn-default">Edit</button>
                 <button type="cancel" class="cancel btn btn-default">Cancel</button>
@@ -34,18 +42,11 @@
                    href="{% url 'transport-comments' waypoint_id=waypoint.id %}">
                    Show Comments On Tranport Map
                 </a>
-                {% if messages %}
-            <div class="text-danger" ><b>
-                {% for message in messages %}
-                        <p align="center">{{ message }}</p>
-                {% endfor %}
-            {% endif %}
-            </b></div>
             </div>
         </div>
-        
-        <div class="col-xs-6" align="left">
-            <div class="comment">
+  </section>
+  <aside>
+        <div class="col-xs-9" align="left">
             <div class="col-xs-3" align="right">Bus:</div>
             <div class="col-xs-3" align="left">{{ waypoint.bus }}&nbsp;<br></div>
             <div class="col-xs-3" align="right">Shelter:</div>
@@ -55,21 +56,18 @@
             <div class="col-xs-3" align="right">Covered:</div>
             <div class="col-xs-3" align="left">{{ waypoint.covered }}&nbsp;<br></div>
             <p>&nbsp;</p>
-            </div>
-            <div class="comment">
+            
                 <h3>Comments</h3>
                 {% for comment in comments %}
                     <div class="comment">
                         <strong>{{ comment.author.username }} &nbsp; &nbsp;</strong>
-                        {{ comment.created_date }}
+                        <br>{{ comment.created_date }}
                         <p>{{ comment.comment|linebreaks }}</p>
                     </div>
                 {% empty %}
                         <p>No comments here yet :(</p>
                 {% endfor %}
-            </div>
-        </div>
-    </div><!--END comments-->
+  </aside>
 </div>
 
 <!-- {{json}} -->
