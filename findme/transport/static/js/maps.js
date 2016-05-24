@@ -16,6 +16,7 @@ function initGoogle() {
       
       if (data.map.includes('canvas')) {
         waypoints = $.parseJSON(var_waypoints);
+        searchAddress();
       }
 }
 
@@ -55,7 +56,7 @@ function makeMap() {
     //alert(data.map);
 
     var mapOptions = {
-        zoom: 14,
+        zoom: 17,
         center: coords,
         mapTypeControl: false,
         mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -200,7 +201,6 @@ function googleMapsLoaded() {
 }
 
 $(document).ready(initGoogle);
-$(document).ready(searchAddress);
 
 window.onload = googleMapsLoaded;
 

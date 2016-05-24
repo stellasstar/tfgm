@@ -1,8 +1,11 @@
 from django import forms
-
 from django.conf import settings
+from django.contrib import messages
+
+from captcha.fields import ReCaptchaField
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
+from crispy_forms.layout import Layout, Fieldset, Submit
+from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
 
 from transport.mixin import ReadOnlyFieldsMixin
 from transport.models import Waypoint, Comment
@@ -26,15 +29,40 @@ class WaypointForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(WaypointForm, self).__init__(*args, **kwargs)
 
-
-class WaypointUpdateForm(forms.ModelForm):
-    """Form for editing the data that is part of the Waypoint model"""
+class WaypointAddForm(forms.ModelForm):
+    """Form for creating the data that is part of the Waypoint model"""
 
     class Meta():
         model = Waypoint
         fields = []
 
     def __init__(self, *args, **kwargs):
+        super(WaypointForm, self).__init__(*args, **kwargs)
+
+
+class WaypointUpdateForm(forms.ModelForm):
+    """Form for editing the data that is part of the Waypoint model"""
+
+    steps = forms.ChoiceField(choices=[(x, x) for x in range(1, 350)])
+    cofee = forms.ChoiceField(choices=[(x, x) for x in range(1, 350)])
+    ramp = forms.BooleanField(required=False,initial=False,label='ramp')
+    lift = forms.BooleanField(required=False,initial=False,label='lift')
+    level_access = forms.BooleanField(required=False,
+                                      initial=False,label='level_access')
+    audio_assistance = forms.BooleanField(required=False,
+                                          initial=False,label='audio_assistance')
+    audio_talking_description = forms.BooleanField(required=False,
+                                                   initial=False,label='audio_talking_description')
+
+    class Meta():
+        model = Waypoint
+        fields = []
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('submit',
+                                     'Update',
+                                     css_class='btn-primary'))
         super(WaypointUpdateForm, self).__init__(*args, **kwargs)
 
 
@@ -46,9 +74,15 @@ class CommentForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
-        self.helper.add_input(Submit('submit',
-                                     'Add Comment',
-                                     css_class='btn-primary'))
+        self.helper.layout = Layout(
+            FormActions(
+                Submit('submit', 'Add', 
+                       css_class="btn-default"),
+                Submit('edit', 'Edit', 
+                       css_class="btn-default"),
+                Submit('cancel', 'Cancel', 
+                       css_class="btn-default"),),
+        )
         super(CommentForm, self).__init__(*args, **kwargs)
 
     def get_comments(self, waypoint_id):
@@ -62,16 +96,16 @@ class CommentForm(forms.ModelForm):
         context['comments'] = comments
         context['waypoint_id'] = waypoint_id
         return context
-
-    def save(self, *args, **kwargs):
+    
+    def save(self, commit=True, *args, **kwargs):
         user = self.initial['author']
-        comment = str(self.cleaned_data['comment'])
+        comment = self.cleaned_data['comment']
         waypoint_id = str(self.data.get('waypoint_id'))
         waypoint = Waypoint.objects.get(pk=waypoint_id)
-        new_comment = Comment(
-                          waypoint = waypoint,
-                          author = user,
-                          comment = comment,
-                          approved_comment = True
-                      )
+        new_comment = super(CommentForm, self).save(commit=False)
+        new_comment.waypoint = waypoint
+        new_comment.author = user
+        new_comment.comment = comment
+        new_comment.approved_comment = True
         new_comment.save()
+        return new_comment

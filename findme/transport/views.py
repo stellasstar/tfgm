@@ -1,16 +1,18 @@
 import simplejson
 
-
 from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.gis.geos import fromstr
+from django.contrib.gis.gdal import SpatialReference, CoordTransform
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, render_to_response
+from django.template import RequestContext
 from django.views.generic import ListView, CreateView
 from django.views.generic.base import TemplateView
 
-from transport.forms import WaypointForm, CommentForm
+from transport.forms import WaypointForm, WaypointUpdateForm, CommentForm
 from transport.mixin import ReadOnlyFieldsMixin
 from transport.models import Waypoint, Position, Comment
 from transport import mapUtils
@@ -24,7 +26,8 @@ else:
     User = get_user_model()
 
 
-# home button in search address is not working
+# need to fix this view
+# maybe put search into it's own view
 class WaypointView(TemplateView):
 
     model = Waypoint
@@ -38,7 +41,8 @@ class WaypointView(TemplateView):
 
         try:
             waypoint = Waypoint.objects.get(pk=pk)
-            comments = waypoint.wp_comments.all().order_by('created_date')
+            comments = waypoint.wp_comments.all().order_by(
+                          'created_date')
             return (waypoint, comments)
         except:
             pass
@@ -114,7 +118,6 @@ class WaypointView(TemplateView):
         context['user'] = user
 
         # searching for the information in the address search bar
-        # home button in search address is not working
         if self.request.GET.get("search_address"):
             # remove old waypoint information
             self.kwargs['waypoint_id'] = None
@@ -137,7 +140,7 @@ class WaypointView(TemplateView):
                     self.request.session['data'] = data
                 except Exception as e:
                     exc = "Exception: " + str(e)
-                    msg = "Can't find search address. " + search_address
+                    msg = "Can't find search address: " + search_address
                     messages.error(self.request, msg)
                     # messages.add_message(self.request, messages.ERROR, exc)
                     data = self.request.session['data']
@@ -181,31 +184,73 @@ class PositionView(ListView):
     model = Position
 
 
-class AddComments(LoginRequiredMixin, CreateView):
+class CommentsView(LoginRequiredMixin, CreateView):
 
     model = Comment
     form_class = CommentForm
     template_name = 'transport/comments.html'
+    map_to_show = 'defaultPositionMap'
+
+    def get_context_data(self, **kwargs):
+        data = {}
+        kwargs['user'] = self.request.user
+        context = super(CommentsView, self).get_context_data(**kwargs)
+        waypoint_id = str(self.kwargs.get('waypoint_id'))
+        waypoint = Waypoint.objects.get(pk=waypoint_id)
+        comments = waypoint.wp_comments.all().order_by('created_date')
+
+        context['comments'] = comments
+        context['waypoint_id'] = waypoint_id
+        context['waypoint'] = waypoint
+        context['map'] = self.map_to_show
+
+        location = self.get_converted_location(
+            waypoint.geom[0].y,
+            waypoint.geom[0].x)
+
+        data['latitude'] = location.y
+        data['longitude'] = location.x
+        data['srid'] = waypoint.geom.srid
+        data['name'] = waypoint.name
+        data['map'] = self.map_to_show
+        data['GOOGLE_KEY'] = settings.GOOGLE_API_KEY
+
+        cls = simplejson.JSONEncoderForHTML
+        context['json'] = simplejson.dumps(data, cls=cls)
+        return context
+
+    def get_converted_location(self, lat, lng):
+
+        # converting from web standards to us dod gps system
+        ct = CoordTransform(
+            SpatialReference(settings.WEB_MERCATOR_STANDARD),
+            SpatialReference(settings.US_DOD_GPS)
+            )
+        coordinates = fromstr('POINT(%s %s)' % (lng, lat),
+                           srid=settings.WEB_MERCATOR_STANDARD)
+        coordinates.transform(ct)
+        return coordinates
 
     def get_initial(self):
-        initial = super(AddComments, self).get_initial()
+        initial = super(CommentsView, self).get_initial()
         initial = initial.copy()
         initial['author_id'] = self.request.user.pk
         initial['author'] = self.request.user
         return initial
 
+    def form_invalid(self, form):
+        context = self.get_context_data()
+        context['form'] = form
+        return render_to_response(
+            self.template_name, 
+            context, 
+            context_instance=RequestContext(self.request)
+        )
+
     def get_success_url(self):
-        return reverse('add-comments', kwargs={
+        return reverse('comments', kwargs={
             'waypoint_id': self.kwargs.get('waypoint_id')})
 
-    def get_context_data(self, **kwargs):
-        kwargs['user'] = self.request.user
-        context = super(AddComments, self).get_context_data(**kwargs)
-        waypoint_id = str(self.kwargs.get('waypoint_id'))
-        waypoint = Waypoint.objects.get(pk=waypoint_id)
-        comments = Comment.objects.filter(
-            waypoint=waypoint).order_by('created_date')
-        context['comments'] = comments
-        context['waypoint_id'] = waypoint_id
-        context['waypoint'] = waypoint
-        return context
+    def form_valid(self, form):
+        form.save()
+        return HttpResponseRedirect('comments')

@@ -1,11 +1,11 @@
 import os, sys, time
 from random import randint
-import findme
 
 from django.contrib.auth import authenticate, login, logout
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
+import findme
 from transport.models import Waypoint, Comment
 
 # import custom user model
@@ -30,7 +30,7 @@ class Command(BaseCommand):
         user = User.objects.get(username = 'testCommenter')
         for way in ways:
             comment = Comment.objects.create(author = user)
-            comment.comment = lines[randint(0,len(lines))]
+            comment.comment = lines[randint(0,len(lines)-1)]
             comment.waypoint = way
             comment.approved_comment = True
             #way.comments.create(comment)

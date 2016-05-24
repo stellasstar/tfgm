@@ -93,6 +93,15 @@ class Waypoint(gis_models.Model):
     geom = gis_models.MultiPointField(blank=True, null=True,
                                       srid=settings.WEB_MERCATOR_STANDARD)
     indicator = gis_models.CharField(max_length=254, null=True, blank=True)
+
+    steps = models.PositiveSmallIntegerField(default=0)
+    coffee = models.PositiveSmallIntegerField(default=0)
+    ramp = models.BooleanField(default=False)
+    lift = models.BooleanField(default=False)
+    level_access = models.BooleanField(default=False)
+    audio_assistance = models.BooleanField(default=False)
+    audio_talking_description = models.BooleanField(default=False)
+
     #comments = models.ForeignKey('transport.Comment',
                              #related_name='comments_wp',
                              #null=True,
@@ -168,15 +177,19 @@ class Area(gis_models.Model):
         return "Area %s" % (self.name)
 
 class Comment(models.Model):
+    approved_comment = models.BooleanField(default=False)
+    created_date = models.DateTimeField(default=timezone.now)
     waypoint = models.ForeignKey('transport.Waypoint',
                              related_name='wp_comments',
                              null=True,
-                             blank=True)
+                             blank=True,)
+    position = models.ForeignKey('transport.Position', 
+                                 related_name='position_comments',
+                                 null=True,
+                                 blank=True,)
     author = models.ForeignKey(settings.AUTH_USER_MODEL,
                              related_name='author')
-    comment = models.TextField(null=True, blank=True)
-    created_date = models.DateTimeField(default=timezone.now)
-    approved_comment = models.BooleanField(default=False)
+    comment = models.TextField(null=True, blank=False)
 
     def approve(self):
         self.approved_comment = True
@@ -184,6 +197,7 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.comment
+    
 
 # Auto-generated `LayerMapping` dictionary for Waypoint model
 waypoint_mapping = {

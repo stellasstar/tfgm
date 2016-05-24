@@ -1,10 +1,10 @@
 import os
-import findme
 
 from django.conf import settings
 from django.contrib.gis.geos import fromstr
 from django.core.management.base import BaseCommand
 
+import findme
 from transport.models import Position
 
 # import custom user model
@@ -48,7 +48,7 @@ class Command(BaseCommand):
                     password = 'stella',)
         user2.first_name = 'stella'
         user2.last_name = 'silverstein'
-        user.set_password('stella')
+        user2.set_password('stella')
         new_position = Position(
                     user=user2,
                     name=user2.username,
@@ -58,4 +58,21 @@ class Command(BaseCommand):
         user2.position = new_position
         user2.save()
         new_position.user = user2
+        new_position.save()
+        
+        superuser = User.objects.create_superuser(username = 'super',
+                    email = 'super.stella@isotoma.com',
+                    password = 'super',)
+        superuser.first_name = 'super'
+        superuser.last_name = 'silverstein'
+        superuser.set_password('super')
+        new_position = Position(
+                    user=superuser,
+                    name=superuser.username,
+                    geometry=fromstr(lString))
+        superuser.save()
+        new_position.save()
+        superuser.position = new_position
+        superuser.save()
+        new_position.user = superuser
         new_position.save()

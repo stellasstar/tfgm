@@ -1,5 +1,4 @@
 import os
-import findme
 
 from django.core.management.base import BaseCommand
 from django.conf import settings
@@ -7,6 +6,7 @@ from django.conf import settings
 from django.contrib.gis.gdal import SpatialReference, CoordTransform
 from django.contrib.gis.geos import MultiPoint, fromstr
 
+import findme
 from transport.models import Waypoint
 
 # waypoint_mapping = {
