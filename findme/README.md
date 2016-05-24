@@ -42,7 +42,7 @@ Ensure that there is a line in /etc/postgresql/9.3/main/pg_hba.conf that allows 
 
 - load test Comments, ran 2x
 
-::
+
     $ ./findme/scripts/importData.sh
 
 now go and grab a cup of tea, the import script takes about 5 minutes to run
