@@ -1,14 +1,18 @@
 import simplejson
 
-from django.views.generic import ListView
-from django.views.generic.base import TemplateView
-from django.shortcuts import get_object_or_404
 
 from django.contrib import messages
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.views.generic import ListView, CreateView
+from django.views.generic.base import TemplateView
 
-from transport.forms import WaypointForm
-from transport.models import Waypoint, Position
+from transport.forms import WaypointForm, CommentForm
+from transport.mixin import ReadOnlyFieldsMixin
+from transport.models import Waypoint, Position, Comment
 from transport import mapUtils
 
 # import custom user model
@@ -29,6 +33,15 @@ class WaypointView(TemplateView):
     form_class = WaypointForm
     map_to_show = 'map_canvas'
     GOOGLE_KEY = settings.GOOGLE_API_KEY
+
+    def get_comments(self, pk):
+
+        try:
+            waypoint = Waypoint.objects.get(pk=pk)
+            comments = waypoint.wp_comments.all().order_by('created_date')
+            return (waypoint, comments)
+        except:
+            pass
 
     def get_inital_user_data(self):
 
@@ -84,6 +97,8 @@ class WaypointView(TemplateView):
         context = super(WaypointView, self).get_context_data(**kwargs)
         username = self.kwargs.get('username')
         data = {}
+        comments = []
+        waypoint = []
 
         if username:
             user = get_object_or_404(User, username=username)
@@ -100,7 +115,14 @@ class WaypointView(TemplateView):
 
         # searching for the information in the address search bar
         # home button in search address is not working
-        if self.request.GET:
+        if self.request.GET.get("search_address"):
+            # remove old waypoint information
+            self.kwargs['waypoint_id'] = None
+            kwargs['waypoint_id'] = None
+            context['waypoint_id'] = None
+            context['comments'] = []
+
+            # get new area waypoint data
             self.request.session['searched'] = True
             default_address = data['address'].decode('utf-8').lower()
             get_search = self.request.GET.get("search_address")
@@ -117,22 +139,73 @@ class WaypointView(TemplateView):
                     exc = "Exception: " + str(e)
                     msg = "Can't find search address. " + search_address
                     messages.error(self.request, msg)
-                    messages.add_message(self.request, messages.ERROR, exc)
+                    # messages.add_message(self.request, messages.ERROR, exc)
                     data = self.request.session['data']
-
-        context['map'] = self.map_to_show
 
         # get waypoint data
         waypoints, user_location = mapUtils.find_waypoints(data['latitude'],
                                                            data['longitude'])
-
         cls = simplejson.JSONEncoderForHTML
         context['json'] = simplejson.dumps(data, cls=cls)
         context['waypoints'] = waypoints
+        context['map'] = self.map_to_show
 
-        return context
+        waypoint_id = self.kwargs.get('waypoint_id')
+        location_id = self.request.GET.get('location_id')
+        if (waypoint_id is None):
+            return context
+        else:
+            (waypoint, comments) = self.get_comments(waypoint_id)
+            # for comments about individual waypoints
+            context['comments'] = comments
+            context['waypoint'] = waypoint
+            context['location_id'] = location_id
+            return context
+
+# can't get redirect to work correctly
+    # def get(self, request, *args, **kwargs):
+        # context = self.get_context_data(**kwargs)
+        # waypoint_id = 'waypoint_id' in context
+        #  if waypoint_id:
+            #return HttpResponseRedirect(
+                # reverse('tranport-comments',
+                        # args=context))
+        # else:
+            # return HttpResponseRedirect(
+                # reverse('tranport',
+                        # args=context))
 
 
 class PositionView(ListView):
 
     model = Position
+
+
+class AddComments(LoginRequiredMixin, CreateView):
+
+    model = Comment
+    form_class = CommentForm
+    template_name = 'transport/comments.html'
+
+    def get_initial(self):
+        initial = super(AddComments, self).get_initial()
+        initial = initial.copy()
+        initial['author_id'] = self.request.user.pk
+        initial['author'] = self.request.user
+        return initial
+
+    def get_success_url(self):
+        return reverse('add-comments', kwargs={
+            'waypoint_id': self.kwargs.get('waypoint_id')})
+
+    def get_context_data(self, **kwargs):
+        kwargs['user'] = self.request.user
+        context = super(AddComments, self).get_context_data(**kwargs)
+        waypoint_id = str(self.kwargs.get('waypoint_id'))
+        waypoint = Waypoint.objects.get(pk=waypoint_id)
+        comments = Comment.objects.filter(
+            waypoint=waypoint).order_by('created_date')
+        context['comments'] = comments
+        context['waypoint_id'] = waypoint_id
+        context['waypoint'] = waypoint
+        return context

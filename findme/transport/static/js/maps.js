@@ -153,10 +153,15 @@ function printTransport() {
             var lat = waypoints.features[i].geometry.coordinates[0][1];
             var lng = waypoints.features[i].geometry.coordinates[0][0];
             var name = waypoints.features[i].properties.name;
+            var id = waypoints.features[i].id;
+            var comments = waypoints.features[i].properties.wp_comments;
+            if (comments == null) {
+                comments = []
+            }
             var usr_pos = new google.maps.LatLng(usr_lat, usr_lng);
             var pos = new google.maps.LatLng(lat, lng);
             var distance = google.maps.geometry.spherical.computeDistanceBetween(pos, usr_pos); 
-            
+            //alert(id);
             var content = $("<div>");
             content.addClass("expandContent");
             var a = $('<a href="#">');
@@ -171,7 +176,11 @@ function printTransport() {
             show.addClass('showMe');
             show.append("latitude: &nbsp;&nbsp;" + lat.toFixed(6) + "\n");
             show.append("longitude: &nbsp;&nbsp;" +lng.toFixed(6) + "\n");
-            show.append("Comments"); 
+            var b = $('<a>');
+            b.attr("href", id + "?location_id=" + (i+1))
+            b.append("Comments: &nbsp;&nbsp;" + comments.length);
+            show.append(b);
+
             ways.append(content);
             ways.append(show);
         }

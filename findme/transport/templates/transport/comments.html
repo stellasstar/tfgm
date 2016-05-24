@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load staticfiles%}
+
+{% block title %}Comments For Transportation Links{% endblock %}
+{% block head %}Comments For Transportation Links{% endblock %}
+
+{% block content %}
+
+        <div class="col-xs-12" align="center"><h1>{{waypoint.name}}</h1></div>
+        <div class="col-xs-12" align="left">
+            <div class="col-xs-6" align="right">Shelter:</div>
+            <div class="col-xs-6" align="left">{{ waypoint.shelter }}&nbsp;</div>
+            <div class="col-xs-6" align="right">Bench:</div>
+            <div class="col-xs-6" align="left">{{ waypoint.bench }}&nbsp;</div>
+            <div class="col-xs-6" align="right">Covered:</div>
+            <div class="col-xs-6" align="left">{{ waypoint.covered }}&nbsp;</div>
+        </div>
+
+        <div class="col-xs-12 comment" align="left">
+        {% for comment in comments %}
+            <div class="comment">
+                <div class="date">{{ comment.created_date }}</div>
+                <strong>{{ comment.author.username }}</strong>
+                <p>{{ comment.comment|linebreaks }}</p>
+            </div>
+        {% empty %}
+            <p>No comments here yet :(</p>
+        {% endfor %}
+
+    <div class="comment">
+      <div class="col-xs-4 col-sm-4" align="left">
+            <h3>New Comment</h3>
+    <b>Author:  {{user}}</b>
+    <form method="POST" class="post-form">
+    <input type="hidden" name="waypoint_id" value="{{waypoint.id}}"/>
+        {% csrf_token %}
+        {{ form.as_p}}
+        <button type="submit" class="save btn btn-default">Add Comment</button>
+    </form>
+        <a class="btn btn-default"
+           href="{% url 'transport-comments' waypoint_id=waypoint.id %}">
+           Show Comments On Tranport Map
+        </a>
+      </div>
+    </div>
+
+{% endblock %}

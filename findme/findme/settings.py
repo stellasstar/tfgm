@@ -42,12 +42,13 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.gis',
+    'django.contrib.sites',
     'imagekit',
     'crispy_forms',
     'floppyforms',
     'captcha',
-    'gatekeeper',
     'findme',
+    'gatekeeper',
     'transport',
 )
 
@@ -126,7 +127,6 @@ TEMPLATES = [
         ],
         'APP_DIRS': True,
         'OPTIONS': {
-            'debug': DEBUG,
             'context_processors': [
                 # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
                 # list if you haven't customized them:
@@ -193,7 +193,9 @@ AVATAR_DEFAULT_HEIGHT = 200
 
 handler404 = 'views.handler404'
 
-# using 2 different coordinate transformation systems for better accuracy
+# when transforming from british nation grid to web mercator standard
+# use 2 different coordinate transformation systems for better accuracy
+# 27700 -> 4326 -> 3857
 # 27700 corresponds to the British National Grid coordinate system
 # 4326 corresponds to the U.S. Department of Defense, and is the
 #     standard used by the Global Positioning System (GPS)
@@ -205,3 +207,8 @@ handler404 = 'views.handler404'
 US_DOD_GPS = 4326
 BRITISH_NATIONAL_GRID = 27700
 WEB_MERCATOR_STANDARD = 3857
+
+try:
+    from local import *
+except ImportError:
+    pass

@@ -1,6 +1,7 @@
 *.pyc
 tfgm/
 venv/
+findme/keys/
 findme/ffindme.egg-info/
 findme/media/
 tfgm.wpr
