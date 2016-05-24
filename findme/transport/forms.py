@@ -87,9 +87,9 @@ class CommentForm(forms.ModelForm):
 
     def get_comments(self, waypoint_id):
         waypoint = Waypoint.objects.get(pk=waypoint_id)
-        comments = waypoint.wp_comments.all()
+        comments = waypoint.wp_comments.all().order_by('created_date')
         return (waypoint, comments)
-        
+
     def get_context_data(self, **kwargs):
         waypoint_id = kwargs['waypoint_id']
         (waypoint, comments) = self.get_comments(pk=waypoint_id)

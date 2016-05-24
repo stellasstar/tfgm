@@ -102,7 +102,7 @@ class Waypoint(gis_models.Model):
     audio_assistance = models.BooleanField(default=False)
     audio_talking_description = models.BooleanField(default=False)
 
-    #comments = models.ForeignKey('transport.Comment', 
+    #comments = models.ForeignKey('transport.Comment',
                              #related_name='comments_wp',
                              #null=True,
                              #blank=True)
@@ -177,7 +177,6 @@ class Area(gis_models.Model):
         return "Area %s" % (self.name)
 
 class Comment(models.Model):
-    
     approved_comment = models.BooleanField(default=False)
     created_date = models.DateTimeField(default=timezone.now)
     waypoint = models.ForeignKey('transport.Waypoint',
