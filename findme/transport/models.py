@@ -93,10 +93,10 @@ class Waypoint(gis_models.Model):
     geom = gis_models.MultiPointField(blank=True, null=True,
                                       srid=settings.WEB_MERCATOR_STANDARD)
     indicator = gis_models.CharField(max_length=254, null=True, blank=True)
-    comments = models.ForeignKey('transport.Comment', 
-                             related_name='comments_wp',
-                             null=True,
-                             blank=True)
+    #comments = models.ForeignKey('transport.Comment',
+                             #related_name='comments_wp',
+                             #null=True,
+                             #blank=True)
     objects = gis_models.GeoManager()
 
     class Meta:
@@ -168,7 +168,7 @@ class Area(gis_models.Model):
         return "Area %s" % (self.name)
 
 class Comment(models.Model):
-    waypoint = models.ForeignKey('transport.Waypoint', 
+    waypoint = models.ForeignKey('transport.Waypoint',
                              related_name='wp_comments',
                              null=True,
                              blank=True,)

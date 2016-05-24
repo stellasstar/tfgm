@@ -43,8 +43,9 @@
             </b></div>
             </div>
         </div>
-        
-        <div class="col-xs-6" align="left">
+
+        <div class="col-xs-12 comment" align="left">
+        {% for comment in comments %}
             <div class="comment">
             <div class="col-xs-3" align="right">Bus:</div>
             <div class="col-xs-3" align="left">{{ waypoint.bus }}&nbsp;<br></div>
@@ -72,5 +73,21 @@
     </div><!--END comments-->
 </div>
 
-<!-- {{json}} -->
+    <div class="comment">
+      <div class="col-xs-4 col-sm-4" align="left">
+            <h3>New Comment</h3>
+    <b>Author:  {{user}}</b>
+    <form method="POST" class="post-form">
+    <input type="hidden" name="waypoint_id" value="{{waypoint.id}}"/>
+        {% csrf_token %}
+        {{ form.as_p}}
+        <button type="submit" class="save btn btn-default">Add Comment</button>
+    </form>
+        <a class="btn btn-default"
+           href="{% url 'transport-comments' waypoint_id=waypoint.id %}">
+           Show Comments On Tranport Map
+        </a>
+      </div>
+    </div>
+
 {% endblock %}

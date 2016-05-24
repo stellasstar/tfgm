@@ -207,3 +207,8 @@ handler404 = 'views.handler404'
 US_DOD_GPS = 4326
 BRITISH_NATIONAL_GRID = 27700
 WEB_MERCATOR_STANDARD = 3857
+
+try:
+    from local import *
+except ImportError:
+    pass

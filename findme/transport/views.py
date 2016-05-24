@@ -40,8 +40,7 @@ class WaypointView(TemplateView):
 
         try:
             waypoint = Waypoint.objects.get(pk=pk)
-            comments = Comment.objects.filter(
-                       waypoint=waypoint).order_by('created_date')
+            comments = waypoint.wp_comments.all().order_by('created_date')
             return (waypoint, comments)
         except:
             pass
