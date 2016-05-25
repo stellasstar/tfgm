@@ -70,6 +70,9 @@ class Position(gis_models.Model):
 # Waypoint --srid=3857 --mapping --multi
 
 class Waypoint(gis_models.Model):
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             related_name='user', default=1)
     osm_id = gis_models.FloatField(null=True, blank=True)
     public_tra = gis_models.CharField(max_length=254, null=True, blank=True)
     name = gis_models.CharField(max_length=254, null=True, blank=True)

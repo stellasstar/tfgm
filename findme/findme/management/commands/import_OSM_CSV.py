@@ -9,14 +9,6 @@ from django.contrib.gis.geos import MultiPoint, fromstr
 import findme
 from transport.models import Waypoint
 
-# import custom user model
-try:
-    from django.contrib.auth import get_user_model
-except ImportError:
-    from django.contrib.auth.models import User
-else:
-    User = get_user_model()
-
 # waypoint_mapping = {
 # 'osm_id' : 'OSM_ID',
 # 'public_tra' : 'PUBLIC_TRA',
@@ -42,19 +34,16 @@ else:
 # }
 
 # example input data
-# AtcoCode,,Easting,Northing,CommonName,Indicator,Bearing,Street,Landmark,
-# NptgLocalityCode,,,StopType,BusStopType,TimingStatus,Status,RevisionNumber,
-# Notes,LocalityCentre,NaptanCode,ShortCommonName,ModificationDate
-# ['"1800AMIC001"', '""', '376969', '387893', '"Altrincham Interchange"',
-# '"Nr Train Station"', '"NA"', '"STAMFORD NE
-# W RD"', '"Altrincham Interchange"', '"E0028261"', '""', '""', '"BCS"',
-# '"MKD"', '"TIP"', '"ACT"', '17', '"STOP BB R
-# EMOVED FROM AMIC"', '"Y"', '"MANADADG"', '"Interchange"', '"2014-12-18"\r\n']
+# OSM_ID,PUBLIC_TRA,NAME,REF,ROUTE_REF,OPERATOR,NETWORK,TRAIN,SUBWAY,
+# MONORAIL,TRAM,BUS,TROLLEYBUS,AERIALWAY,FERRY,SHELTER,BENCH,
+# COVERED,AREA,Z_ORDER,kmlgeometry
+# 3974050131.0,stop_position,,,,,,,,,,yes,,,,,,,,,
+# POINT (-219133.54 7045434.48 0)
 
 
 class Command(BaseCommand):
     help = 'Loads Tfgm geospatial data from app data directory'
-    wp = 'static/data/TfGMStoppingPoints.csv'
+    wp = 'static/data/weogeo/data/public_transport_point.csv'
 
     # using 2 different coordinate transformation systems for better accuracy
     # 27700 corresponds to the British National Grid coordinate system
@@ -69,31 +58,19 @@ class Command(BaseCommand):
         wp_file = os.path.abspath(os.path.join(os.path.join(
                       os.path.dirname(findme.__file__), self.wp)))
         f = open(wp_file, 'r')
-        bng = CoordTransform(
-                SpatialReference(settings.BRITISH_NATIONAL_GRID),
-                SpatialReference(settings.US_DOD_GPS))
-        web_transform = CoordTransform(
-                            SpatialReference(settings.US_DOD_GPS),
-                            SpatialReference(settings.WEB_MERCATOR_STANDARD))
         user = User.objects.get(username = 'transport')
+        fields = Waypoint._meta.get_fields()
         for line in f:
             words = line.split(",")
             w = Waypoint.objects.create(user=user)
-            easting = words[2]
-            northing = words[3]
-            location = fromstr('POINT(%s %s)' % (easting, northing),
-                               srid=settings.BRITISH_NATIONAL_GRID)
-            location.transform(bng)
-            location.transform(web_transform)
-            w.geom = MultiPoint(location)
-            w.bus = 'yes'
-            w.name = words[4].strip('"')
-            w.indicator = words[5].strip('"')
-            w.ref = words[0].strip('"')
-            w.public_tra = 'stop_position'
-            w.area = words[9].strip('"')
-            w.route_ref = words[9].strip('"')
+            coords = words.pop(-1)
+            location = fromstr(coords.strip(),
+                               srid=settings.WEB_MERCATOR_STANDARD)
             w.z_order = '0.0'
+            w.geom = MultiPoint(location)
+            w.osm_id = words[0]
+            w.public_tra = words[1]
+            
             print w.id, w
             w.save()
 

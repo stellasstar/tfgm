@@ -6,6 +6,8 @@
 
 - sudo apt-get install binutils libproj-dev postgresql-9.3 postgresql-9.3-postgis-2.1 postgresql-server-dev-9.3 python-psycopg2 postgis
 
+- sudo apt-get install libgdal-dev
+
 - sudo apt-get install libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk
 
 - sudo apt-get install python-pip (if needed)

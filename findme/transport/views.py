@@ -12,7 +12,8 @@ from django.template import RequestContext
 from django.views.generic import ListView, CreateView
 from django.views.generic.base import TemplateView
 
-from transport.forms import WaypointForm, WaypointUpdateForm, CommentForm
+from transport.forms import (WaypointForm, WaypointAddForm, WaypointUpdateForm,
+                             CommentForm)
 from transport.mixin import ReadOnlyFieldsMixin
 from transport.models import Waypoint, Position, Comment
 from transport import mapUtils
@@ -24,6 +25,83 @@ except ImportError:  # django < 1.5
     from django.contrib.auth.models import User
 else:
     User = get_user_model()
+
+
+class CommentsView(LoginRequiredMixin, CreateView):
+
+    model = Comment
+    form_class = CommentForm
+    template_name = 'transport/comments.html'
+    map_to_show = 'defaultPositionMap'
+
+    def get_context_data(self, **kwargs):
+        data = {}
+        kwargs['user'] = self.request.user
+        context = super(CommentsView, self).get_context_data(**kwargs)
+        waypoint_id = str(self.kwargs.get('waypoint_id'))
+        waypoint = Waypoint.objects.get(pk=waypoint_id)
+        comments = waypoint.wp_comments.all().order_by('created_date')
+
+        context['comments'] = comments
+        context['waypoint_id'] = waypoint_id
+        context['waypoint'] = waypoint
+        context['map'] = self.map_to_show
+
+        location = self.get_converted_location(
+            waypoint.geom[0].y,
+            waypoint.geom[0].x)
+
+        data['latitude'] = location.y
+        data['longitude'] = location.x
+        data['srid'] = waypoint.geom.srid
+        data['name'] = waypoint.name
+        data['map'] = self.map_to_show
+        data['GOOGLE_KEY'] = settings.GOOGLE_API_KEY
+
+        cls = simplejson.JSONEncoderForHTML
+        context['json'] = simplejson.dumps(data, cls=cls)
+        return context
+
+    def get_converted_location(self, lat, lng):
+
+        # converting from web standards to us dod gps system
+        ct = CoordTransform(
+            SpatialReference(settings.WEB_MERCATOR_STANDARD),
+            SpatialReference(settings.US_DOD_GPS)
+            )
+        coordinates = fromstr('POINT(%s %s)' % (lng, lat),
+                           srid=settings.WEB_MERCATOR_STANDARD)
+        coordinates.transform(ct)
+        return coordinates
+
+    def get_initial(self):
+        initial = super(CommentsView, self).get_initial()
+        initial = initial.copy()
+        initial['author_id'] = self.request.user.pk
+        initial['author'] = self.request.user
+        return initial
+
+    def form_invalid(self, form):
+        context = self.get_context_data()
+        context['form'] = form
+        return render_to_response(
+            self.template_name, 
+            context, 
+            context_instance=RequestContext(self.request)
+        )
+
+    def get_success_url(self):
+        return reverse('comments', kwargs={
+            'waypoint_id': self.kwargs.get('waypoint_id')})
+
+    def form_valid(self, form):
+        form.save()
+        return HttpResponseRedirect('comments')
+
+
+class PositionView(ListView):
+
+    model = Position
 
 
 # need to fix this view
@@ -179,78 +257,16 @@ class WaypointView(TemplateView):
                         # args=context))
 
 
-class PositionView(ListView):
+class WaypointAddView(LoginRequiredMixin, CreateView):
 
-    model = Position
-
-
-class CommentsView(LoginRequiredMixin, CreateView):
-
-    model = Comment
-    form_class = CommentForm
-    template_name = 'transport/comments.html'
-    map_to_show = 'defaultPositionMap'
-
-    def get_context_data(self, **kwargs):
-        data = {}
-        kwargs['user'] = self.request.user
-        context = super(CommentsView, self).get_context_data(**kwargs)
-        waypoint_id = str(self.kwargs.get('waypoint_id'))
-        waypoint = Waypoint.objects.get(pk=waypoint_id)
-        comments = waypoint.wp_comments.all().order_by('created_date')
-
-        context['comments'] = comments
-        context['waypoint_id'] = waypoint_id
-        context['waypoint'] = waypoint
-        context['map'] = self.map_to_show
-
-        location = self.get_converted_location(
-            waypoint.geom[0].y,
-            waypoint.geom[0].x)
-
-        data['latitude'] = location.y
-        data['longitude'] = location.x
-        data['srid'] = waypoint.geom.srid
-        data['name'] = waypoint.name
-        data['map'] = self.map_to_show
-        data['GOOGLE_KEY'] = settings.GOOGLE_API_KEY
-
-        cls = simplejson.JSONEncoderForHTML
-        context['json'] = simplejson.dumps(data, cls=cls)
-        return context
-
-    def get_converted_location(self, lat, lng):
-
-        # converting from web standards to us dod gps system
-        ct = CoordTransform(
-            SpatialReference(settings.WEB_MERCATOR_STANDARD),
-            SpatialReference(settings.US_DOD_GPS)
-            )
-        coordinates = fromstr('POINT(%s %s)' % (lng, lat),
-                           srid=settings.WEB_MERCATOR_STANDARD)
-        coordinates.transform(ct)
-        return coordinates
-
-    def get_initial(self):
-        initial = super(CommentsView, self).get_initial()
-        initial = initial.copy()
-        initial['author_id'] = self.request.user.pk
-        initial['author'] = self.request.user
-        return initial
-
-    def form_invalid(self, form):
-        context = self.get_context_data()
-        context['form'] = form
-        return render_to_response(
-            self.template_name, 
-            context, 
-            context_instance=RequestContext(self.request)
-        )
-
-    def get_success_url(self):
-        return reverse('comments', kwargs={
-            'waypoint_id': self.kwargs.get('waypoint_id')})
+    model = Waypoint
+    template_name = 'waypoint/waypoint_add.html'
+    success_url = "/transport/"
+    form_class = WaypointAddForm
+    map_to_show = 'map_canvas'
+    GOOGLE_KEY = settings.GOOGLE_API_KEY
 
     def form_valid(self, form):
         form.save()
-        return HttpResponseRedirect('comments')
+        return HttpResponseRedirect('transport-add')
+    

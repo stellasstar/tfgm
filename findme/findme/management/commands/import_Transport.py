@@ -8,7 +8,6 @@ from transport.models import (Waypoint, waypoint_mapping,
                               Route, route_mapping,
                               Area, area_mapping)
 
-
 class Command(BaseCommand):
     help = 'Loads geospatial data from app data directory'
 
@@ -24,7 +23,6 @@ class Command(BaseCommand):
             os.path.join(os.path.dirname(findme.__file__), self.wp)))
         poly_file = os.path.abspath(os.path.join(
             os.path.join(os.path.dirname(findme.__file__), self.poly)))
-
         # each LayerMapping object is mapping the data files to its
         # respective model using the *_mapping object
         # usage:  LayerMapping(model, file, file to model mapping

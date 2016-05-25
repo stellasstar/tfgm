@@ -32,19 +32,42 @@ class WaypointForm(forms.ModelForm):
 class WaypointAddForm(forms.ModelForm):
     """Form for creating the data that is part of the Waypoint model"""
 
+    steps = forms.ChoiceField(choices=[(x, x) for x in range(1, 350)])
+    coffee = forms.ChoiceField(choices=[(x, x) for x in range(1, 350)])
+    ramp = forms.BooleanField(required=False,initial=False,label='ramp')
+    lift = forms.BooleanField(required=False,initial=False,label='lift')
+    level_access = forms.BooleanField(required=False,
+                                      initial=False,label='level_access')
+    audio_assistance = forms.BooleanField(required=False,
+                                          initial=False,label='audio_assistance')
+    audio_talking_description = forms.BooleanField(required=False,
+                                                   initial=False,label='audio_talking_description')
+
+
     class Meta():
         model = Waypoint
-        fields = []
+        fields = ['coffee',
+                  'steps',
+                  'ramp',
+                  'lift',
+                  'level_access',
+                  'audio_assistance',
+                  'audio_talking_description',
+                 ]
 
     def __init__(self, *args, **kwargs):
-        super(WaypointForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('submit',
+                                    'Submit',
+                                    css_class='btn-primary'))
+        super(WaypointAddForm, self).__init__(*args, **kwargs)
 
 
 class WaypointUpdateForm(forms.ModelForm):
     """Form for editing the data that is part of the Waypoint model"""
 
     steps = forms.ChoiceField(choices=[(x, x) for x in range(1, 350)])
-    cofee = forms.ChoiceField(choices=[(x, x) for x in range(1, 350)])
+    coffee = forms.ChoiceField(choices=[(x, x) for x in range(1, 350)])
     ramp = forms.BooleanField(required=False,initial=False,label='ramp')
     lift = forms.BooleanField(required=False,initial=False,label='lift')
     level_access = forms.BooleanField(required=False,

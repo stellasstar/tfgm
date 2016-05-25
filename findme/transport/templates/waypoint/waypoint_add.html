@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load staticfiles%}
+{% block title %}User Registration{% endblock %}
+{% block head %}User Registration{% endblock %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+    <h1>Hello {{user.get_full_name}}. </h1>
+     <br />
+    {% csrf_token %}
+    {% load crispy_forms_tags %}
+    {% crispy form %}
+{% endif %}
+
+
+{% endblock %}

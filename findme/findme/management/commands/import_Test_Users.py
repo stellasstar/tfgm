@@ -21,6 +21,29 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         User.objects.all().delete()
+        
+        user = User.objects.create_user(
+            username = 'transport',
+            email = 'transport@test.com',
+            password = 'transport',
+        )
+        user.first_name = 'Add'
+        user.last_name = 'transport'
+        user.set_password('transport')
+        lat = settings.DEFAULT_LATITUDE
+        lng = settings.DEFAULT_LONGITUDE
+        lString = 'POINT(%s %s)' % (lng, lat)
+        new_position = Position(
+            user=user,
+            name=user.username,
+            geometry=fromstr(lString))
+        user.save()
+        new_position.save()
+        user.position = new_position
+        user.save()
+        new_position.user = user
+        new_position.save()        
+
         user = User.objects.create_user(
                    username = 'testCommenter',
                    email = 'testCommenter@test.com',
@@ -42,7 +65,7 @@ class Command(BaseCommand):
         user.save()
         new_position.user = user
         new_position.save()
-        
+
         user2 = User.objects.create_user(username = 'stella',
                     email = 'stella.silverstein@isotoma.com',
                     password = 'stella',)
