@@ -78,7 +78,7 @@ class Command(BaseCommand):
         user = User.objects.get(username = 'transport')
         for line in f:
             words = line.split(",")
-            w = Waypoint.objects.create(user=user)
+            w = Waypoint.objects.create(wp_owner=user)
             easting = words[2]
             northing = words[3]
             location = fromstr('POINT(%s %s)' % (easting, northing),
@@ -86,11 +86,10 @@ class Command(BaseCommand):
             location.transform(bng)
             location.transform(web_transform)
             w.geom = MultiPoint(location)
-            w.bus = 'yes'
+            w.bus = True
             w.name = words[4].strip('"')
             w.indicator = words[5].strip('"')
             w.ref = words[0].strip('"')
-            w.public_tra = 'stop_position'
             w.area = words[9].strip('"')
             w.route_ref = words[9].strip('"')
             w.z_order = '0.0'

@@ -15,7 +15,7 @@ from django.views.generic.base import TemplateView
 from transport.forms import (WaypointForm, WaypointAddForm, WaypointUpdateForm,
                              CommentForm)
 from transport.mixin import ReadOnlyFieldsMixin
-from transport.models import Waypoint, Position, Comment
+from transport.models import Waypoint, Position, Comment, Area
 from transport import mapUtils
 
 # import custom user model
@@ -263,10 +263,26 @@ class WaypointAddView(LoginRequiredMixin, CreateView):
     template_name = 'waypoint/waypoint_add.html'
     success_url = "/transport/"
     form_class = WaypointAddForm
-    map_to_show = 'map_canvas'
+    map_to_show = 'map_waypoint'
     GOOGLE_KEY = settings.GOOGLE_API_KEY
+
+    def get_context_data(self, **kwargs):
+        data = {}
+        kwargs['user'] = self.request.user
+        context = super(WaypointAddView, self).get_context_data(**kwargs)
+        return context
+
+    def get_initial(self):
+        initial = super(WaypointAddView, self).get_initial()
+        initial = initial.copy()
+        initial['owner_id'] = self.request.user.pk
+        initial['owner'] = self.request.user
+        return initial
 
     def form_valid(self, form):
         form.save()
         return HttpResponseRedirect('transport-add')
-    
+
+    def get_success_url(self):
+        return reverse('comments', kwargs={
+            'waypoint_id': self.kwargs.get('waypoint_id')})

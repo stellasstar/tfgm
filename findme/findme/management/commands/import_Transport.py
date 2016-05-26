@@ -33,9 +33,9 @@ class Command(BaseCommand):
         # more info about iso is at
         # http://www.w3schools.com/charsets/ref_html_8859.asp
 
-        lm1 = LayerMapping(Waypoint, wp_file, waypoint_mapping,
-                           transform=False, encoding='iso-8859-1')
-        lm1.save(strict=True, verbose=True)
+        #lm1 = LayerMapping(Waypoint, wp_file, waypoint_mapping,
+                           #transform=False, encoding='iso-8859-1')
+        #lm1.save(strict=True, verbose=True)
 
         lm2 = LayerMapping(Route, route_file, route_mapping,
                            transform=False, encoding='iso-8859-1')

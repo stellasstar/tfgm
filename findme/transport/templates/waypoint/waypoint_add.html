@@ -1,17 +1,63 @@
 {% extends 'base.html' %}
 {% load staticfiles%}
+{% load floppyforms %}
+
 {% block title %}User Registration{% endblock %}
 {% block head %}User Registration{% endblock %}
 
+{% block extra_js %}
+{{form.media}} 
+{% endblock %}
+
+{% block options %}
+{{ block.super }}
+options['base_layer'] = new OpenLayers.Layer.Google("Google Streets", {numZoomLevels: 20, units: 'm'});
+options['point_zoom'] = 15;
+options['color'] = ff0000;
+options['map_id'] = 'map_waypoint'
+options['default_lon'] = {{ lon }};
+options['default_lat'] = {{ lat }};
+{% endblock %}
+
+
 {% block content %}
 
-{% if user.is_authenticated %}
-    <h1>Hello {{user.get_full_name}}. </h1>
-     <br />
-    {% csrf_token %}
-    {% load crispy_forms_tags %}
-    {% crispy form %}
-{% endif %}
 
+<div class="group col-xs-12 container">
+        <div class="col-xs-12" align="center"><h1><h1>Hello {{user.get_full_name}}. </h1></h1></div>
+        <div class="col-xs-12" align="left"></div>
+  <section>
+        <div class="col-xs-6" align="left">
+            <p style="clear: left;">&nbsp;</p>
+            <div class="comment"> 
+            <h3>New Waypoint</h3>
+            <p class="bold">Author:  {{user}}</p>
+
+            <form action="" method="post">
+                {% csrf_token %}
+                    {{ form.as_p }}
+                <input class="btn btn-primary" type="submit" value="Submit" />
+            </form>
+                
+            </div>
+        </div>
+  </section>
+  <aside>
+        <div class="col-xs-9" align="left">
+            <div class="comment">
+            <div class="col-xs-3" align="right">Bus:</div>
+            <div class="col-xs-3" align="left">{{ waypoint.bus }}&nbsp;<br></div>
+            <div class="col-xs-3" align="right">Shelter:</div>
+            <div class="col-xs-3" align="left">{{ waypoint.shelter }}&nbsp;<br></div>
+            <div class="col-xs-3" align="right">Bench:</div>
+            <div class="col-xs-3" align="left">{{ waypoint.bench }}&nbsp;<br></div>
+            <div class="col-xs-3" align="right">Covered:</div>
+            <div class="col-xs-3" align="left">{{ waypoint.covered }}&nbsp;<br></div>
+            <p>&nbsp;</p>
+            
+                <div class="col-xs-6" classid={{map}}></div>
+        </div>
+  </aside>
+</div>
 
 {% endblock %}

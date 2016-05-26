@@ -1,11 +1,14 @@
 
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.http import HttpResponseNotFound
 from django.views.generic.base import TemplateView
 from django.views.generic import FormView
 from django.template import Context
 from django.template.loader import get_template, TemplateDoesNotExist
+
+import djqscsv
 
 from findme.forms import ContactForm
 
@@ -50,3 +53,16 @@ class StaticView(TemplateView):
             return response.render()
         except TemplateDoesNotExist:
             raise HttpResponseNotFound
+
+
+# class UtilitiesView(LoginRequiredMixin, TemplateView):
+
+    # def get_csv(request):
+        # qs = Person.objects.all()
+        # filename = djqscsv.generate_filename(person_qs, append_datestamp=True)
+        # render_to_csv_response(person_qs, use_verbose_names=False)
+        ## for foreign keys
+        # person_qs = Person.objects.values('id', 'name', 'hobby__name')
+        # csv_file = TemporaryFile()
+        # djqscsv.write_csv(person_qs, csv_file)
+        # return djqscsv.render_to_csv_response(qs)

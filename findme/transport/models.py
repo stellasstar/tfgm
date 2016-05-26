@@ -11,6 +11,8 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 
+from transport import choices
+
 try:
     from django.contrib.auth import get_user_model
     User = settings.AUTH_USER_MODEL
@@ -71,39 +73,38 @@ class Position(gis_models.Model):
 
 class Waypoint(gis_models.Model):
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             related_name='user', default=1)
-    osm_id = gis_models.FloatField(null=True, blank=True)
-    public_tra = gis_models.CharField(max_length=254, null=True, blank=True)
-    name = gis_models.CharField(max_length=254, null=True, blank=True)
+    wp_owner = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             related_name='wp_owner', default=1)
+    public_tra = gis_models.CharField(max_length=254, default='stop_position')
+    name = gis_models.CharField(max_length=254, default='')
     ref = gis_models.CharField(max_length=254, null=True, blank=True)
     route_ref = gis_models.CharField(max_length=254, null=True, blank=True)
     operator = gis_models.CharField(max_length=254, null=True, blank=True)
     network = gis_models.CharField(max_length=254, null=True, blank=True)
-    train = gis_models.CharField(max_length=254, null=True, blank=True)
-    subway = gis_models.CharField(max_length=254, null=True, blank=True)
-    monorail = gis_models.CharField(max_length=254, null=True, blank=True)
-    tram = gis_models.CharField(max_length=254, null=True, blank=True)
-    bus = gis_models.CharField(max_length=254, null=True, blank=True)
-    trolleybus = gis_models.CharField(max_length=254, null=True, blank=True)
-    aerialway = gis_models.CharField(max_length=254, null=True, blank=True)
-    ferry = gis_models.CharField(max_length=254, null=True, blank=True)
-    shelter = gis_models.CharField(max_length=254, null=True, blank=True)
-    bench = gis_models.CharField(max_length=254, null=True, blank=True)
-    covered = gis_models.CharField(max_length=254, null=True, blank=True)
+    train = gis_models.BooleanField(default=False)
+    subway = gis_models.BooleanField(default=False)
+    monorail = gis_models.BooleanField(default=False)
+    tram = gis_models.BooleanField(default=False)
+    bus = gis_models.BooleanField(default=True)
+    trolleybus = gis_models.BooleanField(default=False)
+    aerialway = gis_models.BooleanField(default=False)
+    ferry = gis_models.BooleanField(default=False)
+    shelter = gis_models.BooleanField(default=False)
+    bench = gis_models.BooleanField(default=False)
+    covered = gis_models.BooleanField(default=False)
     area = gis_models.CharField(max_length=254, null=True, blank=True)
     z_order = gis_models.FloatField(null=True, blank=True)
     geom = gis_models.MultiPointField(blank=True, null=True,
                                       srid=settings.WEB_MERCATOR_STANDARD)
     indicator = gis_models.CharField(max_length=254, null=True, blank=True)
 
-    steps = models.PositiveSmallIntegerField(default=0)
-    coffee = models.PositiveSmallIntegerField(default=0)
-    ramp = models.BooleanField(default=False)
-    lift = models.BooleanField(default=False)
-    level_access = models.BooleanField(default=False)
-    audio_assistance = models.BooleanField(default=False)
-    audio_talking_description = models.BooleanField(default=False)
+    steps = gis_models.PositiveSmallIntegerField(default=0)
+    coffee = gis_models.PositiveSmallIntegerField(default=0)
+    ramp = gis_models.BooleanField(default=False)
+    lift = gis_models.BooleanField(default=False)
+    level_access = gis_models.BooleanField(default=False)
+    audio_assistance = gis_models.BooleanField(default=False)
+    audio_talking_description = gis_models.BooleanField(default=False)
 
     #comments = models.ForeignKey('transport.Comment',
                              #related_name='comments_wp',
@@ -123,7 +124,8 @@ class Waypoint(gis_models.Model):
 
 
 class Route(gis_models.Model):
-    osm_id = gis_models.FloatField(blank=True, null=True)
+    route_owner = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             related_name='route_owner', default=1)
     public_tra = gis_models.CharField(max_length=254, blank=True)
     name = gis_models.CharField(max_length=254, blank=True)
     ref = gis_models.CharField(max_length=254, blank=True)
@@ -152,7 +154,8 @@ class Route(gis_models.Model):
 
 
 class Area(gis_models.Model):
-    osm_id = gis_models.FloatField(null=True, blank=True)
+    area_owner = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             related_name='area_owner', default=1)
     public_tra = gis_models.CharField(max_length=254, blank=True)
     name = gis_models.CharField(max_length=254, blank=True)
     ref = gis_models.CharField(max_length=254, blank=True)
@@ -204,7 +207,6 @@ class Comment(models.Model):
 
 # Auto-generated `LayerMapping` dictionary for Waypoint model
 waypoint_mapping = {
-    'osm_id': 'OSM_ID',
     'public_tra': 'PUBLIC_TRA',
     'name': 'NAME',
     'ref': 'REF',
@@ -229,7 +231,6 @@ waypoint_mapping = {
 
 # Auto-generated `LayerMapping` dictionary for Waypoints model
 route_mapping = {
-    'osm_id': 'OSM_ID',
     'public_tra': 'PUBLIC_TRA',
     'name': 'NAME',
     'ref': 'REF',
@@ -255,7 +256,6 @@ route_mapping = {
 
 # Auto-generated `LayerMapping` dictionary for Areas model
 area_mapping = {
-    'osm_id': 'OSM_ID',
     'public_tra': 'PUBLIC_TRA',
     'name': 'NAME',
     'ref': 'REF',
