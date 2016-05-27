@@ -2,12 +2,12 @@ from django import forms
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.gis import forms as gis_forms
-from django.contrib.gis.geos import GEOSGeometry
+from django.contrib.gis.geos import GEOSGeometry, Point, fromstr, MultiPoint
 from django.db.models import Count, F
 
 from captcha.fields import ReCaptchaField
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, Submit
+from crispy_forms.layout import Layout, Fieldset, Submit, Field, Div
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
 import floppyforms
 
@@ -24,16 +24,20 @@ else:
     User = get_user_model()
 
 # import manchester area
-MANC = Area.objects.get(name='Greater Manchester')
+# MANC = Area.objects.get(name='Greater Manchester')
 
 
 class GmapPointWidget(floppyforms.gis.BaseGMapWidget,
-                           floppyforms.gis.PointWidget):
+                      floppyforms.gis.PointWidget):
     map_srid = settings.WEB_MERCATOR_STANDARD
     required = True
     display_wkt = False
+    map_width = 400
+    map_height = 400
     default_lon = settings.DEFAULT_WEB_LATITUDE
     default_lat = settings.DEFAULT_WEB_LONGITUDE
+    default_zoom = 5
+    mouse_position = True
 
     def get_context_data(self):
         ctx = super(GmapPointWidget, self).get_context_data()
@@ -63,12 +67,12 @@ class WaypointAddForm(forms.ModelForm):
     steps = forms.ChoiceField(choices=[(x, x) for x in range(0, 350)])
     coffee = forms.ChoiceField(choices=[(x, x) for x in range(0, 350)],
                 help_text='Distance from stop in metres.')
-    public_tra = forms.ChoiceField(choices=choices.STOP_TYPES, 
+    public_tra = forms.ChoiceField(choices=choices.STOP_TYPES,
                      required=True, label='Type of stop')
     area = forms.ModelChoiceField(
         queryset=Area.objects.annotate(
         area_count=Count('name')))
-    
+
     route_ref = forms.ModelChoiceField(
             queryset=Route.objects.annotate(
             route_count=Count('name')))
@@ -94,31 +98,40 @@ class WaypointAddForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
+        self.helper.layout = Layout()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.form_id = 'id-waypointAdd'
+        self.helper.form_method = 'post'
+        self.helper.render_required_fields = True
+        self.helper.filter(Div).wrap(Field, css_class="col-xs-7")
         self.helper.add_input(Submit('submit',
                                     'Submit',
                                     css_class='btn btn-default'))
         super(WaypointAddForm, self).__init__(*args, **kwargs)
 
     def save(self, commit=True, *args, **kwargs):
-        user = self.initial['author']
-        new_waypoint = super(WaypointAddForm, self).save(commit=False)
+        user = self.initial['owner']
+        form = super(WaypointAddForm, self).save(commit=False)
+        coordinates = fromstr('POINT(%s %s)' % (self.cleaned_data['area_target'].x, self.cleaned_data['area_target'].y),
+                              srid=settings.WEB_MERCATOR_STANDARD)
         new_waypoint = Waypoint.objects.create(wp_owner = user)
-        new_waypoint.name = name
-        new_waypoint.public_tra = public_tra
-        new_waypoint.ref = ref
-        new_waypoint.route_ref = route_ref
-        new_waypoint.operator = operator
-        new_waypoint.network = network
-        new_waypoint.coffee = coffee
-        new_waypoint.steps = steps
-        new_waypoint.ramp = ramp
-        new_waypoint.lift = lift
-        new_waypoint.level_access = level_access
-        new_waypoint.audio_assistance = audio_assistance
-        new_waypoint.audio_talking_description = audio_talking_description
-        new_waypoint.shelter = shelter
-        new_waypoint.bench = bench
-        new_waypoint.covered = covered
+        new_waypoint.name = form.name
+        new_waypoint.public_tra = form.public_tra
+        new_waypoint.ref = form.ref
+        new_waypoint.route_ref = form.route_ref
+        new_waypoint.operator = form.operator
+        new_waypoint.network = form.network
+        new_waypoint.coffee = form.coffee
+        new_waypoint.steps = form.steps
+        new_waypoint.ramp = form.ramp
+        new_waypoint.lift = form.lift
+        new_waypoint.level_access = form.level_access
+        new_waypoint.audio_assistance = form.audio_assistance
+        new_waypoint.audio_talking_description = form.audio_talking_description
+        new_waypoint.shelter = form.shelter
+        new_waypoint.bench = form.bench
+        new_waypoint.covered = form.covered
+        new_waypoint.geom = MultiPoint(coordinates)
         new_waypoint.save()
         return new_waypoint
 
@@ -163,11 +176,11 @@ class CommentForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             FormActions(
-                Submit('submit', 'Add', 
+                Submit('submit', 'Add',
                        css_class="btn-default"),
-                Submit('edit', 'Edit', 
+                Submit('edit', 'Edit',
                        css_class="btn-default"),
-                Submit('cancel', 'Cancel', 
+                Submit('cancel', 'Cancel',
                        css_class="btn-default"),),
         )
         super(CommentForm, self).__init__(*args, **kwargs)
@@ -183,7 +196,7 @@ class CommentForm(forms.ModelForm):
         context['comments'] = comments
         context['waypoint_id'] = waypoint_id
         return context
-    
+
     def save(self, commit=True, *args, **kwargs):
         user = self.initial['author']
         comment = self.cleaned_data['comment']

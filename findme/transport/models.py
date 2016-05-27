@@ -189,7 +189,7 @@ class Comment(models.Model):
                              related_name='wp_comments',
                              null=True,
                              blank=True,)
-    position = models.ForeignKey('transport.Position', 
+    position = models.ForeignKey('transport.Position',
                                  related_name='position_comments',
                                  null=True,
                                  blank=True,)
@@ -203,7 +203,7 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.comment
-    
+
 
 # Auto-generated `LayerMapping` dictionary for Waypoint model
 waypoint_mapping = {

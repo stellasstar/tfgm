@@ -70,14 +70,15 @@
         </div>
         <div class="col-xs-12" align="center">
             <div class="col-xs-6" id={{map}}></div>
-            <div class="col-xs-4 waypoints">
-                <div class="wp_header" align="center">Finding Transport Links...</div>
-                <div class="wpitems" align="left"></div>
-            </div>
-            
-            <a class="btn btn-primary" href="{% url 'transport-add'%}" align="left">
+            <div class="col-xs-4" align="center">
+            <a class="btn btn-primary" href="{% url 'transport-add'%}" align="center">
                 Add Transport Link
             </a>
+                <div class="waypoints" align="center">
+                    <div class="wp_header" align="center">Finding Transport Links...</div>
+                    <div class="wpitems" align="left"></div>
+                </div>
+            </div>
         </div>
         <div>&nbsp;</div>
 
@@ -114,7 +115,7 @@
         {% endfor %}
         {% if waypoint_id %}
             <div class="comment">
-            <a class="btn btn-default"
+            <a class="btn btn-primary"
                 href="{% url 'comments' waypoint_id=waypoint_id %}">
                 Add comment
             </a>

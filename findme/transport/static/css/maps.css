@@ -19,7 +19,7 @@
         box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
 }
 
-#map_waypoint {
+#id_area_target_map {
         height: 400px;
         width: 400px;
         margin-top: 30px;
@@ -28,6 +28,11 @@
         margin-left: 30px;
 #        border:solid 3px #00FF33;
         box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
+        clear: right;
+}
+
+#id_area_target_map:after {
+  clear: both;
 }
 
 .stylish-input-group .input-group-addon{
@@ -42,7 +47,7 @@
 .stylish-input-group #home_address{
     border:0;
     background:transparent;
-    width:0px; 
+    width:0px;
     height:40px;
 }
 .stylish-input-group button{
@@ -51,7 +56,7 @@
 }
 
 .waypoints {
-        max-height: 400px; 
+        max-height: 400px;
         margin-top: 30px;
         margin-right: 30px;
         margin-bottom: 30px;

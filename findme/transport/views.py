@@ -3,7 +3,7 @@ import simplejson
 from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.gis.geos import fromstr
+from django.contrib.gis.geos import fromstr, Point
 from django.contrib.gis.gdal import SpatialReference, CoordTransform
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -85,8 +85,8 @@ class CommentsView(LoginRequiredMixin, CreateView):
         context = self.get_context_data()
         context['form'] = form
         return render_to_response(
-            self.template_name, 
-            context, 
+            self.template_name,
+            context,
             context_instance=RequestContext(self.request)
         )
 
@@ -277,12 +277,22 @@ class WaypointAddView(LoginRequiredMixin, CreateView):
         initial = initial.copy()
         initial['owner_id'] = self.request.user.pk
         initial['owner'] = self.request.user
+        initial['area_target'] = Point(
+            float(settings.DEFAULT_WEB_LONGITUDE),
+            float(settings.DEFAULT_WEB_LATITUDE),
+            srid=settings.WEB_MERCATOR_STANDARD)
         return initial
 
-    def form_valid(self, form):
-        form.save()
-        return HttpResponseRedirect('transport-add')
+    def form_invalid(self, form):
+        context = self.get_context_data()
+        context['form'] = form
+        return render_to_response(
+            self.template_name,
+            context,
+            context_instance=RequestContext(self.request)
+        )
 
-    def get_success_url(self):
-        return reverse('comments', kwargs={
-            'waypoint_id': self.kwargs.get('waypoint_id')})
+    def form_valid(self, form):
+        waypoint = form.save()
+        url = reverse('comments', kwargs={'waypoint_id': waypoint.id})
+        return HttpResponseRedirect(url)

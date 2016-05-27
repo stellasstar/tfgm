@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'imagekit',
     'crispy_forms',
+    'leaflet',
     'floppyforms',
     'captcha',
     'findme',
@@ -144,6 +145,7 @@ TEMPLATES = [
 ]
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SITE_ID = 1
 
 LOGIN_REDIRECT_URL = '/'
 
