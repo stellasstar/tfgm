@@ -4,20 +4,23 @@
 
 - sudo apt-get update
 
-- sudo apt-get install binutils libproj-dev postgresql-9.3 postgresql-9.3-postgis-2.1 postgresql-server-dev-9.3 python-psycopg2 postgis
+- sudo apt-get install python-dev binutils python-setuptools libproj-dev postgresql-9.3 postgresql-9.3-postgis-2.1 postgresql-server-dev-9.3 python-psycopg2 postgis
 
 - sudo apt-get install libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk
 
 - sudo apt-get install python-pip (if needed)
 
-## CD into the project directory
-- git clone git@github.com:isotoma/stella_tfgm
-
-- cd stella_tfgm
-
 ## Set up the virtual environment
-- virtualenv --setuptools venv 
-- source venv/bin/activate Cd findme
+using the instructions here setup virtualenv and virtualenvwrapper
+- https://github.com/stellasstar/tfgm/blob/master/findme/python.rst
+
+- mkvirtualenv tfgm
+- cd ..
+
+## CD into the project directory
+- git clone git@github.com:stellasstar/tfgm.git
+
+- cd tfgm
 
 ## Install other dependencies through pip 
 - pip install -r requirements.txt --upgrade -e .
@@ -43,7 +46,7 @@ Ensure that there is a line in /etc/postgresql/9.3/main/pg_hba.conf that allows 
 - load test Comments, ran 2x
 
 
-    $ ./findme/scripts/importData.sh
+    $ ./findme/scripts/import_Data.sh
 
 now go and grab a cup of tea, the import script takes about 5 minutes to run
 its quite a bit of data
