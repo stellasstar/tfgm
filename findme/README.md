@@ -31,6 +31,7 @@ Ensure that there is a line in /etc/postgresql/9.3/main/pg_hba.conf that allows 
 - edit /etc/postgresql/9.3/main/pg_hba.conf to look like the line below
 
 - "local" is for Unix domain socket connections only local all all md5
+- local   all             all                                     md5
 
 ### Unfortunately the django management command zap_and_create_postgis_db does not work until a PostgreSQL database with postgis already exists. The role and password can be taken from settings.py, and the builddb.sh file can be edited with this information. builddb.sh will install the initial database, and rebuild.sh will build the necessary tables.
 
@@ -50,3 +51,5 @@ Ensure that there is a line in /etc/postgresql/9.3/main/pg_hba.conf that allows 
 
 now go and grab a cup of tea, the import script takes about 5 minutes to run
 its quite a bit of data
+
+## Running the program
